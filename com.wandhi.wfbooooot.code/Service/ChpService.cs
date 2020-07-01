@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.wandhi.wfbooooot.code.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,27 +7,23 @@ using System.Threading.Tasks;
 
 namespace com.wandhi.wfbooooot.code.Service
 {
-    public class ChpService
+    public class ChpService : BaseService
     {
-        public long send;
-        public ChpService(long send)
+
+        public ChpService(long send) : base(send)
         {
-            this.send = send;
+
         }
         public ChpService()
         {
 
-        }
-        public void run()
-        {
-            AppData.CQApi.SendGroupMessage(send, GetMsg());
         }
 
         /// <summary>
         /// 获取信息
         /// </summary>
         /// <returns></returns>
-        public string GetMsg()
+        public override string GetMsg()
         {
             return GHttpHelper.Http.Get("https://chp.shadiao.app/api.php");
         }

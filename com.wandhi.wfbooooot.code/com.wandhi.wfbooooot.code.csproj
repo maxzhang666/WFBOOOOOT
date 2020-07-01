@@ -106,8 +106,10 @@
     <Compile Include="Event\Event_AppStart.cs" />
     <Compile Include="Event\Event_GroupMessage_CHP.cs" />
     <Compile Include="Event\Event_GroupMessage_WIKI.cs" />
+    <Compile Include="Interface\IBaseService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\ChpService.cs" />
     <Compile Include="Service\DjtService.cs" />
   </ItemGroup>

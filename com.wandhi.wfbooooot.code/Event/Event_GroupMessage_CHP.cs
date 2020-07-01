@@ -1,4 +1,5 @@
-﻿using com.wandhi.wfbooooot.code.Service;
+﻿using com.wandhi.wfbooooot.code.Interface;
+using com.wandhi.wfbooooot.code.Service;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using System;
@@ -18,7 +19,17 @@ namespace com.wandhi.wfbooooot.code.Event
         {
             if (e.FromGroup == AppData.GroupNumber && e.Message.Text.StartsWith("/骚话"))
             {
-                var msg = new ChpService().GetMsg();
+                IBaseService baseService;
+                var random = new Random().Next(100);
+                if (random > 50)
+                {
+                    baseService = new ChpService();
+                }
+                else
+                {
+                    baseService = new DjtService();
+                }
+                var msg = baseService.GetMsg();
                 e.FromGroup.SendGroupMessage(msg);
                 e.Handler = true;
             }
