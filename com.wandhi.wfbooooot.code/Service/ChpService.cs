@@ -27,5 +27,10 @@ namespace com.wandhi.wfbooooot.code.Service
         {
             return GHttpHelper.Http.Get("https://chp.shadiao.app/api.php");
         }
+
+        public override string GetMsg(string KeyWord)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

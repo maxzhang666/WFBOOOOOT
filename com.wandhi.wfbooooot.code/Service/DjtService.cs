@@ -26,5 +26,10 @@ namespace com.wandhi.wfbooooot.code.Service
         {
             return GHttpHelper.Http.Get(Api);
         }
+
+        public override string GetMsg(string KeyWord)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
