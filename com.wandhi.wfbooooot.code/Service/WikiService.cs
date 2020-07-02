@@ -10,6 +10,7 @@ namespace com.wandhi.wfbooooot.code.Service
     public class WikiService : BaseService
     {
         const string SearchApi = "https://warframe.huijiwiki.com/api.php?action=query&format=json&formatversion=1&list=search&srsearch=1231";
+        const string WikiLink = "https://warframe.huijiwiki.com/wiki/";
         public WikiService()
         {
         }
