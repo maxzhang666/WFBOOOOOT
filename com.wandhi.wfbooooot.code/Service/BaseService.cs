@@ -31,7 +31,7 @@ namespace com.wandhi.wfbooooot.code.Service
         /// 直接发送信息
         /// </summary>
         /// <param name="msg"></param>
-        public void send(string msg)
+        public async void send(string msg)
         {
             AppData.CQApi.SendGroupMessage(GroupId, msg);
         }

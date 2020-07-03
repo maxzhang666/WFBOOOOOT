@@ -1,4 +1,6 @@
-﻿using Native.Sdk.Cqp.EventArgs;
+﻿using com.wandhi.wfbooooot.code.Service;
+using Native.Sdk.Cqp;
+using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,12 @@ namespace com.wandhi.wfbooooot.code.Event
     {
         void IGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
         {
-            if (e.FromGroup == "" && e.Message.Text.StartsWith("/wiki"))
+            if ((e.FromGroup == AppData.GroupNumber || e.FromGroup == AppData.GroupDebug) && e.Message.Text.StartsWith("/wiki"))
             {
-
+                e.Handler = true;
+                
+                var service = new WikiService(e.FromGroup);
+                service.send();
             }
         }
     }
