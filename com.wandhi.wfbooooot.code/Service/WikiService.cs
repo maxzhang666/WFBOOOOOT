@@ -13,8 +13,9 @@ namespace com.wandhi.wfbooooot.code.Service
     {
         const string Key = "/Wiki";
 
-        const string SearchApi = "https://warframe.huijiwiki.com/api.php?action=query&format=json&formatversion=1&list=search&srsearch=1231";
+        const string SearchApi = "https://warframe.huijiwiki.com/api.php?action=query&format=json&formatversion=1&list=search&srsearch=";
         const string WikiLink = "https://warframe.huijiwiki.com/wiki/";
+        const string ParseApi = "https://warframe.huijiwiki.com/api.php?action=parse&format=phpfm&page=";
         public WikiService()
         {
         }
@@ -22,6 +23,7 @@ namespace com.wandhi.wfbooooot.code.Service
         public WikiService(long GroupId) : base(GroupId)
         {
         }
+        public WikiService(long GroupId, long MemberId, string Keyword) : base(GroupId, MemberId, Keyword) { }
 
         public override string GetMsg()
         {
@@ -40,21 +42,33 @@ namespace com.wandhi.wfbooooot.code.Service
         string WikiSearch(string keyword)
         {
             var msg = new StringBuilder();
-            var res = Http.Get<WikiSearch>($"{SearchApi}{keyword}");
+            var SearchUrl = $"{SearchApi}{(Uri.EscapeUriString(keyword))}";
 
+            var res = Http.Get<WikiSearch>(SearchUrl);
 
+            if (res == null)
+            {
+                msg.Append("查询失败");
+                AppData.CQLog.Debug("查询失败");
+                AppData.CQLog.Debug(SearchUrl);
+                return msg.ToString();
+            }
             if (res?.query.searchinfo.totalhits <= 0)
             {
                 msg.Append("啥也没查到哦");
             }
             var SearchRes = res?.query.search.Where(a => a.title == keyword).ToList();
-            if (SearchRes.Any())
+            if (!SearchRes.Any())
             {
                 msg.Append("你是不是想找：");
-                foreach (var item in SearchRes)
+                foreach (var item in res.query.search.Take(3))
                 {
                     msg.AppendLine(item.title);
-                }
+                }             
+            }
+            else
+            {
+                msg.AppendLine("准备解析页面");
             }
 
             return msg.ToString();

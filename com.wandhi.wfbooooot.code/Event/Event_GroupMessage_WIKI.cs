@@ -17,11 +17,12 @@ namespace com.wandhi.wfbooooot.code.Event
     {
         void IGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
         {
-            if ((e.FromGroup == AppData.GroupNumber || e.FromGroup == AppData.GroupDebug) && e.Message.Text.StartsWith("/wiki"))
+            if ((e.FromGroup == AppData.GroupNumber || e.FromGroup == AppData.GroupDebug) && e.Message.Text.ToLower().StartsWith("/wiki"))
             {
-                e.Handler = true;
-                
-                var service = new WikiService(e.FromGroup);
+                e.CQApi.SendGroupMessage(e.FromGroup, "好嘞，这就去查！");
+                //e.Handler = true;
+
+                var service = new WikiService(e.FromGroup, e.FromQQ, e.Message.Text.Replace("/wiki", "").Replace("/Wiki", "").Trim());
                 service.send();
             }
         }

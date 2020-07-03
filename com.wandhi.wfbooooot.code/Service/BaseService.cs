@@ -11,14 +11,24 @@ namespace com.wandhi.wfbooooot.code.Service
     {
         long GroupId;
         string _Msg;
+        string _Keyword;
+        long _MemberId;
         public BaseService(long GroupId)
         {
             this.GroupId = GroupId;
         }
-        public BaseService(long GroupId, string Msg)
+        public BaseService(long GroupId, long MemberId, string Keyword)
         {
             this.GroupId = GroupId;
+            this._MemberId = MemberId;
+            this._Keyword = Keyword;
+        }
+        public BaseService(long GroupId, long MemberId, string Keyword, string Msg)
+        {
+            this.GroupId = GroupId;
+            this._Keyword = Keyword;
             this._Msg = Msg;
+            this._MemberId = MemberId;
         }
         public BaseService()
         {
@@ -42,7 +52,7 @@ namespace com.wandhi.wfbooooot.code.Service
         {
             await Task.Factory.StartNew(async () =>
             {
-                var msg = GetMsg();
+                var msg = GetMsg(_Keyword);
                 send(msg);
             });
         }
