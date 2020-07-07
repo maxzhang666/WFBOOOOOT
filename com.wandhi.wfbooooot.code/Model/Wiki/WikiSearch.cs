@@ -16,5 +16,9 @@ namespace com.wandhi.wfbooooot.code.Model.Wiki
         /// 
         /// </summary>
         public WikiSearchQuery query { get; set; }
+
+        public string code { set; get; }
+
+        public string info { set; get; }
     }
 }

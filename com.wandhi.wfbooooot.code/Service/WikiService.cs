@@ -45,26 +45,25 @@ namespace com.wandhi.wfbooooot.code.Service
             var SearchUrl = $"{SearchApi}{(Uri.EscapeUriString(keyword))}";
 
             var res = Http.Get<WikiSearch>(SearchUrl);
-
-            if (res == null)
+            if (res.code.IsNotEmpty())
             {
-                msg.Append("查询失败");
-                AppData.CQLog.Debug("查询失败");
-                AppData.CQLog.Debug(SearchUrl);
+                msg.AppendLine("飞机WikiApi调用失败");
+                msg.Append($"错误消息{res.info}");
                 return msg.ToString();
             }
+
             if (res?.query.searchinfo.totalhits <= 0)
             {
-                msg.Append("啥也没查到哦");
+                msg.AppendLine("啥也没查到哦");
             }
             var SearchRes = res?.query.search.Where(a => a.title == keyword).ToList();
-            if (!SearchRes.Any())
+            if (!SearchRes.Any() && res.query.search.IsNotEmpty())
             {
-                msg.Append("你是不是想找：");
+                msg.AppendLine("你是不是想找：");
                 foreach (var item in res.query.search.Take(3))
                 {
                     msg.AppendLine(item.title);
-                }             
+                }
             }
             else
             {
