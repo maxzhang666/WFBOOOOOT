@@ -57,17 +57,20 @@ namespace com.wandhi.wfbooooot.code.Service
                 msg.AppendLine("啥也没查到哦");
             }
             var SearchRes = res?.query.search.Where(a => a.title == keyword).ToList();
-            if (!SearchRes.Any() && res.query.search.IsNotEmpty())
+            if (!SearchRes.Any())
             {
-                msg.AppendLine("你是不是想找：");
-                foreach (var item in res.query.search.Take(3))
+                if (res.query.search.IsNotEmpty())
                 {
-                    msg.AppendLine(item.title);
+                    msg.AppendLine("你是不是想找：");
+                    foreach (var item in res.query.search.Take(3))
+                    {
+                        msg.AppendLine(item.title);
+                    }
                 }
             }
             else
             {
-                msg.AppendLine("准备解析页面");
+                msg.AppendLine("准备解析页面(功能未开发)");
             }
 
             return msg.ToString();

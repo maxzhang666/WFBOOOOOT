@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		UPDATE.md = UPDATE.md
-		黑话.md = 黑话.md
+		萌新术语入门.md = 萌新术语入门.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.wandhi.wfbooooot.code", "com.wandhi.wfbooooot.code\com.wandhi.wfbooooot.code.csproj", "{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}"

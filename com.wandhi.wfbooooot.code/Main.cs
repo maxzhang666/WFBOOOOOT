@@ -21,9 +21,10 @@ namespace com.wandhi.wfbooooot.code
 
 
             #region 注册事件
-            //彩虹屁、骚话
+            //彩虹屁、骚话            
             unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_CHP>("群消息处理");
             unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_WIKI>("群消息处理");
+            unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_ProWord>("群消息处理");            
             #endregion
 
             #region 注册app指向

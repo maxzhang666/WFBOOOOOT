@@ -105,6 +105,7 @@
     <Compile Include="AppData.cs" />
     <Compile Include="Event\Event_AppStart.cs" />
     <Compile Include="Event\Event_GroupMessage_CHP.cs" />
+    <Compile Include="Event\Event_GroupMessage_ProWord.cs" />
     <Compile Include="Event\Event_GroupMessage_WIKI.cs" />
     <Compile Include="Extention\StringHelper.cs" />
     <Compile Include="Interface\IBaseService.cs" />
