@@ -34,13 +34,13 @@ namespace com.wandhi.wfbooooot.code.Event
         /// <summary>
         /// 注册响应事件
         /// </summary>
-        public Event_Main()
+        public Event_Main(IUnityContainer unityContainer)
         {
             Log.Info("注册响应事件");
             //注册群消息事件
-            AppData.UnityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_CHP>("群消息-彩虹屁");
-            AppData.UnityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_ProWord>("群消息-黑话");
-            AppData.UnityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_WIKI>("群消息-WIki");
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_CHP>("群消息-彩虹屁");
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_ProWord>("群消息-黑话");
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_WIKI>("群消息-WIki");
         }
     }
 }

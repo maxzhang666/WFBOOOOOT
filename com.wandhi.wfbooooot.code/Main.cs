@@ -18,17 +18,13 @@ namespace com.wandhi.wfbooooot.code
         /// <param name="container">用于注册的 IOC 容器 </param>
         public static void Register(IUnityContainer unityContainer, IUnityContainer unityContainer1)
         {
-
             #region 注册容器指向            
             AppData.UnityContainer = unityContainer1;
             #endregion
 
-            #region 注册自定义的事件分发器
-            //彩虹屁、骚话            
+            #region 注册自定义的事件分发器            
             unityContainer.RegisterType<IGroupMessage, Event_Main>("群消息处理");
             #endregion
-
-
         }
     }
 }
