@@ -13,9 +13,9 @@ namespace com.wandhi.wfbooooot.code.Event
     /// <summary>
     /// wiki查询群事件
     /// </summary>
-    public class Event_GroupMessage_CHP : IGroupMessage
+    public class Event_GroupMessage_CHP : IWFGroupMessage
     {
-        void IGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
+        void IWFGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
         {
             if (e.FromGroup == AppData.GroupNumber && e.Message.Text.StartsWith("/骚话"))
             {

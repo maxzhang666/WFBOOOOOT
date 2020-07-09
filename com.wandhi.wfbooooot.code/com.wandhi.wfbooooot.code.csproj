@@ -107,8 +107,12 @@
     <Compile Include="Event\Event_GroupMessage_CHP.cs" />
     <Compile Include="Event\Event_GroupMessage_ProWord.cs" />
     <Compile Include="Event\Event_GroupMessage_WIKI.cs" />
+    <Compile Include="Event\Event_Main.cs" />
+    <Compile Include="Extention\FileHelper.cs" />
+    <Compile Include="Extention\Log.cs" />
     <Compile Include="Extention\StringHelper.cs" />
     <Compile Include="Interface\IBaseService.cs" />
+    <Compile Include="Interface\IWFGrougMessage.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model\Wiki\WikiSearch.cs" />
     <Compile Include="Model\Wiki\WikiSearchInfo.cs" />

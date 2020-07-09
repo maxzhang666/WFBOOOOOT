@@ -1,4 +1,5 @@
-﻿using com.wandhi.wfbooooot.code.Service;
+﻿using com.wandhi.wfbooooot.code.Interface;
+using com.wandhi.wfbooooot.code.Service;
 using Native.Sdk.Cqp;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
@@ -13,9 +14,9 @@ namespace com.wandhi.wfbooooot.code.Event
     /// <summary>
     /// 黑话群事件
     /// </summary>
-    public class Event_GroupMessage_ProWord : IGroupMessage
+    public class Event_GroupMessage_ProWord : IWFGroupMessage
     {
-        void IGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
+        void IWFGroupMessage.GroupMessage(object sender, CQGroupMessageEventArgs e)
         {
             if ((e.FromGroup == AppData.GroupNumber || e.FromGroup == AppData.GroupDebug) && e.Message.Text.ToLower().StartsWith("/黑话"))
             {

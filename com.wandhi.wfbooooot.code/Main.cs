@@ -13,26 +13,22 @@ namespace com.wandhi.wfbooooot.code
     public class Main
     {
         /// <summary>
-        /// 在应用被加载时将调用此方法进行事件注册, 请在此方法里向 <see cref="IUnityContainer"/> 容器中注册需要使用的事件
+        /// 请在Natice框架中执行该函数进行事件注册
         /// </summary>
         /// <param name="container">用于注册的 IOC 容器 </param>
         public static void Register(IUnityContainer unityContainer, IUnityContainer unityContainer1)
         {
 
-
-            #region 注册事件
-            //彩虹屁、骚话            
-            unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_CHP>("群消息处理");
-            unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_WIKI>("群消息处理");
-            unityContainer.RegisterType<IGroupMessage, Event_GroupMessage_ProWord>("群消息处理");            
-            #endregion
-
-            #region 注册app指向
-            //AppData.CQLog = CQLog;
-            //AppData.CQLog.Info("事件注册完成");
-            //AppData.CQApi = CQApi;
+            #region 注册容器指向            
             AppData.UnityContainer = unityContainer1;
             #endregion
+
+            #region 注册自定义的事件分发器
+            //彩虹屁、骚话            
+            unityContainer.RegisterType<IGroupMessage, Event_Main>("群消息处理");
+            #endregion
+
+
         }
     }
 }
