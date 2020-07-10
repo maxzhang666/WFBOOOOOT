@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.International.Converters.TraditionalChineseToSimplifiedConverter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,27 @@ namespace com.wandhi.wfbooooot.code.Extention
         public static bool IsEmpty<T>(this List<T> list)
         {
             return !list.IsNotEmpty();
+        }
+
+
+
+        /// <summary> 
+        /// 简体转换为繁体
+        /// </summary> 
+        /// <param name="str">简体字</param> 
+        /// <returns>繁体字</returns> 
+        public static string GetTraditional(this string str)
+        {            
+            return ChineseConverter.Convert(str, ChineseConversionDirection.SimplifiedToTraditional);
+        }
+        /// <summary> 
+        /// 繁体转换为简体
+        /// </summary> 
+        /// <param name="str">繁体字</param> 
+        /// <returns>简体字</returns> 
+        public static string GetSimplified(this string str)
+        {            
+            return ChineseConverter.Convert(str, ChineseConversionDirection.TraditionalToSimplified);    
         }
     }
 }

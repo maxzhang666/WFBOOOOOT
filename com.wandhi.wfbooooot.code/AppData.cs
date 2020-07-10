@@ -18,7 +18,7 @@ namespace com.wandhi.wfbooooot.code
         {
             get
             {
-                return (CQApi)AppData.UnityContainer.Resolve(typeof(CQApi), AppName);
+                return (CQApi)UnityContainer.Resolve(typeof(CQApi), AppName);
             }
         }
 
@@ -29,7 +29,7 @@ namespace com.wandhi.wfbooooot.code
         {
             get
             {
-                return (CQLog)AppData.UnityContainer.Resolve(typeof(CQLog), AppName);
+                return (CQLog)UnityContainer.Resolve(typeof(CQLog), AppName);
             }
         }
 
