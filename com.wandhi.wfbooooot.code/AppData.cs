@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using com.wandhi.wfbooooot.code.Extention;
 using Native.Sdk.Cqp;
 using Unity;
 
@@ -37,7 +38,21 @@ namespace com.wandhi.wfbooooot.code
         /// 获取当前 App 使用的依赖注入容器实例
         /// </summary>
         public static IUnityContainer UnityContainer { get; set; }
-
+        /// <summary>
+        /// 缓存操作
+        /// </summary>
+        public static Cache Cache
+        {
+            get
+            {
+                if (_MemoryCacheService == null)
+                {
+                    _MemoryCacheService = new Cache();
+                }
+                return _MemoryCacheService;
+            }
+        }
+        private static Cache _MemoryCacheService { set; get; }
 
         #region 自定义对象
         /// <summary>

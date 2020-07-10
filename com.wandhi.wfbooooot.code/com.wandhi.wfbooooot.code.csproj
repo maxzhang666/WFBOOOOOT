@@ -58,7 +58,7 @@
       <HintPath>..\packages\Unity.5.8.6\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="GHttpHelper, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GHttpHelper.1.0.6\lib\net45\GHttpHelper.dll</HintPath>
+      <HintPath>..\packages\GHttpHelper.1.0.7\lib\net45\GHttpHelper.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -72,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -111,8 +112,10 @@
     <Compile Include="Event\Event_GroupMessage_ProWord.cs" />
     <Compile Include="Event\Event_GroupMessage_WIKI.cs" />
     <Compile Include="Event\Event_Main.cs" />
+    <Compile Include="Extention\Cache.cs" />
     <Compile Include="Extention\FileHelper.cs" />
     <Compile Include="Extention\Log.cs" />
+    <Compile Include="Extention\RichasyApi.cs" />
     <Compile Include="Extention\StringHelper.cs" />
     <Compile Include="Interface\IBaseService.cs" />
     <Compile Include="Interface\IWFGrougMessage.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\ChpService.cs" />
     <Compile Include="Service\DjtService.cs" />
+    <Compile Include="Service\WFApiService.cs" />
     <Compile Include="Service\WikiService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\WFApi\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
