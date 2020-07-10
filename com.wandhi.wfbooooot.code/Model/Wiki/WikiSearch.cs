@@ -17,6 +17,10 @@ namespace com.wandhi.wfbooooot.code.Model.Wiki
         /// </summary>
         public WikiSearchQuery query { get; set; }
 
+        public WikiError error { set; get; }
+    }
+    public class WikiError
+    {
         public string code { set; get; }
 
         public string info { set; get; }

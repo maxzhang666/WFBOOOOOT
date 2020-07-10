@@ -45,10 +45,13 @@ namespace com.wandhi.wfbooooot.code.Service
             var SearchUrl = $"{SearchApi}{(Uri.EscapeUriString(keyword))}";
 
             var res = Http.Get<WikiSearch>(SearchUrl);
-            if (res.code.IsNotEmpty())
+            if (res == null || res.error != null)
             {
                 msg.AppendLine("飞机WikiApi调用失败");
-                msg.Append($"错误消息{res.info}");
+                if (res?.error != null)
+                {
+                    msg.Append($"错误消息：{res.error.info}");
+                }
                 return msg.ToString();
             }
 
@@ -56,21 +59,24 @@ namespace com.wandhi.wfbooooot.code.Service
             {
                 msg.AppendLine("啥也没查到哦");
             }
-            var SearchRes = res?.query.search.Where(a => a.title == keyword).ToList();
-            if (!SearchRes.Any())
-            {
-                if (res.query.search.IsNotEmpty())
-                {
-                    msg.AppendLine("你是不是想找：");
-                    foreach (var item in res.query.search.Take(3))
-                    {
-                        msg.AppendLine(item.title);
-                    }
-                }
-            }
             else
             {
-                msg.AppendLine("准备解析页面(功能未开发)");
+                var SearchRes = res?.query.search.Where(a => a.title == keyword).ToList();
+                if (!SearchRes.Any())
+                {
+                    if (res.query.search.IsNotEmpty())
+                    {
+                        msg.AppendLine("你是不是想找：");
+                        msg.AppendLine(string.Join("\r\n", res.query.search.Take(3)));  
+                    }
+                }
+                else
+                {
+                    var dom = new HtmlAgilityPack.HtmlDocument();
+                    dom.LoadHtml(res.query.search[0].snippet);
+                    msg.AppendLine($"简介:{dom.DocumentNode.InnerText}\r\n");
+                    msg.Append($"详情链接：{WikiLink}{Uri.EscapeDataString(res.query.search[0].title)}");
+                }
             }
 
             return msg.ToString();

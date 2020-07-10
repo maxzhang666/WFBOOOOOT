@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.wandhi.wfbooooot.code", "com.wandhi.wfbooooot.code\com.wandhi.wfbooooot.code.csproj", "{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFBoooootTest", "WFBoooootTest\WFBoooootTest.csproj", "{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,14 @@ Global
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Release|x86.ActiveCfg = Release|Any CPU
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Release|x86.Build.0 = Release|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
