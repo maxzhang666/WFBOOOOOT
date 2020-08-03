@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Native.Tool", "Native.Tool\Native.Tool.csproj", "{0CA93EB9-4E25-46C6-94D2-0F97137A1606}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Native.Sdk", "Native.Sdk\Native.Sdk.csproj", "{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Native.Core", "Native.Core\Native.Core.csproj", "{C03C5BB7-91D0-4894-AAF9-127090DFAD91}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43F87A06-BDC3-4D75-B40F-91F2105001E0}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
@@ -16,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		萌新术语入门.md = 萌新术语入门.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.wandhi.wfbooooot.code", "com.wandhi.wfbooooot.code\com.wandhi.wfbooooot.code.csproj", "{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFBooooot", "com.wandhi.wfbooooot.code\WFBooooot.csproj", "{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFBoooootTest", "WFBoooootTest\WFBoooootTest.csproj", "{2F6D3261-7710-47FF-87F1-5C3D0E6C2D98}"
 EndProject
@@ -28,24 +22,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Debug|x86.ActiveCfg = Debug|x86
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Debug|x86.Build.0 = Debug|x86
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Release|Any CPU.ActiveCfg = Release|x86
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Release|x86.ActiveCfg = Release|x86
-		{0CA93EB9-4E25-46C6-94D2-0F97137A1606}.Release|x86.Build.0 = Release|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Debug|x86.ActiveCfg = Debug|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Debug|x86.Build.0 = Debug|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Release|Any CPU.ActiveCfg = Release|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Release|x86.ActiveCfg = Release|x86
-		{D7A958B3-79D9-49F8-8BB4-9619BAB6ECBA}.Release|x86.Build.0 = Release|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Debug|x86.ActiveCfg = Debug|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Debug|x86.Build.0 = Debug|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Release|Any CPU.ActiveCfg = Release|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Release|x86.ActiveCfg = Release|x86
-		{C03C5BB7-91D0-4894-AAF9-127090DFAD91}.Release|x86.Build.0 = Release|x86
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}.Debug|x86.ActiveCfg = Debug|x86

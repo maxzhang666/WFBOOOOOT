@@ -7,8 +7,8 @@
     <ProjectGuid>{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.wandhi.wfbooooot.code</RootNamespace>
-    <AssemblyName>com.wandhi.wfbooooot.code</AssemblyName>
+    <RootNamespace>WFBooooot</RootNamespace>
+    <AssemblyName>WFBooooot</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -130,12 +130,6 @@
     <Compile Include="Service\DjtService.cs" />
     <Compile Include="Service\WFApiService.cs" />
     <Compile Include="Service\WikiService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Native.Sdk\Native.Sdk.csproj">
-      <Project>{d7a958b3-79d9-49f8-8bb4-9619bab6ecba}</Project>
-      <Name>Native.Sdk</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
