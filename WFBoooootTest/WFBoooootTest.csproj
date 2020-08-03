@@ -49,8 +49,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\com.wandhi.wfbooooot.code\WFBooooot.csproj">
-      <Project>{293AE53C-2A90-4086-BCA8-4E6F9BF73EC3}</Project>
+    <ProjectReference Include="..\WFBooooot\WFBooooot.csproj">
+      <Project>{293ae53c-2a90-4086-bca8-4e6f9bf73ec3}</Project>
       <Name>WFBooooot</Name>
     </ProjectReference>
   </ItemGroup>
