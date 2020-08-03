@@ -1,6 +1,4 @@
-﻿using com.wandhi.wfbooooot.code.Interface;
-using com.wandhi.wfbooooot.code.Service;
-using Native.Sdk.Cqp;
+﻿using Native.Sdk.Cqp;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using System;
@@ -8,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WFBooooot.Interface;
+using WFBooooot.Service;
 
-namespace com.wandhi.wfbooooot.code.Event
+namespace WFBooooot.Event
 {
     /// <summary>
     /// wiki查询群事件

@@ -1,5 +1,4 @@
-﻿using com.wandhi.wfbooooot.code.Interface;
-using com.wandhi.wfbooooot.code.Service;
+﻿using WFBooooot.Service;
 using Native.Sdk.Cqp;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
@@ -8,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WFBooooot.Interface;
 
-namespace com.wandhi.wfbooooot.code.Event
+namespace WFBooooot.Event
 {
     /// <summary>
     /// 黑话群事件

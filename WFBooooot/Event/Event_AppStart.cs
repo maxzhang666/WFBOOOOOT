@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Event
+namespace WFBooooot.Event
 {
     public class Event_AppStart : IAppEnable
     {

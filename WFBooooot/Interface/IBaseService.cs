@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Interface
+namespace WFBooooot.Interface
 {
     interface IBaseService
     {

@@ -1,11 +1,11 @@
-﻿using com.wandhi.wfbooooot.code.Interface;
+﻿using WFBooooot.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Service
+namespace WFBooooot.Service
 {
     public class DjtService : BaseService
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Extention
+namespace WFBooooot.Extention
 {
     /// <summary>
     /// 本地日志记录

@@ -1,22 +1,22 @@
-using com.wandhi.wfbooooot.code.Extention;
-using com.wandhi.wfbooooot.code.Interface;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using System.Threading.Tasks;
 using Unity;
 using Unity.Interception.Utilities;
+using WFBooooot.Extention;
+using WFBooooot.Interface;
 
-namespace com.wandhi.wfbooooot.code.Event
+namespace WFBooooot.Event
 {
     /// <summary>
-    /// 事件分发器
-    /// 由于框架自带的IOC分发仅触发了一个事件
-    /// 所以这里封装一个分发器，使对应的事件分发到注入的每个响应中中
+    /// 锟铰硷拷锟街凤拷锟斤拷
+    /// 锟斤拷锟节匡拷锟斤拷源锟斤拷锟絀OC锟街凤拷锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷锟铰硷拷
+    /// 锟斤拷锟斤拷锟斤拷锟斤拷锟阶耙伙拷锟斤拷址锟斤拷锟斤拷锟绞癸拷锟接︼拷锟斤拷录锟斤拷址锟斤拷锟阶拷锟斤拷每锟斤拷锟斤拷应锟斤拷锟斤拷
     /// </summary>
     public class Event_Main : IGroupMessage
     {
         /// <summary>
-        /// 群消息事件分发
+        /// 群锟斤拷息锟铰硷拷锟街凤拷
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -32,15 +32,15 @@ namespace com.wandhi.wfbooooot.code.Event
         }
 
         /// <summary>
-        /// 注册响应事件
+        /// 注锟斤拷锟斤拷应锟铰硷拷
         /// </summary>
         public Event_Main(IUnityContainer unityContainer)
         {
-            Log.Info("注册响应事件");
-            //注册群消息事件
-            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_CHP>("群消息-彩虹屁");
-            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_ProWord>("群消息-黑话");
-            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_WIKI>("群消息-WIki");
+            Log.Info("注锟斤拷锟斤拷应锟铰硷拷");
+            //注锟斤拷群锟斤拷息锟铰硷拷
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_CHP>("群锟斤拷息-锟绞猴拷屁");
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_ProWord>("群锟斤拷息-锟节伙拷");
+            unityContainer.RegisterType<IWFGroupMessage, Event_GroupMessage_WIKI>("群锟斤拷息-WIki");
         }
     }
 }

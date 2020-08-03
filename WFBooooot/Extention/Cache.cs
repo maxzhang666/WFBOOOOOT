@@ -5,7 +5,7 @@ using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Extention
+namespace WFBooooot.Extention
 {
     public class Cache
     {

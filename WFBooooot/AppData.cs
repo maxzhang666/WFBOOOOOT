@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using com.wandhi.wfbooooot.code.Extention;
 using Native.Sdk.Cqp;
 using Unity;
+using WFBooooot.Extention;
 
-namespace com.wandhi.wfbooooot.code
+namespace WFBooooot
 {
     public static class AppData
     {

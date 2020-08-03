@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Extention
+namespace WFBooooot.Extention
 {
     public static class StringHelper
     {

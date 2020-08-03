@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.wandhi.wfbooooot.code.Model.Wiki
+namespace WFBooooot.Model.Wiki
 {
     public class WikiSearch
     {
