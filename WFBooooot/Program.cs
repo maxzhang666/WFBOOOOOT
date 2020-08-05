@@ -7,7 +7,7 @@ namespace WFBooooot
 {
     class Program
     {
-        private static ConfigService _configService;
+        private static ConfigService _ConfigService;
         private static Log _Log;
         private static IWandhiIocManager _WandhiIocManager;
 
@@ -16,9 +16,19 @@ namespace WFBooooot
             //初始化依赖
             Init();
 
+            Hold();
+        }
 
-            Console.WriteLine("Hello World!");
-            Console.ReadLine();
+        static void Hold()
+        {
+            while (true)
+            {
+                var key = Console.ReadLine();
+                if (key.ToLower() == "exit")
+                {
+                    break;
+                }
+            }
         }
 
         static void Init()
@@ -28,7 +38,7 @@ namespace WFBooooot
             _WandhiIocManager.RegisterByAssemblies(Assembly.GetExecutingAssembly());
 
             //初始化组件
-            _configService = _WandhiIocManager.Resolve<ConfigService>();
+            _ConfigService = _WandhiIocManager.Resolve<ConfigService>();
             _Log = _WandhiIocManager.Resolve<Log>();
         }
     }
