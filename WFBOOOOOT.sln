@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43F87A06-BDC3-4D75-B40F-91F2105001E0}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
-		UPDATE.md = UPDATE.md
 		萌新术语入门.md = 萌新术语入门.md
 	EndProjectSection
 EndProject

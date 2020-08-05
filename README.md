@@ -9,8 +9,7 @@ Warframe机器人
 
 
 ## 更新日志
-
-[Native 更新日志](UPDATE.md)
+还没发布呢更新锤子
 
 ## 关于打赏
 
