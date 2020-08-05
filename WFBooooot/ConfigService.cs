@@ -14,7 +14,7 @@ namespace WFBooooot
     /// </summary>
     public class ConfigService : IIocService
     {
-        private const string FileName = "app.config";
+        private const string FileName = "app.config.json";
         private readonly string _filePath = $"{Directory.GetCurrentDirectory()}/{FileName}";
         private readonly Log Log;
         public AppConfig AppConfig { private set; get; }
