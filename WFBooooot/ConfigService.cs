@@ -60,6 +60,9 @@ namespace WFBooooot
             return appConfig;
         }
 
+        /// <summary>
+        /// 保存配置信息
+        /// </summary>
         public void SaveConfig()
         {
             File.WriteAllText(_filePath, JsonConvert.SerializeObject(AppConfig));
