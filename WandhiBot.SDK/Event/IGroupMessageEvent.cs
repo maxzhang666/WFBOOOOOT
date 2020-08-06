@@ -1,3 +1,4 @@
+using WandhiBot.SDK.EventArgs;
 using WandhiBot.SDK.Model;
 
 namespace WandhiBot.SDK.Event
@@ -13,6 +14,6 @@ namespace WandhiBot.SDK.Event
         /// <param name="fromQQ">来源QQ</param>
         /// <param name="fromGroup">来源群</param>
         /// <param name="msg">消息内容</param>
-        void GroupMessage(QQ fromQQ, Group fromGroup, QQMessage msg);
+        void GroupMessage(GroupMessageEventArgs groupMessageEventArgs);
     }
 }
