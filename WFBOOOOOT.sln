@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WFBoooootTest", "WFBoooootT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WFBooooot_old", "WFBooooot_old\WFBooooot_old.csproj", "{55D7D4E1-F5FA-4293-84DA-AC80CFFD4AA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFBooooot", "WFBooooot\WFBooooot.csproj", "{72413BF4-765D-4794-AD1C-BCE5E1ADBF84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFBooooot.IOT", "WFBooooot.IOT\WFBooooot.IOT.csproj", "{72413BF4-765D-4794-AD1C-BCE5E1ADBF84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IocManager", "IocManager\IocManager.csproj", "{98DFD7FD-C3FC-4135-B6BF-9E88ACBE0CDA}"
 EndProject

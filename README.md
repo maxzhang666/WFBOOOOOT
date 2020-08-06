@@ -6,7 +6,22 @@ Warframe机器人
 
 无
 
+## 项目目录
 
+- IocManager
+`IOC管理容器`
+
+- SocketClient
+`WebSocket连接工具`
+
+- WandhiBot.SDK
+`机器人约束规范`
+
+- WFBooooot.IOT
+`基于IOT机器人的连接框架`
+
+- WFBooooot
+`基于WandhiBot.SDK约束规范的Warframe机器人实现`
 
 ## 更新日志
 还没发布呢更新锤子
