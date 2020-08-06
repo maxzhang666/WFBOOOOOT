@@ -35,7 +35,8 @@ namespace SocketClient
 			{
 				if (this.callBackRegistry.TryRemove(ackId.Value, out target)) // use TryRemove - callbacks are one-shot event registrations
 				{
-					target.BeginInvoke(value, target.EndInvoke, null);
+					target.Invoke(value);
+					// target.BeginInvoke(value, target.EndInvoke, null);
 				}
 			}
 		}

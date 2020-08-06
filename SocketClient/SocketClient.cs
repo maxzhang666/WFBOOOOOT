@@ -236,9 +236,7 @@ namespace SocketClient
         ///        Debug.WriteLine(data.ToJson());
         ///    });
         /// </example>
-        public virtual void On(
-            string eventName,
-            Action<IMessage> action)
+        public virtual void On(string eventName, Action<IMessage> action)
         {
             this.registrationManager.AddOnEvent(eventName, action);
         }
