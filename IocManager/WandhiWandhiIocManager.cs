@@ -26,9 +26,19 @@ namespace IocManager
         {
             var types = assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IIocService)));
 
+            //注册对象
             foreach (var item in types)
             {
                 IocContainer.RegisterType(item);
+            }
+
+            var singletonTypes =
+                assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IIocSingletonService)));
+
+            //注册单例对象
+            foreach (var item in singletonTypes)
+            {
+                IocContainer.RegisterSingleton(item);
             }
         }
 
