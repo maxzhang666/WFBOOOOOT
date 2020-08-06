@@ -12,7 +12,7 @@ namespace WFBooooot
     /// <summary>
     /// 配置文件类
     /// </summary>
-    public class ConfigService : IIocService
+    public class ConfigService : IIocSingletonService
     {
         private const string FileName = "app.config.json";
         private readonly string _filePath = $"{Directory.GetCurrentDirectory()}/{FileName}";

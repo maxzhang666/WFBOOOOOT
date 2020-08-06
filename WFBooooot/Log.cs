@@ -3,7 +3,7 @@ using IocManager;
 
 namespace WFBooooot
 {
-    public class Log : IIocService
+    public class Log : IIocSingletonService
     {
         public void Info(string msg)
         {
@@ -15,7 +15,7 @@ namespace WFBooooot
             WriteLine(msg, "debug");
         }
 
-        public void WriteLine(string msg, string type)
+        private static void WriteLine(string msg, string type)
         {
             Console.WriteLine($"[{type}]:{msg}");
         }
