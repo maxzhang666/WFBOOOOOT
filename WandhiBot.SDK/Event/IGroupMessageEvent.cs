@@ -1,3 +1,4 @@
+using IocManager;
 using WandhiBot.SDK.EventArgs;
 using WandhiBot.SDK.Model;
 
@@ -6,14 +7,12 @@ namespace WandhiBot.SDK.Event
     /// <summary>
     /// QQ群消息事件
     /// </summary>
-    public interface IGroupMessageEvent
+    public interface IGroupMessageEvent:IIocService
     {
         /// <summary>
         /// QQ群消息事件
         /// </summary>
-        /// <param name="fromQQ">来源QQ</param>
-        /// <param name="fromGroup">来源群</param>
-        /// <param name="msg">消息内容</param>
+        /// <param name="groupMessageEventArgs"></param>
         void GroupMessage(GroupMessageEventArgs groupMessageEventArgs);
     }
 }

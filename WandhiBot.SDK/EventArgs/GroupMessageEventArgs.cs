@@ -7,16 +7,16 @@ namespace WandhiBot.SDK.EventArgs
         /// <summary>
         /// 来源QQ 
         /// </summary>
-        public QQ fromQQ { set; get; }
+        public QQ FromQQ { set; get; }
 
         /// <summary>
         /// 来源群
         /// </summary>
-        public Group fromGroup { set; get; }
+        public Group FromGroup { set; get; }
 
         /// <summary>
         /// 消息内容
         /// </summary>
-        public QQMessage msg { set; get; }
+        public QQMessage Msg { set; get; }
     }
 }
