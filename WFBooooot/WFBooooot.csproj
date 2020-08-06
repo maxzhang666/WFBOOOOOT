@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IocManager\IocManager.csproj" />
+    <ProjectReference Include="..\SocketClient\SocketClient.csproj" />
+    <ProjectReference Include="..\WandhiBot.SDK\WandhiBot.SDK.csproj" />
   </ItemGroup>
 
 </Project>

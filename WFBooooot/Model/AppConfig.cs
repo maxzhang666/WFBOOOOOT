@@ -3,7 +3,7 @@ using IocManager;
 
 namespace WFBooooot.Model
 {
-    public class AppConfig:IIocService
+    public class AppConfig : IIocService
     {
         /// <summary>
         /// 服务器
@@ -14,6 +14,8 @@ namespace WFBooooot.Model
         /// 端口号
         /// </summary>
         public string Port { get; set; } = "8888";
+
+        public string QQ { set; get; } = "1213068777";
 
         public List<string> DebugGroup { get; set; } = new List<string> {"951770042"};
     }
