@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using IocManager;
 using Newtonsoft.Json;
+using OPQ.SDK;
 using SocketClient;
 using SocketClient.Message.Impl;
 using Unity;
@@ -23,6 +24,7 @@ namespace WFBooooot.IOT
         private static IWandhiIocManager _WandhiIocManager;
         private static ISocketClient _Socket;
         private static SocketHelper _SocketHelper;
+        private static OpqSocket _OpqSocket;
 
         static void Main(string[] args)
         {
@@ -40,33 +42,14 @@ namespace WFBooooot.IOT
             var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1
                 ? $"{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/"
                 : $"http://{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/";
-            _Socket = new SocketClient.SocketClient(uri);
+            _OpqSocket = new OpqSocket(_ConfigService.AppConfig.Host, _ConfigService.AppConfig.Port, _ConfigService.AppConfig.QQ);
 
-            _Socket.Opened += _SocketHelper.OnSocketConnected;
-            _Socket.Message += _SocketHelper.OnSocketMessage;
-            _Socket.SocketConnectionClosed += _SocketHelper.OnSocketConnectionClosed;
-            _Socket.Error += _SocketHelper.OnSocketError;
-            _Socket.Connect();
+            _OpqSocket.SocketClient.Opened += _SocketHelper.OnSocketConnected;
+            _OpqSocket.SocketClient.Message += _SocketHelper.OnSocketMessage;
+            _OpqSocket.SocketClient.SocketConnectionClosed += _SocketHelper.OnSocketConnectionClosed;
+            _OpqSocket.SocketClient.Error += _SocketHelper.OnSocketError;
 
-            _Socket.On("connect", (fn) =>
-            {
-                Console.WriteLine(((ConnectMessage) fn).ConnectMsg);
-                //重连成功 取得 在线QQ的websocket 链接connid
-                //Ack
-                _Socket.Emit("GetWebConn", _ConfigService.AppConfig.QQ, null, (callback) =>
-                    {
-                        var jsonMsg = callback as string;
-                        Console.WriteLine($"callback [root].[messageAck]: {jsonMsg} \r\n");
-                        if (jsonMsg != null && !jsonMsg.Contains("OK"))
-                        {
-                            //处理有些时候掉线收不到某些消息的问题，重新连接可以解决
-                            _Socket.Close();
-                            SocketInti();
-                            return;
-                        }
-                    }
-                );
-            });
+            _OpqSocket.Connect();
 
 
             //region 事件分发
