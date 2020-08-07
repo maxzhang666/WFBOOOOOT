@@ -12,7 +12,7 @@ using WebSocket4Net;
 
 namespace SocketClient
 {
-    public class SocketClient : IDisposable, ISocketClient
+    public class Client : IDisposable, ISocketClient
     {
         private Timer socketHeartBeatTimer; // HeartBeat timer 
         private Task dequeuOutBoundMsgTask;
@@ -114,12 +114,12 @@ namespace SocketClient
         }
 
         // Constructors
-        public SocketClient(string url)
+        public Client(string url)
             : this(url, WebSocketVersion.Rfc6455)
         {
         }
 
-        public SocketClient(string url, WebSocketVersion socketVersion)
+        public Client(string url, WebSocketVersion socketVersion)
         {
             this.uri = new Uri(url);
 
