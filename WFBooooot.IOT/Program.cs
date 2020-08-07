@@ -1,13 +1,20 @@
 ﻿using System;
-using System.Net.Sockets;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using IocManager;
+using Newtonsoft.Json;
 using SocketClient;
 using SocketClient.Message.Impl;
 using Unity;
-using WFBooooot.Helper;
+using WandhiBot.SDK.Event;
+using WandhiBot.SDK.EventArgs;
+using WandhiBot.SDK.Model;
+using WFBooooot.IOT.Enum;
+using WFBooooot.IOT.Helper;
+using WFBooooot.IOT.Model;
 
-namespace WFBooooot
+namespace WFBooooot.IOT
 {
     class Program
     {
@@ -30,7 +37,7 @@ namespace WFBooooot
 
         static void SocketInti()
         {
-            var uri = _ConfigService.AppConfig.Host.IndexOf("http") > -1
+            var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1
                 ? $"{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/"
                 : $"http://{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/";
             _Socket = new SocketClient.SocketClient(uri);
@@ -50,7 +57,7 @@ namespace WFBooooot
                     {
                         var jsonMsg = callback as string;
                         Console.WriteLine($"callback [root].[messageAck]: {jsonMsg} \r\n");
-                        if (!jsonMsg.Contains("OK"))
+                        if (jsonMsg != null && !jsonMsg.Contains("OK"))
                         {
                             //处理有些时候掉线收不到某些消息的问题，重新连接可以解决
                             _Socket.Close();
@@ -60,15 +67,44 @@ namespace WFBooooot
                     }
                 );
             });
-            
-            
+
+
+            //region 事件分发
+            //群消息事件
+            _Socket.On(EventType.OnGroupMsgs.ToString(), (message) =>
+            {
+                var events = _WandhiIocManager.ResolveAll<IGroupMessageEvent>();
+                var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
+                var groupArgs = new GroupMessageEventArgs
+                {
+                    FromGroup = new Group
+                    {
+                        Id = groupMessage.CurrentPacket.Data.FromGroupId,
+                        GroupName = groupMessage.CurrentPacket.Data.FromGroupName
+                    },
+                    FromQQ = new QQ
+                    {
+                        Id = groupMessage.CurrentPacket.Data.FromUserId,
+                        NickName = groupMessage.CurrentPacket.Data.FromNickName,
+                    },
+                    Msg = new QQMessage
+                    {
+                        Text = groupMessage.CurrentPacket.Data.Content,
+                        MsgId = groupMessage.CurrentPacket.Data.MsgSeq
+                    }
+                };
+                foreach (var item in events)
+                {
+                    Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
+                }
+            });
+
+            //endregion
 
 
             //二维码检测事件
             _Socket.On("OnCheckLoginQrcode",
                 (fn) => { Console.WriteLine("OnCheckLoginQrcode\n" + ((JSONMessage) fn).MessageText); });
-            //收到群消息的回调事件
-            _Socket.On("OnGroupMsgs", (fn) => { Console.WriteLine("OnGroupMsgs\n" + ((JSONMessage) fn).MessageText); });
             //收到好友消息的回调事件
             _Socket.On("OnFriendMsgs",
                 (fn) => { Console.WriteLine("OnFriendMsgs\n" + ((JSONMessage) fn).MessageText); });
@@ -100,6 +136,13 @@ namespace WFBooooot
             _ConfigService = _WandhiIocManager.Resolve<ConfigService>();
             _SocketHelper = _WandhiIocManager.Resolve<SocketHelper>();
             _Log = _WandhiIocManager.Resolve<Log>();
+
+            //注册群消息事件
+            var groupEvent = Assembly.GetExecutingAssembly().GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupMessageEvent)));
+            foreach (var item in groupEvent)
+            {
+                _WandhiIocManager.GetContainer().RegisterType(typeof(IGroupMessageEvent), item, item.Name);
+            }
         }
     }
 }

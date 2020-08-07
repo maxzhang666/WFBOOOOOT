@@ -1,7 +1,7 @@
 using System;
 using IocManager;
 
-namespace WFBooooot
+namespace WFBooooot.IOT
 {
     public class Log : IIocSingletonService
     {
@@ -12,7 +12,9 @@ namespace WFBooooot
 
         public void Debug(string msg)
         {
+#if DEBUG
             WriteLine(msg, "debug");
+#endif
         }
 
         private static void WriteLine(string msg, string type)

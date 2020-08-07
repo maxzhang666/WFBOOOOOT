@@ -1,4 +1,4 @@
-namespace WFBooooot.Enum
+namespace WFBooooot.IOT.Enum
 {
     public enum EventType
     {

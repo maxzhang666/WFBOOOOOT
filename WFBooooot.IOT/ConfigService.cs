@@ -1,13 +1,11 @@
-using System;
 using System.IO;
 using IocManager;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
-using Unity;
-using WFBooooot.Model;
+using WFBooooot.IOT.Model;
 
-namespace WFBooooot
+namespace WFBooooot.IOT
 {
     /// <summary>
     /// 配置文件类

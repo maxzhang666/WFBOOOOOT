@@ -2,7 +2,7 @@ using System;
 using IocManager;
 using SocketClient.Event;
 
-namespace WFBooooot.Helper
+namespace WFBooooot.IOT.Helper
 {
     public class SocketHelper : IIocSingletonService
     {

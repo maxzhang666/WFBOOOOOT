@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using IocManager;
 
-namespace WFBooooot.Model
+namespace WFBooooot.IOT.Model
 {
     public class AppConfig : IIocService
     {
