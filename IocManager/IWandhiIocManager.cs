@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Unity;
 
@@ -23,5 +25,12 @@ namespace IocManager
         /// </summary>
         /// <returns></returns>
         IUnityContainer GetContainer();
+
+        /// <summary>
+        /// 批量获取对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IEnumerable<T> ResolveAll<T>();
     }
 }

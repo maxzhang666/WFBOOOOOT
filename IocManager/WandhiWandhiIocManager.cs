@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Unity;
@@ -50,6 +52,11 @@ namespace IocManager
         public IUnityContainer GetContainer()
         {
             return IocContainer;
+        }
+
+        public IEnumerable<T> ResolveAll<T>()
+        {
+            return IocContainer.ResolveAll<T>();
         }
 
         /// <summary>
