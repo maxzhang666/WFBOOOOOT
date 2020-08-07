@@ -5,7 +5,7 @@ namespace WandhiBot.SDK.Model
         /// <summary>
         /// 群号
         /// </summary>
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 群名
@@ -14,12 +14,12 @@ namespace WandhiBot.SDK.Model
 
         public override string ToString()
         {
-            return Id;
+            return Id.ToString();
         }
 
         public static implicit operator string(Group group)
         {
-            return group.Id;
+            return group.ToString();
         }
 
         public static bool operator !=(Group a, Group b)

@@ -5,7 +5,7 @@ namespace WandhiBot.SDK.Model
         /// <summary>
         /// QQ号
         /// </summary>
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 昵称
@@ -14,7 +14,7 @@ namespace WandhiBot.SDK.Model
 
         public override string ToString()
         {
-            return Id;
+            return Id.ToString();
         }
 
         public static implicit operator string(QQ qq)
