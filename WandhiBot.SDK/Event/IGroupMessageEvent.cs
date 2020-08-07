@@ -7,12 +7,12 @@ namespace WandhiBot.SDK.Event
     /// <summary>
     /// QQ群消息事件
     /// </summary>
-    public interface IGroupMessageEvent:IIocService
+    public interface IGroupMessageEvent
     {
         /// <summary>
         /// QQ群消息事件
         /// </summary>
-        /// <param name="groupMessageEventArgs"></param>
-        void GroupMessage(GroupMessageEventArgs groupMessageEventArgs);
+        /// <param name="e"></param>
+        void GroupMessage(GroupMessageEventArgs e);
     }
 }

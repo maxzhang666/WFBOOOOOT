@@ -21,5 +21,25 @@ namespace WandhiBot.SDK.Model
         {
             return group.Id;
         }
+
+        public static bool operator !=(Group a, Group b)
+        {
+            if (a == null && b == null)
+            {
+                return false;
+            }
+
+            if (a == null || b == null)
+            {
+                return true;
+            }
+
+            return a.Id != b.Id;
+        }
+
+        public static bool operator ==(Group a, Group b)
+        {
+            return !(a != b);
+        }
     }
 }
