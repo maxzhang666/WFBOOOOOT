@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketClient", "SocketClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WandhiBot.SDK", "WandhiBot.SDK\WandhiBot.SDK.csproj", "{924A54FB-6EF5-4165-AC9D-AF23473F570E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPQ.SDK", "OPQ.SDK\OPQ.SDK.csproj", "{049002D9-57A1-4982-8E94-8949A795B294}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,14 @@ Global
 		{924A54FB-6EF5-4165-AC9D-AF23473F570E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{924A54FB-6EF5-4165-AC9D-AF23473F570E}.Release|x86.ActiveCfg = Release|Any CPU
 		{924A54FB-6EF5-4165-AC9D-AF23473F570E}.Release|x86.Build.0 = Release|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Debug|x86.Build.0 = Debug|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Release|x86.ActiveCfg = Release|Any CPU
+		{049002D9-57A1-4982-8E94-8949A795B294}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,8 @@ Warframe机器人
 
 ## 特点
 
-无
+- 依赖注入
+- 开发者无需关心框架实现，实现并注册事件即可
 
 ## 项目结构
 
@@ -17,8 +18,11 @@ Warframe机器人
 - WandhiBot.SDK
 `机器人约束规范`
 
+- OPQ.SDK
+`OPQ机器人框架`
+
 - WFBooooot.IOT
-`基于IOT机器人的连接框架`
+`基于OPQ框架的机器人`
 
 - WFBooooot
 `基于WandhiBot.SDK约束规范的Warframe机器人实现`
@@ -28,7 +32,7 @@ Warframe机器人
 
 - 喔啦喔啦  Coolq什么的都挂了
 
-## 关于打赏
+## 打赏
 
 您的支持就是我更新的动力!
 
