@@ -5,6 +5,7 @@ namespace OPQ.SDK.Enum
         OnCheckLoginQrcode = 1,
         OnGroupMsgs,
         OnFriendMsgs,
-        OnEvents
+        OnEvents,
+        connect
     }
 }
