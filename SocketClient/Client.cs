@@ -14,12 +14,12 @@ namespace SocketClient
 {
     public class Client : IDisposable, ISocketClient
     {
-        private Timer socketHeartBeatTimer; // HeartBeat timer 
-        private Task dequeuOutBoundMsgTask;
-        private BlockingCollection<string> outboundQueue;
-        private int retryConnectionCount = 0;
-        private int retryConnectionAttempts = 3;
-        private readonly static object padLock = new object(); // allow one connection attempt at a time
+        private Timer _socketHeartBeatTimer; // HeartBeat timer 
+        private Task _dequeuOutBoundMsgTask;
+        private BlockingCollection<string> _outboundQueue;
+        private int _retryConnectionCount;
+        private int _retryConnectionAttempts = 3;
+        private readonly static object PadLock = new object(); // allow one connection attempt at a time
 
         /// <summary>
         /// Uri of Websocket server
@@ -77,8 +77,8 @@ namespace SocketClient
         /// </summary>
         public int RetryConnectionAttempts
         {
-            get { return this.retryConnectionAttempts; }
-            set { this.retryConnectionAttempts = value; }
+            get { return _retryConnectionAttempts; }
+            set { _retryConnectionAttempts = value; }
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SocketClient
         /// </summary>
         public bool IsConnected
         {
-            get { return this.ReadyState == WebSocketState.Open; }
+            get { return ReadyState == WebSocketState.Open; }
         }
 
         /// <summary>
@@ -106,10 +106,9 @@ namespace SocketClient
         {
             get
             {
-                if (this.wsClient != null)
-                    return this.wsClient.State;
-                else
-                    return WebSocketState.None;
+                if (wsClient != null)
+                    return wsClient.State;
+                return WebSocketState.None;
             }
         }
 
@@ -121,13 +120,13 @@ namespace SocketClient
 
         public Client(string url, WebSocketVersion socketVersion)
         {
-            this.uri = new Uri(url);
+            uri = new Uri(url);
 
             this.socketVersion = socketVersion;
 
-            this.registrationManager = new RegistrationManager();
-            this.outboundQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
-            this.dequeuOutBoundMsgTask =
+            registrationManager = new RegistrationManager();
+            _outboundQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
+            _dequeuOutBoundMsgTask =
                 Task.Factory.StartNew(() => dequeuOutboundMessages(), TaskCreationOptions.LongRunning);
         }
 
@@ -136,21 +135,21 @@ namespace SocketClient
         /// </summary>
         public void Connect()
         {
-            lock (padLock)
+            lock (PadLock)
             {
-                if (!(this.ReadyState == WebSocketState.Connecting || this.ReadyState == WebSocketState.Open))
+                if (!(ReadyState == WebSocketState.Connecting || ReadyState == WebSocketState.Open))
                 {
                     try
                     {
-                        this.ConnectionOpenEvent.Reset();
+                        ConnectionOpenEvent.Reset();
                         // this.HandShake = this.requestHandshake(uri);// perform an initial HTTP request as a new, non-handshaken connection
 
                         //if (this.HandShake == null || string.IsNullOrWhiteSpace(this.HandShake.SID) || this.HandShake.HadError)
-                        if (this.HandShake != null)
+                        if (HandShake != null)
                         {
-                            this.LastErrorMessage =
-                                string.Format("Error initializing handshake with {0}", uri.ToString());
-                            this.OnErrorEvent(this, new ErrorEventArgs(this.LastErrorMessage, new Exception()));
+                            LastErrorMessage =
+                                string.Format("Error initializing handshake with {0}", uri);
+                            OnErrorEvent(this, new ErrorEventArgs(LastErrorMessage, new Exception()));
                         }
                         else
                         {
@@ -159,27 +158,27 @@ namespace SocketClient
                             var url = string.Format("{0}://{1}:{2}/socket.io/{3}", wsScheme, uri.Host, uri.Port,
                                 uri.Query);
 
-                            this.wsClient = new WebSocket(
+                            wsClient = new WebSocket(
                                 url,
                                 string.Empty,
-                                this.socketVersion);
+                                socketVersion);
 
-                            this.wsClient.EnableAutoSendPing =
+                            wsClient.EnableAutoSendPing =
                                 true; // #4 tkiley: Websocket4net client library initiates a websocket heartbeat, causes delivery problems
-                            this.wsClient.Opened += this.wsClient_OpenEvent;
+                            wsClient.Opened += wsClient_OpenEvent;
 
-                            this.wsClient.MessageReceived += this.wsClient_MessageReceived;
-                            this.wsClient.Error += this.wsClient_Error;
+                            wsClient.MessageReceived += wsClient_MessageReceived;
+                            wsClient.Error += wsClient_Error;
                             //this.wsClient.Handshaked
-                            this.wsClient.Closed += wsClient_Closed;
+                            wsClient.Closed += wsClient_Closed;
 
-                            this.wsClient.Open();
+                            wsClient.Open();
                         }
                     }
                     catch (Exception ex)
                     {
                         Trace.WriteLine(string.Format("Connect threw an exception...{0}", ex.Message));
-                        this.OnErrorEvent(this, new ErrorEventArgs("SocketIO.Client.Connect threw an exception", ex));
+                        OnErrorEvent(this, new ErrorEventArgs("SocketIO.Client.Connect threw an exception", ex));
                     }
                 }
             }
@@ -188,37 +187,37 @@ namespace SocketClient
         public IEndPointClient Connect(string endPoint)
         {
             EndPointClient nsClient = new EndPointClient(this, endPoint);
-            this.Connect();
-            this.Send(new ConnectMessage(endPoint));
+            Connect();
+            Send(new ConnectMessage(endPoint));
             return nsClient;
         }
 
         protected void ReConnect()
         {
-            this.retryConnectionCount++;
+            _retryConnectionCount++;
 
-            this.OnConnectionRetryAttemptEvent(this, EventArgs.Empty);
+            OnConnectionRetryAttemptEvent(this, EventArgs.Empty);
 
-            this.closeHeartBeatTimer(); // stop the heartbeat time
-            this.closeWebSocketClient(); // stop websocket
+            closeHeartBeatTimer(); // stop the heartbeat time
+            closeWebSocketClient(); // stop websocket
 
-            this.Connect();
+            Connect();
 
-            bool connected = this.ConnectionOpenEvent.WaitOne(4000); // block while waiting for connection
+            bool connected = ConnectionOpenEvent.WaitOne(4000); // block while waiting for connection
             Trace.WriteLine(string.Format("\tRetry-Connection successful: {0}", connected));
             if (connected)
-                this.retryConnectionCount = 0;
+                _retryConnectionCount = 0;
             else
             {
                 // we didn't connect - try again until exhausted
-                if (this.retryConnectionCount < this.RetryConnectionAttempts)
+                if (_retryConnectionCount < RetryConnectionAttempts)
                 {
-                    this.ReConnect();
+                    ReConnect();
                 }
                 else
                 {
-                    this.Close();
-                    this.OnSocketConnectionClosedEvent(this, EventArgs.Empty);
+                    Close();
+                    OnSocketConnectionClosedEvent(this, EventArgs.Empty);
                 }
             }
         }
@@ -238,7 +237,7 @@ namespace SocketClient
         /// </example>
         public virtual void On(string eventName, Action<IMessage> action)
         {
-            this.registrationManager.AddOnEvent(eventName, action);
+            registrationManager.AddOnEvent(eventName, action);
         }
 
         public virtual void On(
@@ -246,7 +245,7 @@ namespace SocketClient
             string endPoint,
             Action<IMessage> action)
         {
-            this.registrationManager.AddOnEvent(eventName, endPoint, action);
+            registrationManager.AddOnEvent(eventName, endPoint, action);
         }
 
         /// <summary>
@@ -266,10 +265,10 @@ namespace SocketClient
             {
                 case "message":
                     if (payload is string)
-                        msg = new TextMessage() {MessageText = payload};
+                        msg = new TextMessage {MessageText = payload};
                     else
                         msg = new JSONMessage(payload);
-                    this.Send(msg);
+                    Send(msg);
                     break;
                 case "connect":
                 case "disconnect":
@@ -278,16 +277,16 @@ namespace SocketClient
                 case "error":
                 case "retry":
                 case "reconnect":
-                    throw new System.ArgumentOutOfRangeException(eventName,
+                    throw new ArgumentOutOfRangeException(eventName,
                         "Event name is reserved by socket.io, and cannot be used by clients or servers with this message type");
                 default:
                     if (!string.IsNullOrWhiteSpace(endPoint) && !endPoint.StartsWith("/"))
                         endPoint = "/" + endPoint;
                     msg = new EventMessage(eventName, payload, endPoint, callback);
                     if (callback != null)
-                        this.registrationManager.AddCallBack(msg);
+                        registrationManager.AddCallBack(msg);
 
-                    this.Send(msg);
+                    Send(msg);
                     break;
             }
         }
@@ -311,16 +310,16 @@ namespace SocketClient
         /// <param name="msg"></param>
         public void Send(IMessage msg)
         {
-            this.MessageQueueEmptyEvent.Reset();
-            if (this.outboundQueue != null)
-                this.outboundQueue.Add(msg.Encoded);
+            MessageQueueEmptyEvent.Reset();
+            if (_outboundQueue != null)
+                _outboundQueue.Add(msg.Encoded);
         }
 
         private void Send(string rawEncodedMessageText)
         {
-            this.MessageQueueEmptyEvent.Reset();
-            if (this.outboundQueue != null)
-                this.outboundQueue.Add(rawEncodedMessageText);
+            MessageQueueEmptyEvent.Reset();
+            if (_outboundQueue != null)
+                _outboundQueue.Add(rawEncodedMessageText);
         }
 
         /// <summary>
@@ -334,9 +333,9 @@ namespace SocketClient
 
             bool skip = false;
             if (!string.IsNullOrEmpty(msg.Event) && registrationManager != null)
-                skip = this.registrationManager.InvokeOnEvent(msg); // 
+                skip = registrationManager.InvokeOnEvent(msg); // 
 
-            var handler = this.Message;
+            var handler = Message;
             if (handler != null && !skip)
             {
                 Trace.WriteLine(string.Format("webSocket_OnMessage: {0}", msg.RawMessage));
@@ -349,60 +348,60 @@ namespace SocketClient
         /// </summary>
         public void Close()
         {
-            this.retryConnectionCount = 0; // reset for next connection cycle
+            _retryConnectionCount = 0; // reset for next connection cycle
             // stop the heartbeat time
-            this.closeHeartBeatTimer();
+            closeHeartBeatTimer();
 
             // stop outbound messages
-            this.closeOutboundQueue();
+            closeOutboundQueue();
 
-            this.closeWebSocketClient();
+            closeWebSocketClient();
 
-            if (this.registrationManager != null)
+            if (registrationManager != null)
             {
-                this.registrationManager.Dispose();
-                this.registrationManager = null;
+                registrationManager.Dispose();
+                registrationManager = null;
             }
         }
 
         protected void closeHeartBeatTimer()
         {
             // stop the heartbeat timer
-            if (this.socketHeartBeatTimer != null)
+            if (_socketHeartBeatTimer != null)
             {
-                this.socketHeartBeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
-                this.socketHeartBeatTimer.Dispose();
-                this.socketHeartBeatTimer = null;
+                _socketHeartBeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                _socketHeartBeatTimer.Dispose();
+                _socketHeartBeatTimer = null;
             }
         }
 
         protected void closeOutboundQueue()
         {
             // stop outbound messages
-            if (this.outboundQueue != null)
+            if (_outboundQueue != null)
             {
-                this.outboundQueue.CompleteAdding(); // stop adding any more items;
-                this.dequeuOutBoundMsgTask.Wait(700); // wait for dequeue thread to stop
-                this.outboundQueue.Dispose();
-                this.outboundQueue = null;
+                _outboundQueue.CompleteAdding(); // stop adding any more items;
+                _dequeuOutBoundMsgTask.Wait(700); // wait for dequeue thread to stop
+                _outboundQueue.Dispose();
+                _outboundQueue = null;
             }
         }
 
         protected void closeWebSocketClient()
         {
-            if (this.wsClient != null)
+            if (wsClient != null)
             {
                 // unwire events
-                this.wsClient.Closed -= this.wsClient_Closed;
-                this.wsClient.MessageReceived -= wsClient_MessageReceived;
-                this.wsClient.Error -= wsClient_Error;
-                this.wsClient.Opened -= this.wsClient_OpenEvent;
+                wsClient.Closed -= wsClient_Closed;
+                wsClient.MessageReceived -= wsClient_MessageReceived;
+                wsClient.Error -= wsClient_Error;
+                wsClient.Opened -= wsClient_OpenEvent;
 
-                if (this.wsClient.State == WebSocketState.Connecting || this.wsClient.State == WebSocketState.Open)
+                if (wsClient.State == WebSocketState.Connecting || wsClient.State == WebSocketState.Open)
                 {
                     try
                     {
-                        this.wsClient.Close();
+                        wsClient.Close();
                     }
                     catch
                     {
@@ -411,7 +410,7 @@ namespace SocketClient
                     }
                 }
 
-                this.wsClient = null;
+                wsClient = null;
             }
         }
 
@@ -420,16 +419,16 @@ namespace SocketClient
         {
             //30秒心跳
             // this.socketHeartBeatTimer = new Timer(OnHeartBeatTimerCallback, new object(), HandShake.HeartbeatInterval, HandShake.HeartbeatInterval);
-            this.socketHeartBeatTimer = new Timer(OnHeartBeatTimerCallback, new object(), 30000, 30000);
+            _socketHeartBeatTimer = new Timer(OnHeartBeatTimerCallback, new object(), 30000, 30000);
 
-            this.ConnectionOpenEvent.Set();
+            ConnectionOpenEvent.Set();
 
-            this.OnMessageEvent(new EventMessage() {Event = "open"});
-            if (this.Opened != null)
+            OnMessageEvent(new EventMessage {Event = "open"});
+            if (Opened != null)
             {
                 try
                 {
-                    this.Opened(this, EventArgs.Empty);
+                    Opened(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -453,22 +452,22 @@ namespace SocketClient
             switch (iMsg.MessageType)
             {
                 case SocketClientMessageTypes.Disconnect:
-                    this.OnMessageEvent(iMsg);
+                    OnMessageEvent(iMsg);
                     if (string.IsNullOrWhiteSpace(iMsg.Endpoint)) // Disconnect the whole socket
-                        this.Close();
+                        Close();
                     break;
                 case SocketClientMessageTypes.Heartbeat:
-                    this.OnHeartBeatTimerCallback(null);
+                    OnHeartBeatTimerCallback(null);
                     break;
                 case SocketClientMessageTypes.Connect:
                 case SocketClientMessageTypes.Message:
                 case SocketClientMessageTypes.JSONMessage:
                 case SocketClientMessageTypes.Event:
                 case SocketClientMessageTypes.Error:
-                    this.OnMessageEvent(iMsg);
+                    OnMessageEvent(iMsg);
                     break;
                 case SocketClientMessageTypes.ACK:
-                    this.registrationManager.InvokeCallBack(iMsg.AckId, iMsg.RawMessage);
+                    registrationManager.InvokeCallBack(iMsg.AckId, iMsg.RawMessage);
                     break;
                 default:
                     Trace.WriteLine("unknown wsClient message Received... " + e.Message);
@@ -483,31 +482,31 @@ namespace SocketClient
         /// <param name="e"></param>
         private void wsClient_Closed(object sender, EventArgs e)
         {
-            if (this.retryConnectionCount < this.RetryConnectionAttempts)
+            if (_retryConnectionCount < RetryConnectionAttempts)
             {
-                this.ConnectionOpenEvent.Reset();
-                this.ReConnect();
+                ConnectionOpenEvent.Reset();
+                ReConnect();
             }
             else
             {
-                this.Close();
-                this.OnSocketConnectionClosedEvent(this, EventArgs.Empty);
+                Close();
+                OnSocketConnectionClosedEvent(this, EventArgs.Empty);
             }
         }
 
         private void wsClient_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            this.OnErrorEvent(sender, new ErrorEventArgs("SocketClient error", e.Exception));
+            OnErrorEvent(sender, new ErrorEventArgs("SocketClient error", e.Exception));
         }
 
         protected void OnErrorEvent(object sender, ErrorEventArgs e)
         {
-            this.LastErrorMessage = e.Message;
-            if (this.Error != null)
+            LastErrorMessage = e.Message;
+            if (Error != null)
             {
                 try
                 {
-                    this.Error.Invoke(this, e);
+                    Error.Invoke(this, e);
                 }
                 catch
                 {
@@ -519,11 +518,11 @@ namespace SocketClient
 
         protected void OnSocketConnectionClosedEvent(object sender, EventArgs e)
         {
-            if (this.SocketConnectionClosed != null)
+            if (SocketConnectionClosed != null)
             {
                 try
                 {
-                    this.SocketConnectionClosed(sender, e);
+                    SocketConnectionClosed(sender, e);
                 }
                 catch
                 {
@@ -535,11 +534,11 @@ namespace SocketClient
 
         protected void OnConnectionRetryAttemptEvent(object sender, EventArgs e)
         {
-            if (this.ConnectionRetryAttempt != null)
+            if (ConnectionRetryAttempt != null)
             {
                 try
                 {
-                    this.ConnectionRetryAttempt(sender, e);
+                    ConnectionRetryAttempt(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -547,23 +546,23 @@ namespace SocketClient
                 }
             }
 
-            Trace.WriteLine(string.Format("Attempting to reconnect: {0}", this.retryConnectionCount));
+            Trace.WriteLine(string.Format("Attempting to reconnect: {0}", _retryConnectionCount));
         }
 
         // Housekeeping
         protected void OnHeartBeatTimerCallback(object state)
         {
-            if (this.ReadyState == WebSocketState.Open)
+            if (ReadyState == WebSocketState.Open)
             {
                 IMessage msg = new Heartbeat();
                 try
                 {
-                    if (this.outboundQueue != null && !this.outboundQueue.IsAddingCompleted)
+                    if (_outboundQueue != null && !_outboundQueue.IsAddingCompleted)
                     {
-                        this.outboundQueue.Add(msg.Encoded);
-                        if (this.HeartBeatTimerEvent != null)
+                        _outboundQueue.Add(msg.Encoded);
+                        if (HeartBeatTimerEvent != null)
                         {
-                            this.HeartBeatTimerEvent.BeginInvoke(this, EventArgs.Empty, EndAsyncEvent, null);
+                            HeartBeatTimerEvent.BeginInvoke(this, EventArgs.Empty, EndAsyncEvent, null);
                         }
                     }
                 }
@@ -597,20 +596,20 @@ namespace SocketClient
         /// </summary>
         protected void dequeuOutboundMessages()
         {
-            while (this.outboundQueue != null && !this.outboundQueue.IsAddingCompleted)
+            while (_outboundQueue != null && !_outboundQueue.IsAddingCompleted)
             {
-                if (this.ReadyState == WebSocketState.Open)
+                if (ReadyState == WebSocketState.Open)
                 {
                     string msgString;
                     try
                     {
-                        if (this.outboundQueue.TryTake(out msgString, 500))
+                        if (_outboundQueue.TryTake(out msgString, 500))
                         {
                             //Trace.WriteLine(string.Format("webSocket_Send: {0}", msgString));
-                            this.wsClient.Send(msgString);
+                            wsClient.Send(msgString);
                         }
                         else
-                            this.MessageQueueEmptyEvent.Set();
+                            MessageQueueEmptyEvent.Set();
                     }
                     catch (Exception ex)
                     {
@@ -619,7 +618,7 @@ namespace SocketClient
                 }
                 else
                 {
-                    this.ConnectionOpenEvent.WaitOne(2000); // wait for connection event
+                    ConnectionOpenEvent.WaitOne(2000); // wait for connection event
                 }
             }
         }
@@ -688,9 +687,9 @@ namespace SocketClient
             if (disposing)
             {
                 // free managed resources
-                this.Close();
-                this.MessageQueueEmptyEvent.Dispose();
-                this.ConnectionOpenEvent.Dispose();
+                Close();
+                MessageQueueEmptyEvent.Dispose();
+                ConnectionOpenEvent.Dispose();
             }
         }
     }
