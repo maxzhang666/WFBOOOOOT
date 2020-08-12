@@ -7,9 +7,13 @@ namespace WandhiBot.SDK.Http
     /// </summary>
     public class WandhiInterceptor:IInterceptor
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="invocation"></param>
         public void Intercept(IInvocation invocation)
         {
-     
+            
         }
     }
 }

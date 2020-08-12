@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using Castle.DynamicProxy;
+using WandhiBot.SDK.Http.Attributes;
 
 namespace WandhiBot.SDK.Http
 {
@@ -41,7 +42,7 @@ namespace WandhiBot.SDK.Http
         {
             //仅注册公开类  不考虑私有类的问题
             var types = Assembly.GetExecutingAssembly().GetExportedTypes().ToList();
-            types = types.Where(c => c.GetCustomAttributes().Any()).ToList();
+            types = types.Where(c => c.GetInterfaces().Contains(typeof(IWandhiModule))).ToList();
             var propertyInfos = new List<PropertyInfo>();
             //扫描类成员
             types.ForEach(t =>
