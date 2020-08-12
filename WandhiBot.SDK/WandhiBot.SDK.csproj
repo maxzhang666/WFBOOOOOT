@@ -11,4 +11,8 @@
       <ProjectReference Include="..\IocManager\IocManager.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Castle.Core" Version="4.4.1" />
+    </ItemGroup>
+
 </Project>
