@@ -1,5 +1,7 @@
 ## 简介
 
+
+![构建](https://github.com/maxzhang666/WFBooooot/workflows/.NET%20Core/badge.svg)
 Warframe机器人
 
 ## 特点
