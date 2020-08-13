@@ -1,8 +1,11 @@
-## 简介
+# Warframe机器人
+
+<p align="center"> 
+    <img src="https://github.com/maxzhang666/WFBooooot/workflows/.NET%20Core/badge.svg" alt="构建">
+    <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac-blue.svg" alt="platform">
+</p>
 
 
-![构建](https://github.com/maxzhang666/WFBooooot/workflows/.NET%20Core/badge.svg)
-Warframe机器人
 
 ## 特点
 
