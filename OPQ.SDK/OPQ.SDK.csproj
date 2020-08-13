@@ -2,6 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <Title>OPQ.SDK</Title>
+        <Description>OPQ Netcore开发框架</Description>
+        <Copyright>Wandhi</Copyright>
+        <PackageProjectUrl>https://github.com/maxzhang666/WFBOOOOOT</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/maxzhang666/WFBOOOOOT</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
+        <PackageTags>OPQ,SDK</PackageTags>
+        <LangVersion>default</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>MaxZhang</Authors>
     </PropertyGroup>
 
     <ItemGroup>
