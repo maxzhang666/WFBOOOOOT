@@ -1,6 +1,6 @@
-using WFBooooot.Enum;
+using OPQ.SDK.Enum;
 
-namespace WFBooooot.Model
+namespace OPQ.SDK.Model
 {
     public class QMessage
     {
@@ -32,7 +32,7 @@ namespace WFBooooot.Model
         /// <summary>
         /// 消息类型
         /// </summary>
-        public MsgType MsgType { get; set; }
+        public MessageType MsgType { get; set; }
 
         /// <summary>
         /// 消息事件戳

@@ -44,6 +44,14 @@ namespace IocManager
             }
         }
 
+        public void RegisterByAssemblies(Assembly[] assembly)
+        {
+            foreach (var item in assembly)
+            {
+                RegisterByAssemblies(item);
+            }
+        }
+
         public T Resolve<T>()
         {
             return IocContainer.Resolve<T>();

@@ -1,5 +1,8 @@
-﻿using WandhiBot.SDK.Event;
+﻿using OPQ.SDK;
+using OPQ.SDK.Model.Group;
+using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
+using WFBooooot.IOT.Model;
 
 namespace WFBooooot.IOT.Event
 {
@@ -8,16 +11,26 @@ namespace WFBooooot.IOT.Event
     /// </summary>
     public class EventGroupMessageWiki : IGroupMessageEvent
     {
+        private AppConfig _appConfig;
+
+        private OpqApi _opqApi;
+
+        public EventGroupMessageWiki(AppConfig appConfig, OpqApi opqApi)
+        {
+            _appConfig = appConfig;
+            _opqApi = opqApi;
+        }
+
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            // if ((e.FromGroup == AppData.GroupNumber || e.FromGroup == AppData.GroupDebug) && e.Message.Text.ToLower().StartsWith("/wiki"))
-            // {
-            //     e.CQApi.SendGroupMessage(e.FromGroup, "好嘞，这就去查！");
-            //     //e.Handler = true;
-            //
-            //     var service = new WikiService(e.FromGroup, e.FromQQ, e.Message.Text.Replace("/wiki", "").Replace("/Wiki", "").Trim());
-            //     service.send();
-            // }
+            if (_appConfig.DebugGroup.Contains(e.FromGroup) && e.Msg.Text.ToLower().StartsWith("/wiki"))
+            {
+                _opqApi.SendMessage(new GroupMessage(e.FromGroup, "好嘞，这就去查！"));
+                //e.Handler = true;
+
+                // var service = new WikiService(e.FromGroup, e.FromQQ, e.Message.Text.Replace("/wiki", "").Replace("/Wiki", "").Trim());
+                // service.send();
+            }
         }
     }
 }

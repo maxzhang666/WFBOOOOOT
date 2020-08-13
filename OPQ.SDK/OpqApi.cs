@@ -1,10 +1,11 @@
+using IocManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OPQ.SDK.Model;
 
 namespace OPQ.SDK
 {
-    public class OpqApi
+    public class OpqApi : IIocSingletonService
     {
         private string Root { set; get; }
         private long CurrentQQ { set; get; }

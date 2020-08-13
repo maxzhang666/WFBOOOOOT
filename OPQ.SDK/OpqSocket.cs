@@ -4,11 +4,15 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using IocManager;
+using Newtonsoft.Json;
 using OPQ.SDK.Enum;
+using OPQ.SDK.Model;
 using SocketClient;
 using SocketClient.Message;
 using Unity;
 using WandhiBot.SDK.Event;
+using WandhiBot.SDK.EventArgs;
+using WandhiBot.SDK.Model;
 
 namespace OPQ.SDK
 {
@@ -29,8 +33,6 @@ namespace OPQ.SDK
 
         private Dictionary<EventType, List<Action<IMessage>>> _actions = new Dictionary<EventType, List<Action<IMessage>>>();
         private string _qq;
-        private string _host;
-        private string _port;
 
         /// <summary>
         /// 初始化OpqSocket连接
@@ -38,19 +40,87 @@ namespace OPQ.SDK
         /// <param name="host"></param>
         /// <param name="port"></param>
         /// <param name="qq"></param>
-        public OpqSocket(string host, string port, string qq)
+        /// <param name="assembly"></param>
+        /// <param name="wandhiIocManager">容器</param>
+        public OpqSocket(string host, string port, string qq, Assembly[] assembly, IWandhiIocManager wandhiIocManager)
         {
+            _qq = qq;
             var uri = host.IndexOf("http", StringComparison.Ordinal) > -1
                 ? $"{host}:{port}/"
                 : $"http://{host}:{port}/";
             SocketClient = new Client(uri);
 
+            WandhiIocManager = wandhiIocManager;
+
             //初始化依赖
-            InitContainer();
+            InitContainer(assembly);
             //注册事件
-            RegisterEvent();
+            RegisterEvent(assembly);
             //注册连接持久器
             HoldConnect();
+            //事件分发
+            EventOutGiving();
+        }
+
+        /// <summary>
+        /// 初始化OpqSocket连接
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <param name="qq"></param>
+        /// <param name="assembly"></param>
+        /// <param name="wandhiIocManager">容器</param>
+        public OpqSocket(string host, string port, string qq, Assembly[] assemblyAssemblies)
+        {
+            _qq = qq;
+            var uri = host.IndexOf("http", StringComparison.Ordinal) > -1
+                ? $"{host}:{port}/"
+                : $"http://{host}:{port}/";
+            SocketClient = new Client(uri);
+            //初始化依赖
+            InitContainer(assemblyAssemblies);
+            //注册事件
+            RegisterEvent(assemblyAssemblies);
+            //注册连接持久器
+            HoldConnect();
+            //事件分发
+            EventOutGiving();
+        }
+
+        private void EventOutGiving()
+        {
+            #region 事件分发
+
+            //endregion 群消息事件
+            On(EventType.OnGroupMsgs, (message) =>
+            {
+                var events = WandhiIocManager.ResolveAll<IGroupMessageEvent>();
+                var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
+                var groupArgs = new GroupMessageEventArgs
+                {
+                    FromGroup = new Group
+                    {
+                        Id = groupMessage.CurrentPacket.Data.FromGroupId,
+                        GroupName = groupMessage.CurrentPacket.Data.FromGroupName
+                    },
+                    FromQQ = new QQ
+                    {
+                        Id = groupMessage.CurrentPacket.Data.FromUserId,
+                        NickName = groupMessage.CurrentPacket.Data.FromNickName,
+                    },
+                    Msg = new QQMessage
+                    {
+                        Text = groupMessage.CurrentPacket.Data.Content,
+                        MsgId = groupMessage.CurrentPacket.Data.MsgSeq
+                    }
+                };
+                foreach (var item in events)
+                {
+                    Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
+                }
+            });
+
+            #endregion
         }
 
         /// <summary>
@@ -97,23 +167,32 @@ namespace OPQ.SDK
         /// <summary>
         /// 注册依赖
         /// </summary>
-        private OpqSocket InitContainer()
+        private OpqSocket InitContainer(Assembly[] assemblyAssemblies)
         {
-            WandhiIocManager = new WandhiWandhiIocManager();
-            WandhiIocManager.RegisterByAssemblies(Assembly.GetExecutingAssembly());
+            if (WandhiIocManager == null)
+            {
+                WandhiIocManager = new WandhiWandhiIocManager();
+            }
+
+            WandhiIocManager.RegisterByAssemblies(assemblyAssemblies);
 
             return this;
         }
 
         /// <summary>
-        /// 注册消息
+        /// 注册消息响应事件
         /// </summary>
         /// <returns></returns>
-        private OpqSocket RegisterEvent()
+        private OpqSocket RegisterEvent(Assembly[] assemblyAssemblies)
         {
-            //注册群消息事件
-            var groupEvent = Assembly.GetExecutingAssembly().GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupMessageEvent)));
-            foreach (var item in groupEvent)
+            //注册群消息响应事件
+            var groupEvents = new List<Type>();
+            foreach (var assembly in assemblyAssemblies)
+            {
+                groupEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupMessageEvent))));
+            }
+
+            foreach (var item in groupEvents)
             {
                 WandhiIocManager.GetContainer().RegisterType(typeof(IGroupMessageEvent), item, item.Name);
             }

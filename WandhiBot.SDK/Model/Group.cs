@@ -22,6 +22,11 @@ namespace WandhiBot.SDK.Model
             return group.ToString();
         }
 
+        public static implicit operator long(Group group)
+        {
+            return group.Id;
+        }
+
         public static bool operator !=(Group a, Group b)
         {
             if (a == null && b == null)

@@ -1,6 +1,4 @@
-using WFBooooot.Model;
-
-namespace WFBooooot.IOT.Model
+namespace OPQ.SDK.Model
 {
     public class OpqMessagePacket
     {

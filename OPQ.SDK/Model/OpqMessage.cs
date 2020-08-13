@@ -1,4 +1,4 @@
-namespace WFBooooot.IOT.Model
+namespace OPQ.SDK.Model
 {
     public class OpqMessage
     {
@@ -10,6 +10,6 @@ namespace WFBooooot.IOT.Model
         /// <summary>
         /// 当前QQ
         /// </summary>
-        public int CurrentQQ { get; set; }
+        public long CurrentQQ { get; set; }
     }
 }
