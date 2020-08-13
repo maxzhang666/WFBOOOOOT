@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using OPQ.SDK;
+using OPQ.SDK.Model.Friend;
 using WandhiBot.SDK.Http;
 using WandhiBot.SDK.Http.Attributes;
 using WFBooooot.Test.ProxyTest;
@@ -10,9 +12,11 @@ namespace WFBooooot.Test
     {
         static void Main(string[] args)
         {
-            // var req = new HttpClient(Assembly.GetExecutingAssembly());
-            // var client=new TestClient("http://baidu.com");
-            // var r1 = TestClient.v1.getTest();
+
+            var opq=new OpqApi("http://192.168.71.164:8888",1213068777);
+            
+            opq.SendMessage(new FriendMessage(373884384,"消息测试"));
+            
             Console.WriteLine("Hello World!");
             Console.ReadKey();
         }

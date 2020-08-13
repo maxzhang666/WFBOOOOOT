@@ -10,4 +10,8 @@
       <ProjectReference Include="..\WandhiBot.SDK\WandhiBot.SDK.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="GHttpHelper" Version="1.0.10" />
+    </ItemGroup>
+
 </Project>

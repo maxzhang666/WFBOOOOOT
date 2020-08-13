@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using OPQ.SDK.Enum;
 
 namespace OPQ.SDK.Model
@@ -8,29 +10,40 @@ namespace OPQ.SDK.Model
         /// 接收用户
         /// </summary>
         public long ToUser { get; set; }
+
         /// <summary>
         /// 消息发送类型
         /// </summary>
         public SendToType SendToType { get; set; }
+
+        /// <summary>
+        /// 消息类型
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MessageType SendMsgType { get; set; }
+
         /// <summary>
         /// 内容
         /// </summary>
         public string Content { set; get; }
+
         /// <summary>
         /// 群Id
         /// </summary>
         public long Groupid { get; set; }
+
         /// <summary>
         /// 艾特对象
         /// </summary>
         public long AtUser { set; get; }
-        
-        
-        public Message(long to,string content)
+
+
+        public Message(long to, string content)
         {
             ToUser = to;
             Content = content;
-            SendToType = SendToType.Friend; 
+            SendToType = SendToType.Friend;
+            SendMsgType = MessageType.TextMsg;
         }
     }
 }

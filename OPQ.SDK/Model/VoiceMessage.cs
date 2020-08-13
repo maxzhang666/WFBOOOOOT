@@ -1,6 +1,8 @@
+using OPQ.SDK.Enum;
+
 namespace OPQ.SDK.Model
 {
-    public class VoiceMessage:Message
+    public class VoiceMessage : Message
     {
         /// <summary>
         /// 音频Url
@@ -13,10 +15,10 @@ namespace OPQ.SDK.Model
         /// 音频大小控制在1m voiceUrl 和voiceBase64Buf 二选一
         /// </summary>
         public string VoiceBase64Buf { get; set; }
-        public VoiceMessage(long to, string content,string voiceUrl,string voiceBase64Buf) : base(to, content)
+
+        public VoiceMessage(long to, string content, string voiceUrl, string voiceBase64Buf) : base(to, content)
         {
-            
-            if (string.IsNullOrEmpty( voiceUrl))
+            if (string.IsNullOrEmpty(voiceUrl))
             {
                 VoiceBase64Buf = voiceBase64Buf;
             }
@@ -24,6 +26,8 @@ namespace OPQ.SDK.Model
             {
                 VoiceUrl = voiceUrl;
             }
+
+            SendMsgType = MessageType.VoiceMsg;
         }
     }
 }

@@ -1,18 +1,31 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using OPQ.SDK.Model;
+
 namespace OPQ.SDK
 {
     public class OpqApi
     {
-        private string Root {  set; get; }
+        private string Root { set; get; }
         private long CurrentQQ { set; get; }
         private string Version;
         private int TimeOut;
+
+        #region 配置信息
+
+        private JsonSerializerSettings _jsonFormat = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
+        #endregion
 
         #region Api地址
 
         /// <summary>
         /// 通用消息发送
         /// </summary>
-        private string SendMessage => $"{Root}/{Version}/LuaApiCaller?qq=${CurrentQQ}&funcname=SendMsg&timeout={TimeOut}";
+        private string SendMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=SendMsg&timeout={TimeOut}";
 
         #endregion
 
@@ -32,7 +45,7 @@ namespace OPQ.SDK
         /// <param name="timeout">
         /// 超时时间
         /// </param>
-        public OpqApi(string root,long currentQQ,string version="v1",int timeout=10)
+        public OpqApi(string root, long currentQQ, string version = "v1", int timeout = 10)
         {
             this.Root = root;
             this.CurrentQQ = currentQQ;
@@ -41,14 +54,15 @@ namespace OPQ.SDK
         }
 
         #region 群消息发送
+
         /// <summary>
         /// 发送群文字消息
         /// </summary>
-        public void SendGroupMessage()
+        public void SendMessage(Message message)
         {
-            
+            GHttpHelper.Http.PostJson(SendMsg, JsonConvert.SerializeObject(message, _jsonFormat));
         }
+
         #endregion
-        
     }
 }

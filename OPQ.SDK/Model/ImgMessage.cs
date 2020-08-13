@@ -1,3 +1,5 @@
+using OPQ.SDK.Enum;
+
 namespace OPQ.SDK.Model
 {
     public class ImgMessage : Message
@@ -32,6 +34,8 @@ namespace OPQ.SDK.Model
             }
 
             FileMd5 = fileMd5;
+
+            SendMsgType = MessageType.PicMsg;
         }
     }
 }
