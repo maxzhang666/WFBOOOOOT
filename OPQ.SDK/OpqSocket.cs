@@ -10,6 +10,7 @@ using OPQ.SDK.Model;
 using SocketClient;
 using SocketClient.Message;
 using Unity;
+using Unity.Injection;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
 using WandhiBot.SDK.Model;
@@ -33,6 +34,8 @@ namespace OPQ.SDK
 
         private Dictionary<EventType, List<Action<IMessage>>> _actions = new Dictionary<EventType, List<Action<IMessage>>>();
         private string _qq;
+        private string _host;
+        private string _port;
 
         /// <summary>
         /// 初始化OpqSocket连接
@@ -45,9 +48,9 @@ namespace OPQ.SDK
         public OpqSocket(string host, string port, string qq, Assembly[] assembly, IWandhiIocManager wandhiIocManager)
         {
             _qq = qq;
-            var uri = host.IndexOf("http", StringComparison.Ordinal) > -1
-                ? $"{host}:{port}/"
-                : $"http://{host}:{port}/";
+            _host = host.IndexOf("http", StringComparison.Ordinal) > -1 ? $"{host}" : $"http://{host}";
+            _port = $"{port}";
+            var uri = $"{_host}:{_port}/";
             SocketClient = new Client(uri);
 
             WandhiIocManager = wandhiIocManager;
@@ -73,9 +76,9 @@ namespace OPQ.SDK
         public OpqSocket(string host, string port, string qq, Assembly[] assemblyAssemblies)
         {
             _qq = qq;
-            var uri = host.IndexOf("http", StringComparison.Ordinal) > -1
-                ? $"{host}:{port}/"
-                : $"http://{host}:{port}/";
+            _host = host.IndexOf("http", StringComparison.Ordinal) > -1 ? $"{host}" : $"http://{host}";
+            _port = $"{port}";
+            var uri = $"{_host}:{_port}/";
             SocketClient = new Client(uri);
             //初始化依赖
             InitContainer(assemblyAssemblies);
@@ -175,6 +178,9 @@ namespace OPQ.SDK
             }
 
             WandhiIocManager.RegisterByAssemblies(assemblyAssemblies);
+
+            //注册Api操作类
+            WandhiIocManager.GetContainer().RegisterSingleton<OpqApi>(new InjectionConstructor($"{_host}:{_port}", long.Parse(_qq), "v1", 10));
 
             return this;
         }

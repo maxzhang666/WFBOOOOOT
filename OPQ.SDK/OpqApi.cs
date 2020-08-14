@@ -5,7 +5,7 @@ using OPQ.SDK.Model;
 
 namespace OPQ.SDK
 {
-    public class OpqApi : IIocSingletonService
+    public class OpqApi
     {
         private string Root { set; get; }
         private long CurrentQQ { set; get; }
