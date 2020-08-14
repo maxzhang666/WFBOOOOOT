@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using GHttpHelper;
+using Newtonsoft.Json;
 using OPQ.SDK.Model.Group;
 using TRKS.WF.QQBot;
 using WarframeAlertingPrime.SDK.Models.Core;
@@ -84,8 +85,7 @@ namespace WFBooooot.IOT.Service
 
         public WMInfo GetWMInfo(string searchword)
         {
-            var info = Http.Get<WMInfo>($"https://api.warframe.market/v1/items/{searchword}/orders?include=item");
-            return info;
+            return Http.Get<WMInfo>($"https://api.warframe.market/v1/items/{searchword}/orders?include=item");
         }
 
         public void SendWMInfo(string item)
@@ -123,7 +123,7 @@ namespace WFBooooot.IOT.Service
             }
 
             var msg = "";
-            if (true)
+            if (false)
             {
                 var infoEx = GetWMINfoEx(searchword);
                 OrderWMInfoEx(infoEx);
