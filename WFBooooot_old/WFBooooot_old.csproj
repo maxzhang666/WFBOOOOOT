@@ -122,7 +122,6 @@
         <Compile Include="Extention\Log.cs" />
         <Compile Include="Extention\RichasyApi.cs" />
         <Compile Include="Extention\StringHelper.cs" />
-        <Compile Include="Interface\IBaseService.cs" />
         <Compile Include="Interface\IWFGrougMessage.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Model\Wiki\WikiSearch.cs" />
@@ -130,7 +129,6 @@
         <Compile Include="Model\Wiki\WikiSearchItem.cs" />
         <Compile Include="Model\Wiki\WikiSearchQuery.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Service\BaseService.cs" />
         <Compile Include="Service\ChpService.cs" />
         <Compile Include="Service\DjtService.cs" />
         <Compile Include="Service\WFApiService.cs" />

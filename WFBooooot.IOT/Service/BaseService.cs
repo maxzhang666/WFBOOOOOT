@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WFBooooot.Interface;
+﻿using System.Threading.Tasks;
 
-namespace WFBooooot.Service
+namespace WFBooooot.IOT.Service
 {
     public abstract class BaseService : IBaseService
     {
-        long GroupId;
-        string _Msg;
-        string _Keyword;
-        long _MemberId;
+        protected long GroupId;
+        protected string _Msg;
+        protected string _Keyword;
+        protected long _MemberId;
+
         public BaseService(long GroupId)
         {
             this.GroupId = GroupId;
         }
+
         public BaseService(long GroupId, long MemberId, string Keyword)
         {
             this.GroupId = GroupId;
             this._MemberId = MemberId;
             this._Keyword = Keyword;
         }
+
         public BaseService(long GroupId, long MemberId, string Keyword, string Msg)
         {
             this.GroupId = GroupId;
@@ -30,10 +28,7 @@ namespace WFBooooot.Service
             this._Msg = Msg;
             this._MemberId = MemberId;
         }
-        public BaseService()
-        {
 
-        }
         public abstract string GetMsg();
         public abstract string GetMsg(string KeyWord);
 
@@ -43,8 +38,8 @@ namespace WFBooooot.Service
         /// <param name="msg"></param>
         public async void send(string msg)
         {
-            AppData.CQApi.SendGroupMessage(GroupId, msg);
         }
+
         /// <summary>
         /// 异步发送信息
         /// </summary>

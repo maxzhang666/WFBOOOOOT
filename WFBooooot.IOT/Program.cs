@@ -83,6 +83,9 @@ namespace WFBooooot.IOT
             _WandhiIocManager = new WandhiWandhiIocManager();
             _WandhiIocManager.RegisterByAssemblies(Assembly.GetExecutingAssembly());
 
+            //注入全局静态类
+            AppData.WandhiIocManager = _WandhiIocManager;
+
             //初始化组件
             _ConfigService = _WandhiIocManager.Resolve<ConfigService>();
             _SocketHelper = _WandhiIocManager.Resolve<SocketHelper>();
