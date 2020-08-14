@@ -21,5 +21,10 @@ namespace WandhiBot.SDK.Model
         {
             return qq.ToString();
         }
+
+        public static implicit operator long(QQ qq)
+        {
+            return qq.Id;
+        }
     }
 }
