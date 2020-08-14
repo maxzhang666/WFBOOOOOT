@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using System.Timers;
 using IocManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -11,6 +15,16 @@ namespace OPQ.SDK
         private long CurrentQQ { set; get; }
         private string Version;
         private int TimeOut;
+
+        /// <summary>
+        /// 每秒执行一次，处理发送事件
+        /// </summary>
+        private Timer _timer = new Timer(TimeSpan.FromMilliseconds(1).TotalMilliseconds);
+
+        /// <summary>
+        /// 待发送消息队列
+        /// </summary>
+        private ConcurrentQueue<Message> _sendActions = new ConcurrentQueue<Message>();
 
         #region 配置信息
 
@@ -48,10 +62,14 @@ namespace OPQ.SDK
         /// </param>
         public OpqApi(string root, long currentQQ, string version = "v1", int timeout = 10)
         {
-            this.Root = root;
-            this.CurrentQQ = currentQQ;
+            Root = root;
+            CurrentQQ = currentQQ;
             Version = version;
             TimeOut = timeout;
+
+
+            _timer.Elapsed += (s, e) => MsgProcess();
+            _timer.Start();
         }
 
         #region 群消息发送
@@ -61,7 +79,18 @@ namespace OPQ.SDK
         /// </summary>
         public void SendMessage(Message message)
         {
-            GHttpHelper.Http.PostJson(SendMsg, JsonConvert.SerializeObject(message, _jsonFormat));
+            _sendActions.Enqueue(message);
+        }
+
+        /// <summary>
+        /// 消息处理
+        /// </summary>
+        private void MsgProcess()
+        {
+            if (_sendActions.TryDequeue(out var msg))
+            {
+                Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, JsonConvert.SerializeObject(msg, _jsonFormat))));
+            }
         }
 
         #endregion
