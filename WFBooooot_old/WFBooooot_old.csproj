@@ -58,8 +58,9 @@
         <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
             <HintPath>..\packages\Unity.5.8.6\lib\net45\CommonServiceLocator.dll</HintPath>
         </Reference>
-        <Reference Include="GHttpHelper, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-            <HintPath>..\packages\GHttpHelper.1.0.7\lib\net45\GHttpHelper.dll</HintPath>
+        <Reference Include="GHttpHelper, Version=1.0.6.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\GHttpHelper.1.0.7\lib\net45\GHttpHelper.dll</HintPath>
+          <Private>True</Private>
         </Reference>
         <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
             <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>

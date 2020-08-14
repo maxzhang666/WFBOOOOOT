@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="GHttpHelper" Version="1.0.12" />
+      <PackageReference Include="GHttpHelper" Version="1.0.13" />
     </ItemGroup>
 
 </Project>
