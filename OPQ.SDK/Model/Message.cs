@@ -1,6 +1,8 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using OPQ.SDK.Enum;
+using WandhiHelper.Extension;
 
 namespace OPQ.SDK.Model
 {
@@ -25,7 +27,27 @@ namespace OPQ.SDK.Model
         /// <summary>
         /// 内容
         /// </summary>
-        public string Content { set; get; }
+        public string Content
+        {
+            set => _Content = value;
+            get
+            {
+                if (!_Content.IsEmpty())
+                {
+                    return _Content;
+                }
+
+                if (MsgProcess != null)
+                {
+                    return MsgProcess.Invoke();
+                }
+
+                return "";
+            }
+        }
+
+        private string _Content { set; get; }
+        private Func<string> MsgProcess { set; get; }
 
         /// <summary>
         /// 群Id
@@ -42,6 +64,14 @@ namespace OPQ.SDK.Model
         {
             ToUser = to;
             Content = content;
+            SendToType = SendToType.Friend;
+            SendMsgType = MessageType.TextMsg;
+        }
+
+        public Message(long to, Func<string> msgProcess)
+        {
+            ToUser = to;
+            MsgProcess = msgProcess;
             SendToType = SendToType.Friend;
             SendMsgType = MessageType.TextMsg;
         }

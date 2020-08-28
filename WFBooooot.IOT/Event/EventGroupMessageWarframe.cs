@@ -12,8 +12,7 @@ namespace WFBooooot.IOT.Event
             if (e.Msg.Text.StartsWith("/"))
             {
                 var warframe = new WarframeInfoService(e.FromGroup, e.FromQQ, e.Msg.Text.Substring(1));
-                var msg = warframe.GetMsg(e.Msg.Text.Substring(1));
-                AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, msg));
+                AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, () => warframe.GetMsg(e.Msg.Text.Substring(1))));
             }
         }
     }

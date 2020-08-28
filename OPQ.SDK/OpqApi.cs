@@ -6,6 +6,7 @@ using IocManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OPQ.SDK.Model;
+using OPQ.SDK.Model.Group;
 
 namespace OPQ.SDK
 {
@@ -80,6 +81,16 @@ namespace OPQ.SDK
         public void SendMessage(Message message)
         {
             _sendActions.Enqueue(message);
+        }
+
+        /// <summary>
+        /// 发送群消息
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="msg"></param>
+        public void SendGroupMessage(long to, string msg)
+        {
+            SendMessage(new GroupMessage(to, msg));
         }
 
         /// <summary>
