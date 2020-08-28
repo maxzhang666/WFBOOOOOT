@@ -25,7 +25,9 @@ namespace OPQ.SDK
         /// <summary>
         /// 放开Socket连接客户端以便自行debug连接异常 
         /// </summary>
-        public Client SocketClient { get; private set; }
+        public Client Client { get; private set; }
+
+        private Log _log { set; get; }
 
         /// <summary>
         /// IOC工具
@@ -51,7 +53,7 @@ namespace OPQ.SDK
             _host = host.IndexOf("http", StringComparison.Ordinal) > -1 ? $"{host}" : $"http://{host}";
             _port = $"{port}";
             var uri = $"{_host}:{_port}/";
-            SocketClient = new Client(uri);
+            Client = new Client(uri);
 
             WandhiIocManager = wandhiIocManager;
 
@@ -73,13 +75,14 @@ namespace OPQ.SDK
         /// <param name="qq"></param>
         /// <param name="assembly"></param>
         /// <param name="wandhiIocManager">容器</param>
+        /// <param name="assemblyAssemblies"></param>
         public OpqSocket(string host, string port, string qq, Assembly[] assemblyAssemblies)
         {
             _qq = qq;
             _host = host.IndexOf("http", StringComparison.Ordinal) > -1 ? $"{host}" : $"http://{host}";
             _port = $"{port}";
             var uri = $"{_host}:{_port}/";
-            SocketClient = new Client(uri);
+            Client = new Client(uri);
             //初始化依赖
             InitContainer(assemblyAssemblies);
             //注册事件
@@ -117,6 +120,7 @@ namespace OPQ.SDK
                         MsgId = groupMessage.CurrentPacket.Data.MsgSeq
                     }
                 };
+                _log.Info($"消息：类型[群],来源[{groupArgs.FromGroup}],用户[{groupArgs.FromQQ.NickName}--{groupArgs.FromQQ}]:{groupArgs.Msg}");
                 foreach (var item in events)
                 {
                     Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
@@ -138,7 +142,7 @@ namespace OPQ.SDK
         /// <exception cref="Exception"></exception>
         public OpqSocket On(EventType eventType, Action<IMessage> callback)
         {
-            if (SocketClient == null)
+            if (Client == null)
             {
                 throw new Exception("socket连接未初始化");
             }
@@ -156,7 +160,7 @@ namespace OPQ.SDK
                 _actions.Add(eventType, new List<Action<IMessage>> {callback});
             }
 
-            SocketClient.On(eventType.ToString(), (message) =>
+            Client.On(eventType.ToString(), (message) =>
             {
                 foreach (var item in _actions[eventType])
                 {
@@ -181,6 +185,7 @@ namespace OPQ.SDK
 
             //注册Api操作类
             WandhiIocManager.GetContainer().RegisterSingleton<OpqApi>(new InjectionConstructor($"{_host}:{_port}", long.Parse(_qq), "v1", 10));
+            _log = WandhiIocManager.Resolve<Log>();
 
             return this;
         }
@@ -214,14 +219,14 @@ namespace OPQ.SDK
         {
             On(EventType.connect, (fn) =>
             {
-                SocketClient.Emit("GetWebConn", _qq, null, (callback) =>
+                Client.Emit("GetWebConn", _qq, null, (callback) =>
                     {
                         if (!(callback is string jsonMsg) || jsonMsg.Contains("OK"))
                         {
                             return;
                         }
 
-                        SocketClient.Close();
+                        Client.Close();
                         Connect();
                     }
                 );
@@ -235,12 +240,12 @@ namespace OPQ.SDK
         /// <exception cref="Exception"></exception>
         public OpqSocket Connect()
         {
-            if (SocketClient == null)
+            if (Client == null)
             {
                 throw new Exception("Socket连接未初始化");
             }
 
-            SocketClient.Connect();
+            Client.Connect();
 
             return this;
         }

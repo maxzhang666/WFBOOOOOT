@@ -31,11 +31,8 @@ namespace WFBooooot.IOT
             Init();
             //初始化Socket连接
             SocketInti();
-
-
             Hold();
         }
-
         static void SocketInti()
         {
             var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1
@@ -45,10 +42,10 @@ namespace WFBooooot.IOT
 
             _OpqSocket = new OpqSocket(_ConfigService.AppConfig.Host, _ConfigService.AppConfig.Port, _ConfigService.AppConfig.QQ, AppDomain.CurrentDomain.GetAssemblies(), _WandhiIocManager);
 
-            _OpqSocket.SocketClient.Opened += _SocketHelper.OnSocketConnected;
-            _OpqSocket.SocketClient.Message += _SocketHelper.OnSocketMessage;
-            _OpqSocket.SocketClient.SocketConnectionClosed += _SocketHelper.OnSocketConnectionClosed;
-            _OpqSocket.SocketClient.Error += _SocketHelper.OnSocketError;
+            _OpqSocket.Client.Opened += _SocketHelper.OnSocketConnected;
+            _OpqSocket.Client.Message += _SocketHelper.OnSocketMessage;
+            _OpqSocket.Client.SocketConnectionClosed += _SocketHelper.OnSocketConnectionClosed;
+            _OpqSocket.Client.Error += _SocketHelper.OnSocketError;
 
             _OpqSocket.Connect();
 
