@@ -19,7 +19,7 @@ namespace WFBooooot.IOT
 
         private static void WriteLine(string msg, string type)
         {
-            Console.WriteLine($"[{type}]:{msg}");
+            Console.WriteLine($"[{DateTime.Now}][{type}]:{msg}");
         }
     }
 }
