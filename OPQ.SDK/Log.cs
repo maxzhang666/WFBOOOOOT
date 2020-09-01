@@ -16,7 +16,6 @@ namespace OPQ.SDK
             WriteLine(msg, "debug");
 #endif
         }
-
         private static void WriteLine(string msg, string type)
         {
             Console.WriteLine($"[{DateTime.Now}][{type}]:{msg}");
