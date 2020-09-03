@@ -45,8 +45,6 @@ namespace WFBooooot.IOT.Service
                         }
                     }
                 }
-
-                SendWMInfo(KeyWord);
             });
             return "处理中，请稍后";
         }
