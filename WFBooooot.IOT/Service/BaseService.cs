@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using WandhiHelper.Extension;
 
 namespace WFBooooot.IOT.Service
 {
@@ -48,7 +49,10 @@ namespace WFBooooot.IOT.Service
             Task.Factory.StartNew(async () =>
             {
                 var msg = GetMsg(_Keyword);
-                send(msg);
+                if (!msg.IsEmpty())
+                {
+                    send(msg);
+                }
             });
         }
     }

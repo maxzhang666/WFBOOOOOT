@@ -28,25 +28,27 @@ namespace WFBooooot.IOT.Service
 
         public override string GetMsg(string KeyWord)
         {
-            Task.Factory.StartNew(() =>
+            var res = "";
+            if (KeyWord.StartsWith("查询"))
             {
-                if (KeyWord.StartsWith("查询"))
+                if (!KeyWord.Contains("裂隙") || !KeyWord.Contains("裂缝"))
                 {
-                    if (!KeyWord.Contains("裂隙") || !KeyWord.Contains("裂缝"))
+                    if (KeyWord.Length > 3)
                     {
-                        if (KeyWord.Length > 3)
+                        Task.Factory.StartNew(() =>
                         {
                             var item = KeyWord.Substring(3).Format();
                             SendWMInfo(item);
-                        }
-                        else
-                        {
-                            AppData.OpqApi.SendMessage(new GroupMessage(GroupId, "你没输入要查询的物品"));
-                        }
+                        });
+                        res = "处理中，请稍后";
+                    }
+                    else
+                    {
+                        AppData.OpqApi.SendMessage(new GroupMessage(GroupId, "你没输入要查询的物品"));
                     }
                 }
-            });
-            return "处理中，请稍后";
+            }
+            return res;
         }
 
         public new void send(string msg)
