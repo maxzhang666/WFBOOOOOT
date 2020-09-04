@@ -30,12 +30,13 @@ namespace WFBooooot.IOT
         /// </summary>
         private void WatchFileChange()
         {
-            var fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
-            ChangeToken.OnChange(() => fileProvider.Watch(FileName), () =>
+            var watcher = new FileSystemWatcher(Directory.GetCurrentDirectory(), FileName);
+
+            watcher.Changed += (sender, e) =>
             {
                 Log.Debug("配置文件变化，重新加载");
                 AppConfig = GetConfig();
-            });
+            };
         }
 
         /// <summary>
@@ -45,15 +46,19 @@ namespace WFBooooot.IOT
         private AppConfig GetConfig()
         {
             AppConfig appConfig;
+            Log.Info($"准备读取配置文件……{_filePath}");
             if (!File.Exists(_filePath))
             {
+                Log.Info("配置文件不存在，准备写入默认配置文件……");
                 appConfig = new AppConfig();
-                File.WriteAllText(_filePath, JsonConvert.SerializeObject(appConfig));
+                SaveConfig();
             }
             else
             {
                 appConfig = JsonConvert.DeserializeObject<AppConfig>(File.ReadAllText(_filePath));
             }
+
+            Log.Info($"配置文件读取结束:{JsonConvert.SerializeObject(appConfig)}");
 
             return appConfig;
         }
@@ -63,6 +68,7 @@ namespace WFBooooot.IOT
         /// </summary>
         public void SaveConfig()
         {
+            Log.Info("保存配置信息");
             File.WriteAllText(_filePath, JsonConvert.SerializeObject(AppConfig));
         }
     }

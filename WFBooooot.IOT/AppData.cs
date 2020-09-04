@@ -13,6 +13,8 @@ namespace WFBooooot.IOT
 
         public static OpqApi OpqApi => WandhiIocManager.Resolve<OpqApi>();
 
-        public static AppConfig AppConfig => WandhiIocManager.Resolve<AppConfig>();
+        public static AppConfig AppConfig => WandhiIocManager.Resolve<ConfigService>().AppConfig;
+
+        public static Log Log => WandhiIocManager.Resolve<Log>();
     }
 }

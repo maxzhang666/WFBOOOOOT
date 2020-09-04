@@ -4,7 +4,7 @@ using WFBooooot.IOT.Service.Warframe;
 
 namespace WFBooooot.IOT.Model
 {
-    public class AppConfig : IIocService
+    public class AppConfig : IIocSingletonService
     {
         /// <summary>
         /// 服务器

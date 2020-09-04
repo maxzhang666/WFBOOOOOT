@@ -1,4 +1,6 @@
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OPQ.SDK.Model.Group;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
@@ -13,6 +15,7 @@ namespace WFBooooot.IOT.Event
     {
         public void GroupMessage(GroupMessageEventArgs e)
         {
+            AppData.Log.Info($"LSP日志：{e.FromGroup},{(JsonConvert.SerializeObject(AppData.AppConfig.DebugGroup))}");
             if (AppData.AppConfig.DebugGroup.Contains(e.FromGroup))
             {
                 if (e.Msg.Text.StartsWith("/"))
