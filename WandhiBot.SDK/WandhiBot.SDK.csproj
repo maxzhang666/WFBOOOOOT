@@ -4,7 +4,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>WandhiBot规范</Title>
         <Copyright>MaxZhang</Copyright>
-        <TargetFrameworks>netstandard1.7;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
