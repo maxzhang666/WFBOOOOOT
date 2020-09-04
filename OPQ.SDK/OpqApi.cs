@@ -5,8 +5,10 @@ using System.Timers;
 using IocManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using OPQ.SDK.Enum;
 using OPQ.SDK.Model;
 using OPQ.SDK.Model.Group;
+using WandhiHelper.Extension;
 
 namespace OPQ.SDK
 {
@@ -80,7 +82,17 @@ namespace OPQ.SDK
         /// </summary>
         public void SendMessage(Message message)
         {
-            _sendActions.Enqueue(message);
+            if (message.SendMsgType == MessageType.TextMsg)
+            {
+                if (!message.Content.IsEmpty())
+                {
+                    _sendActions.Enqueue(message);
+                }
+            }
+            else
+            {
+                _sendActions.Enqueue(message);
+            }
         }
 
         /// <summary>
