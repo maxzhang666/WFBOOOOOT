@@ -49,12 +49,12 @@ namespace WFBooooot.IOT.Service
             return "处理中，请稍后";
         }
 
-        public void send(string msg)
+        public new void send(string msg)
         {
             throw new System.NotImplementedException();
         }
 
-        public void send()
+        public new void send()
         {
             throw new System.NotImplementedException();
         }

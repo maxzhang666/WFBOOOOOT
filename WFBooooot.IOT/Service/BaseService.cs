@@ -45,7 +45,7 @@ namespace WFBooooot.IOT.Service
         /// </summary>
         public async void send()
         {
-            await Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 var msg = GetMsg(_Keyword);
                 send(msg);
