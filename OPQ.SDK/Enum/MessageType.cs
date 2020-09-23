@@ -18,5 +18,9 @@ namespace OPQ.SDK.Enum
         /// 大表情
         /// </summary>
         BigFaceMsg,
+        /// <summary>
+        /// xml消息
+        /// </summary>
+        XmlMsg,
     }
 }
