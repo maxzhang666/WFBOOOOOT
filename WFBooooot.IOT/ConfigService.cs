@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using IocManager;
 using Microsoft.Extensions.FileProviders;
@@ -50,7 +51,7 @@ namespace WFBooooot.IOT
             if (!File.Exists(_filePath))
             {
                 Log.Info("配置文件不存在，准备写入默认配置文件……");
-                appConfig = new AppConfig();
+                appConfig = new AppConfig(new List<string> {"951770042"});
                 SaveConfig();
             }
             else

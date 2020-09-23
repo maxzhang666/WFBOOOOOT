@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using IocManager;
 using WFBooooot.IOT.Service.Warframe;
 
@@ -18,8 +19,17 @@ namespace WFBooooot.IOT.Model
 
         public string QQ { set; get; } = "1213068777";
 
-        public List<string> DebugGroup { get; set; } = new List<string> {"951770042"};
+        public List<string> DebugGroup { get; set; }
 
         public WarframeConfig WarframeConfig { get; set; } = new WarframeConfig {ClientId = "1d6c7c5cae574d02ac3ad1a9e8ef01b0", ClientSecret = "68dc306bbb9348e694a35828c8975a08"};
+
+        public AppConfig()
+        {
+        }
+
+        public AppConfig(List<string> debugGroup)
+        {
+            DebugGroup = debugGroup;
+        }
     }
 }
