@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using GHttpHelper;
 using Newtonsoft.Json;
+using OPQ.SDK;
 using OPQ.SDK.Model.Group;
 using TRKS.WF.QQBot;
 using WarframeAlertingPrime.SDK.Models.Core;
@@ -47,6 +49,15 @@ namespace WFBooooot.IOT.Service
                         res = "你没输入要查询的物品";
                     }
                 }
+            }
+            else if (KeyWord.StartsWith("警报"))
+            {
+                res = "好嘞，让我查查看";
+                Task.Factory.StartNew((() =>
+                {
+                    var alerts = GetAlert();
+                    AppData.OpqApi.SendMessage(new GroupMessage(GroupId, alerts.Format()));
+                }));
             }
 
             return res;
@@ -160,6 +171,37 @@ namespace WFBooooot.IOT.Service
                 .OrderBy(order => order.platinum)
                 .Take(3)
                 .ToArray();
+        }
+
+        /// <summary>
+        /// 警报
+        /// </summary>
+        public List<WFAlert> GetAlert()
+        {
+            try
+            {
+                var alerts = Http.Get<List<WFAlert>>("https://api.warframestat.us/pc/alerts");
+                foreach (var alert in alerts)
+                {
+                    _translator.TranslateAlert(alert);
+                    alert.Activation = alert.Activation.ToLocalTime();
+                    alert.Expiry = alert.Expiry.ToLocalTime();
+                }
+
+                return alerts;
+            }
+            catch (HttpRequestException)
+            {
+            }
+            catch (WebException)
+            {
+            }
+            catch (Exception e)
+            {
+                AppData.Log.Error($"警报获取异常: \r\n{e}");
+            }
+
+            return new List<WFAlert>();
         }
 
         public WarframeInfoService(long GroupId) : base(GroupId)

@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace WFBooooot.IOT.Extension
 {
     public static class DateExtension
     {
-        
+        public static DateTime ToLocal(this DateTime dateTime)
+        {
+            return TimeZoneInfo.ConvertTime(dateTime, TimeZoneInfo.Local);
+        }
     }
 }
