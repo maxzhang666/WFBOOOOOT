@@ -44,7 +44,7 @@ namespace WFBooooot.IOT.Service
                     }
                     else
                     {
-                        AppData.OpqApi.SendMessage(new GroupMessage(GroupId, "你没输入要查询的物品"));
+                        res = "你没输入要查询的物品";
                     }
                 }
             }

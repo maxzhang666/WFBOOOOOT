@@ -17,7 +17,7 @@ namespace OPQ.SDK.Model
         /// <summary>
         /// 来源用户
         /// </summary>
-        public int FromUserId { get; set; }
+        public long FromUserId { get; set; }
 
         /// <summary>
         /// 来源用户名称
