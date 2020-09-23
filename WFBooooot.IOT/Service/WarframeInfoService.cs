@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using GHttpHelper;
 using Newtonsoft.Json;
@@ -16,12 +17,15 @@ using WarframeAlertingPrime.SDK.Models.Enums;
 using WarframeAlertingPrime.SDK.Models.Others;
 using WFBooooot.IOT.Extension;
 using WFBooooot.IOT.Service.Warframe;
+using Order = WarframeAlertingPrime.SDK.Models.User.Order;
 
 namespace WFBooooot.IOT.Service
 {
     public class WarframeInfoService : BaseService, IBaseService
     {
         private readonly WFTranslator _translator = new WFTranslator();
+
+        private bool wfa => AppData.AppConfig.WarframeConfig.ClientId.IsNullOrEmpty() || AppData.AppConfig.WarframeConfig.ClientSecret.IsNullOrEmpty();
 
         public override string GetMsg()
         {
@@ -59,6 +63,25 @@ namespace WFBooooot.IOT.Service
                     AppData.OpqApi.SendMessage(new GroupMessage(GroupId, alerts.Format()));
                 }));
             }
+            else if (KeyWord.StartsWith("紫卡"))
+            {
+                if (KeyWord.Length >= 3)
+                {
+                    if (KeyWord.Substring(2).StartsWith(" "))
+                    {
+                        var weapon = KeyWord.Substring(3).Format();
+                        res = "好嘞，这就去查";
+                        Task.Factory.StartNew((() =>
+                        {
+                            var list = GetRiveninfos(KeyWord);
+                        }));
+                    }
+                }
+                else
+                {
+                    res = "不告诉我查什么难道等我猜？";
+                }
+            }
 
             return res;
         }
@@ -75,24 +98,13 @@ namespace WFBooooot.IOT.Service
 
         public WMInfoEx GetWMINfoEx(string searchword)
         {
-            var header = new WebHeaderCollection();
-            header.Add(HttpRequestHeader.ContentType, "x-www-form-urlencoded");
-
-            var rr = Http.Post("https://api.richasy.cn/connect/token", new
-            {
-                client_id = AppData.AppConfig.WarframeConfig.ClientId,
-                client_secret = AppData.AppConfig.WarframeConfig.ClientSecret,
-                grant_type = "client_credentials"
-            }, RequestType.Form, header);
-
-            header.Clear();
-            header.Add(HttpRequestHeader.Authorization,
-                "Bearer ");
-            var info = Http.Get<WMInfoEx>($"https://api.richasy.cn/wfa/basic/pc/wm/{searchword}", header);
             var client = new Client(AppData.AppConfig.WarframeConfig.ClientId, AppData.AppConfig.WarframeConfig.ClientSecret, new[] {"client_credentials"}, PlatformType.PC);
             var init = client.InitAsync().Result;
-            var res = client.GetWarframeMarketOrdersAsync(new WarframeMarketOrderQueryOption {Code = searchword}).Result;
-            return info;
+
+            var res = client.GetWarframeMarketOrdersAsync(new WarframeMarketOrderQueryOption {Code = searchword});
+
+            var info = new WMInfoEx();
+            return null;
         }
 
         public WMInfo GetWMInfo(string searchword)
@@ -202,6 +214,68 @@ namespace WFBooooot.IOT.Service
             }
 
             return new List<WFAlert>();
+        }
+
+        private void SendRivenInfo(string weapon)
+        {
+            var msg = "";
+            if (wfa)
+            {
+                if (_translator.ContainsWeapon(weapon.Format()))
+                {
+                    var info = GetRiveninfos(weapon);
+                    if (info.Count > 0)
+                    {
+                        msg = info.Format();
+                    }
+                    else
+                    {
+                        msg = $"抱歉, 目前紫卡市场没有任何出售: {weapon} 紫卡的用户.";
+                    }
+
+                    AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
+                }
+                else
+                {
+                    msg = $"武器{weapon}不存在, 请检查格式(请注意: 悦音prime)";
+                }
+            }
+            else
+            {
+                msg = "本机器人没有API授权,请联系机器人管理员.";
+            }
+
+            AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
+        }
+
+        /// <summary>
+        /// 紫卡查询
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public List<Order> GetRiveninfos(string keyword)
+        {
+            if (wfa)
+            {
+                _client.InitAsync();
+                var res = _client.QueryRivenOrdersAsync(new SearchRivenOrderOption() {Weapon = keyword}).Result;
+
+                return res.Items;
+            }
+            else
+            {
+                return new List<Order>();
+            }
+        }
+
+        private Client _client;
+
+        private void ClientInit()
+        {
+            if (wfa)
+            {
+                _client = new Client(AppData.AppConfig.WarframeConfig.ClientId, AppData.AppConfig.WarframeConfig.ClientSecret, new[] {"client_credentials"});
+            }
         }
 
         public WarframeInfoService(long GroupId) : base(GroupId)

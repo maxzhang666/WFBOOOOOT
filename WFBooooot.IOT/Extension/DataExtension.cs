@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Castle.Core.Internal;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Humanizer;
 using Humanizer.Localisation;
 using TRKS.WF.QQBot;
+using WarframeAlertingPrime.SDK.Models.User;
 using WFBooooot.IOT.Service.Warframe;
+using Order = WarframeAlertingPrime.SDK.Models.User.Order;
 
 namespace WFBooooot.IOT.Extension
 {
@@ -75,5 +78,42 @@ namespace WFBooooot.IOT.Extension
 
             return string.Join(" + ", rewards);
         }
+
+
+        #region Api
+
+        public static string Format(this List<Order> list)
+        {
+            var weapon = list.FirstOrDefault()?.weapon;
+            var sb = new StringBuilder();
+            sb.AppendLine($"下面是 {weapon} 紫卡的 {list.Count} 条卖家信息.");
+            foreach (var info in list)
+            {
+                sb.Append($"[{info.account.gameName}]  ");
+                switch (info.account.status)
+                {
+                    case UserStatus.InGame:
+                        sb.AppendLine("游戏中");
+                        break;
+                    case UserStatus.Online:
+                        sb.AppendLine("在线");
+                        break;
+                    case UserStatus.Offline:
+                        sb.AppendLine("离线");
+                        break;
+                    case UserStatus.Suspend:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                sb.AppendLine($"- 价格:{info.platinum}白鸡");
+                sb.AppendLine($"- 属性:{info.properties}");
+                sb.AppendLine();
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        #endregion
     }
 }
