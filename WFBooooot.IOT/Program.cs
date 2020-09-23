@@ -101,7 +101,7 @@ namespace WFBooooot.IOT
 
         static void ExcetionLog(object source, FirstChanceExceptionEventArgs args)
         {
-            _Log.Error($"发生错误：[{args.Exception.Message}],来源[{args.Exception.StackTrace}]");
+            _Log.Error($"发生错误：[{args.Exception.Message}]\r\n来源：\r\n{args.Exception.Source}\r\n路径:{args.Exception.StackTrace}");
         }
     }
 }
