@@ -48,6 +48,7 @@ namespace WFBooooot.IOT.Service
                     }
                 }
             }
+
             return res;
         }
 
@@ -121,26 +122,24 @@ namespace WFBooooot.IOT.Service
                     }
                 }
             }
+
+            var msg = "";
+            if (false)
+            {
+                var infoEx = GetWMINfoEx(searchword);
+                OrderWMInfoEx(infoEx);
+                _translator.TranslateWMOrderEx(infoEx, searchword);
+                msg = WFFormatter.ToString(infoEx);
+            }
             else
             {
-                var msg = "";
-                if (false)
-                {
-                    var infoEx = GetWMINfoEx(searchword);
-                    OrderWMInfoEx(infoEx);
-                    _translator.TranslateWMOrderEx(infoEx, searchword);
-                    msg = WFFormatter.ToString(infoEx);
-                }
-                else
-                {
-                    var info = GetWMInfo(searchword);
-                    OrderWMInfo(info);
-                    _translator.TranslateWMOrder(info, searchword);
-                    msg = WFFormatter.ToString(info);
-                }
-
-                AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
+                var info = GetWMInfo(searchword);
+                OrderWMInfo(info);
+                _translator.TranslateWMOrder(info, searchword);
+                msg = WFFormatter.ToString(info);
             }
+
+            AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
         }
 
         public void OrderWMInfo(WMInfo info)

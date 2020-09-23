@@ -39,10 +39,10 @@ namespace OPQ.SDK.Model
 
                 if (MsgProcess != null)
                 {
-                    return MsgProcess.Invoke();
+                    _Content = MsgProcess.Invoke();
                 }
 
-                return "";
+                return _Content;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using IocManager;
 using Newtonsoft.Json;
@@ -31,8 +32,12 @@ namespace WFBooooot.IOT
             Init();
             //初始化Socket连接
             SocketInti();
+            //注册全局异常捕获
+            ExcetionHandle();
+            //控制台保持
             Hold();
         }
+
         static void SocketInti()
         {
             var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1
@@ -87,6 +92,16 @@ namespace WFBooooot.IOT
             _ConfigService = _WandhiIocManager.Resolve<ConfigService>();
             _SocketHelper = _WandhiIocManager.Resolve<SocketHelper>();
             _Log = _WandhiIocManager.Resolve<Log>();
+        }
+
+        static void ExcetionHandle()
+        {
+            AppDomain.CurrentDomain.FirstChanceException += ExcetionLog;
+        }
+
+        static void ExcetionLog(object source, FirstChanceExceptionEventArgs args)
+        {
+            _Log.Error($"发生错误：[{args.Exception.Message}],来源[{args.Exception.StackTrace}]");
         }
     }
 }
