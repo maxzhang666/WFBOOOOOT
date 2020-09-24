@@ -31,16 +31,17 @@ namespace WFBooooot.IOT.Event
                     var key = e.Msg.Text.Substring(1);
                     if (key.Contains("来张色图"))
                     {
-                        var lastTime = _cacheHelper.Get<DateTime>("lsp", DateTime.Now);
+                        var lastTime = _cacheHelper.Get<DateTime>("lsp", DateTime.Now - TimeSpan.FromMinutes(1));
                         if (DateTime.Now - lastTime > TimeSpan.FromMinutes(1))
                         {
+                            _cacheHelper.Set("lsp", DateTime.Now);
                             AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                             var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
                             AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
                         }
                         else
                         {
-                            AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就好了？缓缓在挊");
+                            AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
                         }
                     }
                 }
