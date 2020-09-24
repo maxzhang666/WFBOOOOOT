@@ -37,12 +37,12 @@ namespace WFBooooot.IOT.Helper
             return value;
         }
 
-        public T Get<T>(string key, out bool flag)
+        public bool TryGet<T>(string key, out T value)
         {
-            flag = true;
-            T value = default;
-            flag = _memoryCache.TryGetValue(key, out value);
-            return value;
+            var res = true;
+            value = default;
+            res = _memoryCache.TryGetValue(key, out value);
+            return res;
         }
 
         public void Remove(string key)
@@ -52,8 +52,7 @@ namespace WFBooooot.IOT.Helper
 
         public T Get<T>(string key, Func<T> factory)
         {
-            var value = Get<T>(key, out var flag);
-            if (!flag)
+            if (!TryGet<T>(key, out var value))
             {
                 value = factory.Invoke();
                 lock (_lock)
@@ -63,6 +62,24 @@ namespace WFBooooot.IOT.Helper
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// 获取缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="default">默认值</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T Get<T>(string key, T @default)
+        {
+            if (_memoryCache.TryGetValue<T>(key, out var value))
+            {
+                return value;
+            }
+
+            Set(key, @default);
+            return @default;
         }
 
 
