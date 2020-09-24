@@ -11,19 +11,16 @@ namespace WFBooooot.IOT.Event
     /// </summary>
     public class EventGroupMessageWiki : IGroupMessageEvent
     {
-        private AppConfig _appConfig;
-
         private OpqApi _opqApi;
 
         public EventGroupMessageWiki(AppConfig appConfig, OpqApi opqApi)
         {
-            _appConfig = appConfig;
             _opqApi = opqApi;
         }
 
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            if (_appConfig.DebugGroup.Contains(e.FromGroup) && e.Msg.Text.ToLower().StartsWith("/wiki"))
+            if (AppData.AppConfig.DebugGroup.Contains(e.FromGroup) && e.Msg.Text.ToLower().StartsWith("/wiki"))
             {
                 _opqApi.SendMessage(new GroupMessage(e.FromGroup, "好嘞，这就去查！"));
                 //e.Handler = true;

@@ -100,30 +100,36 @@ namespace OPQ.SDK
             //endregion 群消息事件
             On(EventType.OnGroupMsgs, (message) =>
             {
-                var events = WandhiIocManager.ResolveAll<IGroupMessageEvent>();
                 var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
-                var groupArgs = new GroupMessageEventArgs
+                _log.Info(
+                    $"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}--{groupMessage.CurrentPacket.Data.FromUserId}]:{groupMessage.CurrentPacket.Data.Content}");
+
+                //忽略自己的消息
+                if (groupMessage.CurrentPacket.Data.FromUserId != long.Parse(_qq))
                 {
-                    FromGroup = new Group
+                    var events = WandhiIocManager.ResolveAll<IGroupMessageEvent>();
+                    var groupArgs = new GroupMessageEventArgs
                     {
-                        Id = groupMessage.CurrentPacket.Data.FromGroupId,
-                        GroupName = groupMessage.CurrentPacket.Data.FromGroupName
-                    },
-                    FromQQ = new QQ
+                        FromGroup = new Group
+                        {
+                            Id = groupMessage.CurrentPacket.Data.FromGroupId,
+                            GroupName = groupMessage.CurrentPacket.Data.FromGroupName
+                        },
+                        FromQQ = new QQ
+                        {
+                            Id = groupMessage.CurrentPacket.Data.FromUserId,
+                            NickName = groupMessage.CurrentPacket.Data.FromNickName,
+                        },
+                        Msg = new QQMessage
+                        {
+                            Text = groupMessage.CurrentPacket.Data.Content,
+                            MsgId = groupMessage.CurrentPacket.Data.MsgSeq
+                        }
+                    };
+                    foreach (var item in events)
                     {
-                        Id = groupMessage.CurrentPacket.Data.FromUserId,
-                        NickName = groupMessage.CurrentPacket.Data.FromNickName,
-                    },
-                    Msg = new QQMessage
-                    {
-                        Text = groupMessage.CurrentPacket.Data.Content,
-                        MsgId = groupMessage.CurrentPacket.Data.MsgSeq
+                        Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
                     }
-                };
-                _log.Info($"消息：类型[群],来源[{groupArgs.FromGroup}],用户[{groupArgs.FromQQ.NickName}--{groupArgs.FromQQ}]:{groupArgs.Msg}");
-                foreach (var item in events)
-                {
-                    Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
                 }
             });
 
