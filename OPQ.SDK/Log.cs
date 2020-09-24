@@ -7,7 +7,7 @@ namespace OPQ.SDK
     {
         public void Info(string msg)
         {
-            WriteLine(msg, "info");
+            WriteLine(msg, "info", ConsoleColor.Green);
         }
 
         public void Debug(string msg)
@@ -16,8 +16,16 @@ namespace OPQ.SDK
             WriteLine(msg, "debug");
 #endif
         }
-        private static void WriteLine(string msg, string type)
+
+        public void Error(string msg)
         {
+            WriteLine(msg, "error", ConsoleColor.Red);
+        }
+
+        private static void WriteLine(string msg, string type, ConsoleColor fontColor = ConsoleColor.White)
+        {
+            //设置字体颜色
+            Console.ForegroundColor = fontColor;
             Console.WriteLine($"[{DateTime.Now}][{type}]:{msg}");
         }
     }

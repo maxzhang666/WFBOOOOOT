@@ -25,7 +25,7 @@ namespace WFBooooot.IOT.Service
     {
         private readonly WFTranslator _translator = new WFTranslator();
 
-        private bool wfa => AppData.AppConfig.WarframeConfig.ClientId.IsNullOrEmpty() || AppData.AppConfig.WarframeConfig.ClientSecret.IsNullOrEmpty();
+        private bool wfa => AppData.AppConfig.WarframeConfig.ClientId.IsNotEmpty() && AppData.AppConfig.WarframeConfig.ClientSecret.IsNotEmpty();
 
         public override string GetMsg()
         {
@@ -71,10 +71,7 @@ namespace WFBooooot.IOT.Service
                     {
                         var weapon = KeyWord.Substring(3).Format();
                         res = "好嘞，这就去查";
-                        Task.Factory.StartNew((() =>
-                        {
-                            var list = GetRiveninfos(KeyWord);
-                        }));
+                        Task.Factory.StartNew((() => { SendRivenInfo(weapon); }));
                     }
                 }
                 else
@@ -221,19 +218,17 @@ namespace WFBooooot.IOT.Service
             var msg = "";
             if (wfa)
             {
-                if (_translator.ContainsWeapon(weapon.Format()))
+                if (_translator.ContainsWeapon(weapon.Format(), out var _weapon))
                 {
-                    var info = GetRiveninfos(weapon);
+                    var info = GetRiveninfos(_weapon);
                     if (info.Count > 0)
                     {
-                        msg = info.Format();
+                        msg = info.Format(weapon);
                     }
                     else
                     {
                         msg = $"抱歉, 目前紫卡市场没有任何出售: {weapon} 紫卡的用户.";
                     }
-
-                    AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
                 }
                 else
                 {
@@ -257,8 +252,8 @@ namespace WFBooooot.IOT.Service
         {
             if (wfa)
             {
-                _client.InitAsync();
-                var res = _client.QueryRivenOrdersAsync(new SearchRivenOrderOption() {Weapon = keyword}).Result;
+                var token = _client.InitAsync().Result;
+                var res = _client.QueryRivenOrdersAsync(new SearchRivenOrderOption() {Weapon = keyword, OrderType = "sell"}).Result;
 
                 return res.Items;
             }
@@ -274,20 +269,27 @@ namespace WFBooooot.IOT.Service
         {
             if (wfa)
             {
-                _client = new Client(AppData.AppConfig.WarframeConfig.ClientId, AppData.AppConfig.WarframeConfig.ClientSecret, new[] {"client_credentials"});
+                _client = new Client(
+                    AppData.AppConfig.WarframeConfig.ClientId,
+                    AppData.AppConfig.WarframeConfig.ClientSecret,
+                    new[] {"wfa.basic", "wfa.riven.query", "wfa.lib.query"}
+                );
             }
         }
 
         public WarframeInfoService(long GroupId) : base(GroupId)
         {
+            ClientInit();
         }
 
         public WarframeInfoService(long GroupId, long MemberId, string Keyword) : base(GroupId, MemberId, Keyword)
         {
+            ClientInit();
         }
 
         public WarframeInfoService(long GroupId, long MemberId, string Keyword, string Msg) : base(GroupId, MemberId, Keyword, Msg)
         {
+            ClientInit();
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using WFBooooot.IOT.Extension;
 
 namespace WFBooooot.IOT.Service.Warframe
 {
@@ -14,6 +16,11 @@ namespace WFBooooot.IOT.Service.Warframe
         public Translator(Dictionary<string, string> dictionary)
         {
             dic = dictionary;
+        }
+
+        public string CnToEn(string source)
+        {
+            return dic.ContainsValue(source) ? dic.FirstOrDefault(a => a.Value == source.Format()).Key : source;
         }
 
         public string Translate(string source)

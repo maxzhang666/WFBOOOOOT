@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using WFBooooot.IOT.Model;
+using WFBooooot.IOT.Service.Warframe;
 
 namespace WFBooooot.IOT
 {
@@ -51,7 +52,10 @@ namespace WFBooooot.IOT
             if (!File.Exists(_filePath))
             {
                 Log.Info("配置文件不存在，准备写入默认配置文件……");
-                appConfig = new AppConfig(new List<string> {"951770042"});
+                appConfig = new AppConfig(
+                    new List<string> {"951770042"},
+                    new WarframeConfig {ClientId = "7d5f1b7c821c46a49d820ee4ba24ed7b", ClientSecret = "09075310b225426f848a4bdd4adbef69"}
+                );
                 SaveConfig();
             }
             else

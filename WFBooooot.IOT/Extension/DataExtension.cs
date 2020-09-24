@@ -45,7 +45,7 @@ namespace WFBooooot.IOT.Extension
             {
                 return "风平浪静，没有警报";
             }
-            
+
             var sb = new StringBuilder();
 
             sb.AppendLine("查询到当前时间的警报如下：");
@@ -82,14 +82,21 @@ namespace WFBooooot.IOT.Extension
 
         #region Api
 
-        public static string Format(this List<Order> list)
+        /// <summary>
+        /// 紫卡
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="weapon"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static string Format(this List<Order> list, string weapon, int num = 5)
         {
-            var weapon = list.FirstOrDefault()?.weapon;
             var sb = new StringBuilder();
+            list = list.OrderBy(a => a.platinum).Take(num).ToList();
             sb.AppendLine($"下面是 {weapon} 紫卡的 {list.Count} 条卖家信息.");
             foreach (var info in list)
             {
-                sb.Append($"[{info.account.gameName}]  ");
+                sb.AppendLine($"[{info.account.gameName}]  ");
                 switch (info.account.status)
                 {
                     case UserStatus.InGame:
@@ -103,15 +110,29 @@ namespace WFBooooot.IOT.Extension
                         break;
                     case UserStatus.Suspend:
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
+
                 sb.AppendLine($"- 价格:{info.platinum}白鸡");
-                sb.AppendLine($"- 属性:{info.properties}");
-                sb.AppendLine();
+                sb.AppendLine($"- 属性:\r\n{info.properties.Format()}");
             }
 
             return sb.ToString().Trim();
+        }
+
+        /// <summary>
+        /// 紫卡属性
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        public static string Format(this List<Property> properties)
+        {
+            var sb = new StringBuilder();
+            foreach (var item in properties)
+            {
+                sb.AppendLine($"      {AppData.WandhiIocManager.Resolve<WFTranslator>().TranslateWordEnToCn(item.name)}【{item.value}%】");
+            }
+
+            return sb.ToString();
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace WFBooooot.IOT.Model
 
         public List<string> DebugGroup { get; set; }
 
-        public WarframeConfig WarframeConfig { get; set; } = new WarframeConfig {ClientId = "1d6c7c5cae574d02ac3ad1a9e8ef01b0", ClientSecret = "68dc306bbb9348e694a35828c8975a08"};
+        public WarframeConfig WarframeConfig { get; set; }
 
         public AppConfig()
         {
@@ -30,6 +30,12 @@ namespace WFBooooot.IOT.Model
         public AppConfig(List<string> debugGroup)
         {
             DebugGroup = debugGroup;
+        }
+
+        public AppConfig(List<string> debugGroup, WarframeConfig warframeConfig)
+        {
+            DebugGroup = debugGroup;
+            WarframeConfig = warframeConfig;
         }
     }
 }

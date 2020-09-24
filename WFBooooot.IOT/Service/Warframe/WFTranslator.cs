@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using IocManager;
 using WFBooooot.IOT.Extension;
 
 namespace WFBooooot.IOT.Service.Warframe
 {
-    public class WFTranslator
+    public class WFTranslator : IIocSingletonService
     {
         private Dictionary<string /*type*/, Translator> dictTranslators = new Dictionary<string, Translator>();
         private Dictionary<string, Translator> searchwordTranslator = new Dictionary<string, Translator>();
@@ -105,9 +106,9 @@ namespace WFBooooot.IOT.Service.Warframe
             foreach (var sale in translateApi.Sale)
             {
                 var distance = lev.DistanceFrom(sale.Zh.Format());
-                distancelist.Add(new StringInfo { LevDistance = distance, Name = sale.Zh});
+                distancelist.Add(new StringInfo {LevDistance = distance, Name = sale.Zh});
             }
-            
+
             return distancelist.Where(dis => dis.LevDistance != 0).Take(5).Select(info => info.Name).ToList();
         }
 
@@ -169,9 +170,27 @@ namespace WFBooooot.IOT.Service.Warframe
             return strings[0] + dictTranslators["Star"].Translate(nodeRegion);
         }
 
-        public bool ContainsWeapon(string weapon)
+        /// <summary>
+        /// 关键字翻译
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public string TranslateWordEnToCn(string keyword)
         {
-            return weapons.Contains(weapon);
+            var zh = translateApi.Dict.FirstOrDefault(a => a.En == keyword.Trim())?.Zh;
+            return zh.IsNotEmpty() ? zh : keyword;
+        }
+
+        public bool ContainsWeapon(string weapon, out string en)
+        {
+            en = "";
+            if (!weapons.Contains(weapon))
+            {
+                return false;
+            }
+
+            en = dictTranslators["Weapon"].CnToEn(weapon);
+            return true;
         }
 
         public void TranslateAlert(WFAlert alert)
