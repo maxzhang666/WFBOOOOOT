@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using IocManager;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using WFBooooot.IOT.Model;
 using WFBooooot.IOT.Service.Warframe;
@@ -16,7 +14,10 @@ namespace WFBooooot.IOT
     {
         private const string FileName = "app.config.json";
         private readonly string _filePath = $"{Directory.GetCurrentDirectory()}/{FileName}";
-        private readonly Log Log;
+        /// <summary>
+        /// 日志工具
+        /// </summary>
+        public readonly Log Log;
         public AppConfig AppConfig { private set; get; }
 
         public ConfigService(Log log)

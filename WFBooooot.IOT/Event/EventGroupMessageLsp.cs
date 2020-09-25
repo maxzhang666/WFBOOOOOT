@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using OPQ.SDK.Model.Group;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
@@ -24,27 +22,33 @@ namespace WFBooooot.IOT.Event
 
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            if (AppData.AppConfig.DebugGroup.Contains(e.FromGroup))
+            if (!AppData.AppConfig.DebugGroup.Contains(e.FromGroup))
             {
-                if (e.Msg.Text.StartsWith("/"))
-                {
-                    var key = e.Msg.Text.Substring(1);
-                    if (key.Contains("来张色图"))
-                    {
-                        var lastTime = _cacheHelper.Get<DateTime>("lsp", DateTime.Now - TimeSpan.FromMinutes(1));
-                        if (DateTime.Now - lastTime > TimeSpan.FromMinutes(1))
-                        {
-                            _cacheHelper.Set("lsp", DateTime.Now);
-                            AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
-                            var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
-                            AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
-                        }
-                        else
-                        {
-                            AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
-                        }
-                    }
-                }
+                return;
+            }
+
+            if (!e.Msg.Text.StartsWith("/"))
+            {
+                return;
+            }
+
+            var key = e.Msg.Text.Substring(1);
+            if (!key.Contains("来张色图"))
+            {
+                return;
+            }
+
+            var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(1));
+            if (DateTime.Now - lastTime > TimeSpan.FromMinutes(1))
+            {
+                _cacheHelper.Set("lsp", DateTime.Now);
+                AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
+                var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
+            }
+            else
+            {
+                AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
             }
         }
 
@@ -56,7 +60,7 @@ namespace WFBooooot.IOT.Event
         private string GetPicUrl(bool isR18 = false)
         {
             var res = GHttpHelper.Http.Get<Lsp>($"https://api.lolicon.app/setu/?apikey=071046145f51a2a084d2c5&r18={(isR18 ? "1" : "0")}");
-            return res.data.FirstOrDefault().url;
+            return res.data.FirstOrDefault()?.url;
         }
     }
 }
