@@ -13,7 +13,7 @@ namespace WFBooooot.IOT.Event
     {
         private OpqApi _opqApi;
 
-        public EventGroupMessageWiki(AppConfig appConfig, OpqApi opqApi)
+        public EventGroupMessageWiki(OpqApi opqApi)
         {
             _opqApi = opqApi;
         }
