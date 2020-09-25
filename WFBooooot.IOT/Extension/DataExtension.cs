@@ -17,7 +17,36 @@ namespace WFBooooot.IOT.Extension
     public static class DataExtension
     {
         /// <summary>
-        /// 警报
+        /// 虚空商人格式化
+        /// </summary>
+        /// <param name="voidTrader"></param>
+        /// <returns></returns>
+        public static string Format(this VoidTrader voidTrader)
+        {
+            var sb = new StringBuilder();
+            if (voidTrader.active)
+            {
+                var time = (DateTime.Now - voidTrader.expiry).Humanize(int.MaxValue,
+                    CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
+                sb.AppendLine($"虚空商人已抵达: {voidTrader.location}");
+                sb.AppendLine($"携带商品:");
+                foreach (var inventory in voidTrader.inventory)
+                {
+                    sb.AppendLine($"         [{inventory.item}] {inventory.ducats}金币 + {inventory.credits}现金");
+                }
+                sb.Append($"结束时间: {time} 后");
+            }
+            else
+            {
+                var time = (DateTime.Now - voidTrader.activation).Humanize(int.MaxValue,new CultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
+                sb.Append($"虚空商人将在 {time} 后 抵达{voidTrader.location}");
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        /// <summary>
+        /// 警报格式化
         /// </summary>
         /// <param name="wfAlert"></param>
         /// <returns></returns>
@@ -30,7 +59,6 @@ namespace WFBooooot.IOT.Extension
             return $"[{mission.Node}] 等级{mission.MinEnemyLevel}~{mission.MaxEnemyLevel}:\r\n" +
                    $"- 类型:     {mission.Type} - {mission.Faction}\r\n" +
                    $"- 奖励:     {reward}\r\n" +
-                   //$"-过期时间: {alert.Expiry}({time} 后)" +
                    $"- 过期时间: {time} 后";
         }
 

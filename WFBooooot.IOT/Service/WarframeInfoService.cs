@@ -79,6 +79,11 @@ namespace WFBooooot.IOT.Service
                     res = "不告诉我查什么难道等我猜？";
                 }
             }
+            else if (KeyWord.Contains("奸商") || KeyWord.Contains("商人") || KeyWord.Contains("虚空商人"))
+            {
+                res = "等着，我看看奸商在哪";
+                Task.Factory.StartNew(SendVoidTrader);
+            }
 
             return res;
         }
@@ -242,6 +247,26 @@ namespace WFBooooot.IOT.Service
 
             AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
         }
+
+        public async void SendVoidTrader()
+        {
+            var trader = GetVoidTrader();
+            var msg = trader.Format();
+            AppData.OpqApi.SendGroupMessage(GroupId, msg);
+        }
+
+        /// <summary>
+        /// 获取奸商信息
+        /// </summary>
+        public VoidTrader GetVoidTrader()
+        {
+            var trader = Http.Get<VoidTrader>("https://api.warframestat.us/pc/voidTrader");
+            trader.activation = trader.activation.ToLocal();
+            trader.expiry = trader.expiry.ToLocal();
+            _translator.TranslateVoidTrader(trader);
+            return trader;
+        }
+
 
         /// <summary>
         /// 紫卡查询
