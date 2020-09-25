@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -257,7 +258,7 @@ namespace SocketClient
         /// <param name="eventName"></param>
         /// <param name="payload">must be a string or a Json Serializable object</param>
         /// <remarks>ArgumentOutOfRangeException will be thrown on reserved event names</remarks>
-        public void Emit(string eventName, dynamic payload, string endPoint = "", Action<dynamic> callback = null)
+        public void Emit<T>(string eventName, T payload, string endPoint = "", Action<object> callback = null)
         {
             string lceventName = eventName.ToLower();
             IMessage msg = null;
@@ -265,7 +266,7 @@ namespace SocketClient
             {
                 case "message":
                     if (payload is string)
-                        msg = new TextMessage {MessageText = payload};
+                        msg = new TextMessage {MessageText = payload.ToString()};
                     else
                         msg = new JSONMessage(payload);
                     Send(msg);
@@ -282,7 +283,7 @@ namespace SocketClient
                 default:
                     if (!string.IsNullOrWhiteSpace(endPoint) && !endPoint.StartsWith("/"))
                         endPoint = "/" + endPoint;
-                    msg = new EventMessage(eventName, payload, endPoint, callback);
+                    msg = new EventMessage(eventName, payload.ToString(), endPoint, callback);
                     if (callback != null)
                         registrationManager.AddCallBack(msg);
 
@@ -299,7 +300,7 @@ namespace SocketClient
         /// </summary>
         /// <param name="eventName"></param>
         /// <param name="payload">must be a string or a Json Serializable object</param>
-        public void Emit(string eventName, dynamic payload)
+        public void Emit<T>(string eventName, T payload)
         {
             this.Emit(eventName, payload, string.Empty, null);
         }

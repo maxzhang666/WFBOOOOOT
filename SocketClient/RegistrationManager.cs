@@ -8,12 +8,12 @@ namespace SocketClient
 {
     public class RegistrationManager
     {
-        private ConcurrentDictionary<int, Action<dynamic>> callBackRegistry;
+        private ConcurrentDictionary<int, Action<object>> callBackRegistry;
 		private ConcurrentDictionary<string, Action<IMessage>> eventNameRegistry;
 
 		public RegistrationManager()
 		{
-			this.callBackRegistry = new ConcurrentDictionary<int, Action<dynamic>>();
+			this.callBackRegistry = new ConcurrentDictionary<int, Action<object>>();
 			this.eventNameRegistry = new ConcurrentDictionary<string, Action<IMessage>>();
 		}
 		

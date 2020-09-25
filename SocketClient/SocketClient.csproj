@@ -10,9 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\6.10.0\lib\mono\4.0-api\Microsoft.CSharp.dll</HintPath>
-      </Reference>
+      <Reference Include="Microsoft.CSharp" />
     </ItemGroup>
 
 </Project>

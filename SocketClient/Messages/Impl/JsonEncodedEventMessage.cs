@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -10,17 +11,17 @@ namespace SocketClient.Message.Impl
     {
         [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "args")] public dynamic[] Args { get; set; }
+        [JsonProperty(PropertyName = "args")] public DynamicObject[] Args { get; set; }
 
         public JsonEncodedEventMessage()
         {
         }
 
-        public JsonEncodedEventMessage(string name, object payload) : this(name, new[] {payload})
+        public JsonEncodedEventMessage(string name, DynamicObject payload) : this(name, new[] {payload})
         {
         }
 
-        public JsonEncodedEventMessage(string name, object[] payloads)
+        public JsonEncodedEventMessage(string name, DynamicObject[] payloads)
         {
             this.Name = name;
             this.Args = payloads;
@@ -45,7 +46,7 @@ namespace SocketClient.Message.Impl
 
         public IEnumerable<T> GetArgsAs<T>()
         {
-            var items = this.Args.Select(i => JsonConvert.DeserializeObject<T>(i.ToString(Formatting.None))).Cast<T>()
+            var items = this.Args.Select(i => JsonConvert.DeserializeObject<T>(i.ToString())).Cast<T>()
                 .ToList();
             return items.AsEnumerable();
         }

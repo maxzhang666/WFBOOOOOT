@@ -1,4 +1,5 @@
 using System;
+using System.Dynamic;
 using System.Linq;
 using SocketClient.Message;
 
@@ -29,7 +30,7 @@ namespace SocketClient
             this.Client.On(eventName, this.EndPoint, action);
         }
 
-        public void Emit(string eventName, dynamic payload, Action<dynamic> callBack = null)
+        public void Emit<T>(string eventName, T payload, Action<object> callBack = null)
         {
             this.Client.Emit(eventName, payload, this.EndPoint, callBack);
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Text.RegularExpressions;
 using SocketClient.Enum;
 
@@ -25,14 +26,14 @@ namespace SocketClient.Message.Impl
             }
         }
 
-        public Action<dynamic> Callback;
+        public Action<object> Callback;
 
         public EventMessage()
         {
             this.MessageType = SocketClientMessageTypes.Event;
         }
 
-        public EventMessage(string eventName, string jsonObject, string endpoint = "", Action<dynamic> callBack = null)
+        public EventMessage(string eventName, string jsonObject, string endpoint = "", Action<object> callBack = null)
             : this()
         {
             this.Callback = callBack;
