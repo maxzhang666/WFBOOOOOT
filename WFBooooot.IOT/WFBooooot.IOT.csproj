@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="run.bat\**" />
+    <EmbeddedResource Remove="run.bat\**" />
+    <None Remove="run.bat\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fastenshtein" Version="1.0.0.5" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0-rc.1.20451.14" />
@@ -29,8 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="run.bat" />
-    <Folder Include="run.bat" />
+    <None Update="run.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
