@@ -10,6 +10,7 @@ using Humanizer.Localisation;
 using TRKS.WF.QQBot;
 using WarframeAlertingPrime.SDK.Models.User;
 using WFBooooot.IOT.Service.Warframe;
+using WFBooooot.IOT.Service.Warframe.NightWave;
 using Order = WarframeAlertingPrime.SDK.Models.User.Order;
 
 namespace WFBooooot.IOT.Extension
@@ -34,11 +35,12 @@ namespace WFBooooot.IOT.Extension
                 {
                     sb.AppendLine($"         [{inventory.item}] {inventory.ducats}金币 + {inventory.credits}现金");
                 }
+
                 sb.Append($"结束时间: {time} 后");
             }
             else
             {
-                var time = (DateTime.Now - voidTrader.activation).Humanize(int.MaxValue,new CultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
+                var time = (DateTime.Now - voidTrader.activation).Humanize(int.MaxValue, new CultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
                 sb.Append($"虚空商人将在 {time} 后 抵达{voidTrader.location}");
             }
 
@@ -82,6 +84,50 @@ namespace WFBooooot.IOT.Extension
                 sb.AppendLine(alert.Format());
                 sb.AppendLine();
             }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 午夜电波
+        /// </summary>
+        /// <param name="nightWave"></param>
+        /// <returns></returns>
+        public static string Format(this NightWave nightWave)
+        {
+            var sb = new StringBuilder();
+            if (nightWave.activeChallenges.Count == 0)
+            {
+                sb.Append("当前还没有电波任务");
+            }
+            else
+            {
+                sb.AppendLine("当前电波任务信息:");
+                sb.AppendLine($"   开始时间：{nightWave.activation?.ToLocal():G}");
+                sb.AppendLine($"   结束时间：{nightWave.expiry?.ToLocal():G}");
+                sb.AppendLine("————————以下是任务详情————————");
+                foreach (var item in nightWave.activeChallenges)
+                {
+                    sb.AppendLine(item.Format());
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 午夜电波挑战信息
+        /// </summary>
+        /// <param name="activeChallengesItem"></param>
+        /// <returns></returns>
+        public static string Format(this ActiveChallengesItem activeChallengesItem)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"名称：【{activeChallengesItem.title}】");
+            sb.AppendLine($"描述：【{activeChallengesItem.desc}】");
+            sb.AppendLine($"任务类型：【{(activeChallengesItem.isDaily ? "日" : "周")}】");
+            sb.AppendLine($"声望奖励：【{activeChallengesItem.reputation}】");
+            sb.AppendLine($"过期时间：【{activeChallengesItem.expiry?.ToLocal():G}】");
 
             return sb.ToString();
         }

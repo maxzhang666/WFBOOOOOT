@@ -12,11 +12,13 @@ using Newtonsoft.Json;
 using OPQ.SDK;
 using OPQ.SDK.Model.Group;
 using TRKS.WF.QQBot;
+using WandhiBot.SDK.EventArgs;
 using WarframeAlertingPrime.SDK.Models.Core;
 using WarframeAlertingPrime.SDK.Models.Enums;
 using WarframeAlertingPrime.SDK.Models.Others;
 using WFBooooot.IOT.Extension;
 using WFBooooot.IOT.Service.Warframe;
+using WFBooooot.IOT.Service.Warframe.NightWave;
 using Order = WarframeAlertingPrime.SDK.Models.User.Order;
 
 namespace WFBooooot.IOT.Service
@@ -82,7 +84,12 @@ namespace WFBooooot.IOT.Service
             else if (KeyWord.Contains("奸商") || KeyWord.Contains("商人") || KeyWord.Contains("虚空商人"))
             {
                 res = "等着，我看看奸商在哪";
-                Task.Factory.StartNew(SendVoidTrader);
+                Task.Factory.StartNew(() => { SendVoidTrader(); });
+            }
+            else if (KeyWord.Contains("电波") || KeyWord.Contains("午夜电波") || KeyWord.Contains("午夜"))
+            {
+                res = "让我看看这周干啥";
+                Task.Factory.StartNew((() => SendNightWave(GroupId)));
             }
 
             return res;
@@ -97,6 +104,30 @@ namespace WFBooooot.IOT.Service
         {
             throw new System.NotImplementedException();
         }
+
+        #region 午夜电波
+
+        public void SendNightWave(long groupId)
+        {
+            var info = GetNightWave();
+            AppData.OpqApi.SendGroupMessage(groupId, info);
+        }
+
+        /// <summary>
+        /// 获取午夜电波信息
+        /// </summary>
+        public string GetNightWave()
+        {
+            var head = new WebHeaderCollection();
+            head.Add(HttpRequestHeader.AcceptLanguage, "zh");
+            var res = Http.Get<NightWave>("https://api.warframestat.us/pc/nightwave", head);
+
+            return res.Format();
+        }
+
+        #endregion
+
+        #region 部件查询
 
         public WMInfoEx GetWMINfoEx(string searchword)
         {
@@ -187,6 +218,10 @@ namespace WFBooooot.IOT.Service
                 .ToArray();
         }
 
+        #endregion
+
+        #region 警报
+
         /// <summary>
         /// 警报
         /// </summary>
@@ -218,6 +253,37 @@ namespace WFBooooot.IOT.Service
             return new List<WFAlert>();
         }
 
+        #endregion
+
+        #region 奸商
+
+        public async void SendVoidTrader()
+        {
+            var trader = GetVoidTrader();
+            var msg = trader.Format();
+            AppData.OpqApi.SendGroupMessage(GroupId, msg);
+        }
+
+        /// <summary>
+        /// 获取奸商信息
+        /// </summary>
+        public VoidTrader GetVoidTrader()
+        {
+            var trader = Http.Get<VoidTrader>("https://api.warframestat.us/pc/voidTrader");
+            trader.activation = trader.activation.ToLocal();
+            trader.expiry = trader.expiry.ToLocal();
+            _translator.TranslateVoidTrader(trader);
+            return trader;
+        }
+
+        #endregion
+
+        #region 紫卡
+
+        /// <summary>
+        /// 发送紫卡信息
+        /// </summary>
+        /// <param name="weapon"></param>
         private void SendRivenInfo(string weapon)
         {
             var msg = "";
@@ -248,26 +314,6 @@ namespace WFBooooot.IOT.Service
             AppData.OpqApi.SendMessage(new GroupMessage(GroupId, msg));
         }
 
-        public async void SendVoidTrader()
-        {
-            var trader = GetVoidTrader();
-            var msg = trader.Format();
-            AppData.OpqApi.SendGroupMessage(GroupId, msg);
-        }
-
-        /// <summary>
-        /// 获取奸商信息
-        /// </summary>
-        public VoidTrader GetVoidTrader()
-        {
-            var trader = Http.Get<VoidTrader>("https://api.warframestat.us/pc/voidTrader");
-            trader.activation = trader.activation.ToLocal();
-            trader.expiry = trader.expiry.ToLocal();
-            _translator.TranslateVoidTrader(trader);
-            return trader;
-        }
-
-
         /// <summary>
         /// 紫卡查询
         /// </summary>
@@ -287,6 +333,8 @@ namespace WFBooooot.IOT.Service
                 return new List<Order>();
             }
         }
+
+        #endregion
 
         private Client _client;
 
