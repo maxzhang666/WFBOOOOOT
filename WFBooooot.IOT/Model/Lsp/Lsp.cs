@@ -112,11 +112,11 @@ namespace WFBooooot.IOT.Model.Lsp
         /// <summary>
         /// 
         /// </summary>
-        public double count { get; set; }
+        public string count { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public double cd_count { get; set; }
+        public string cd_count { get; set; }
     }
  
     public class LspAnalyze

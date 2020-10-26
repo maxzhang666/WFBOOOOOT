@@ -46,29 +46,35 @@ namespace WFBooooot.IOT.Event
                 _cacheHelper.Set("lsp", DateTime.Now);
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
-                var data = LspCount(e.FromQQ);
+                var msg = "\r\n收好了您，哎~慢走";
+                var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_count / data.count, 4, MidpointRounding.AwayFromZero);
-                    AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, $"\r\n收好了您，哎~慢走\r\n你的涩批指数：【{p * 100}%】", GetPicUrl(flag)));
+                    var p = Math.Round(data.info.sp_count / double.Parse(data.count), 4, MidpointRounding.AwayFromZero);
+                    msg += $"\r\n你的涩批指数：【{p * 100}%】";
+                    if (p > 0.95)
+                    {
+                        msg += "\r\n原来你就是传说的LSP！！";
+                    }
                 }
-                else
-                {
-                    AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
-                }
+
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, GetPicUrl(flag)));
             }
             else
             {
-                var data = LspCdCount(e.FromQQ);
+                var data = LspCdCount(e.FromQQ, e.FromQQ.NickName);
+                var msg = $"这么快就冲完了？缓缓吧";
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_cd_count / data.cd_count, 4, MidpointRounding.AwayFromZero);
-                    AppData.OpqApi.SendGroupMessage(e.FromGroup, $"这么快就冲完了？缓缓吧+\r\n+饥渴指数：【{p * 100}%】");
+                    var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count), 4, MidpointRounding.AwayFromZero);
+                    msg += $"\r\n饥渴指数：【{p * 100}%】";
+                    if (p > 0.8)
+                    {
+                        msg += "\r\n还真是一个快枪手呢~";
+                    }
                 }
-                else
-                {
-                    AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
-                }
+
+                AppData.OpqApi.SendGroupMessage(e.FromGroup, msg);
             }
         }
 
@@ -79,7 +85,7 @@ namespace WFBooooot.IOT.Event
         /// <returns></returns>
         private string GetPicUrl(bool isR18 = false)
         {
-            var res = GHttpHelper.Http.Get<Lsp>($"https://api.lolicon.app/setu/?apikey=071046145f51a2a084d2c5&r18={(isR18 ? "1" : "0")}");
+            var res = Http.Get<Lsp>($"https://api.lolicon.app/setu/?apikey=071046145f51a2a084d2c5&r18={(isR18 ? "1" : "0")}");
             return res.data.FirstOrDefault()?.url;
         }
 
@@ -87,9 +93,10 @@ namespace WFBooooot.IOT.Event
         /// lsp统计
         /// </summary>
         /// <param name="qq"></param>
-        private LspData LspCdCount(string qq)
+        /// <param name="nickname"></param>
+        private LspData LspCdCount(string qq,string nickname)
         {
-            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, cd = true}, RequestType.Json, "");
+            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname, cd = true}, RequestType.Form, "");
             return res.code == 1 ? res.data : null;
         }
 
@@ -97,10 +104,11 @@ namespace WFBooooot.IOT.Event
         /// lsp普通统计
         /// </summary>
         /// <param name="qq"></param>
+        /// <param name="nickname"></param>
         /// <returns></returns>
-        private LspData LspCount(string qq)
+        private LspData LspCount(string qq,string nickname)
         {
-            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, cd = false}, RequestType.Json, "");
+            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname, cd = false}, RequestType.Form, "");
             return res.code == 1 ? res.data : null;
         }
     }
