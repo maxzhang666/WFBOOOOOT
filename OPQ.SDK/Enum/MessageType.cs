@@ -31,6 +31,7 @@ namespace OPQ.SDK.Enum
         /// 语音消息[FG]
         /// </summary>
         VoiceMsg,
+        VideoMsg,
 
         /// <summary>
         /// Json格式的复杂消息[FG]
