@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Text;
+using GHttpHelper;
 using OPQ.SDK.Model.Group;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
@@ -44,11 +46,29 @@ namespace WFBooooot.IOT.Event
                 _cacheHelper.Set("lsp", DateTime.Now);
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
-                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
+                var data = LspCount(e.FromQQ);
+                if (data != null)
+                {
+                    var p = Math.Round(data.info.sp_count / data.count, 4, MidpointRounding.AwayFromZero);
+                    AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, $"\r\n收好了您，哎~慢走\r\n你的涩批指数：【{p * 100}%】", GetPicUrl(flag)));
+                }
+                else
+                {
+                    AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, "\r\n收好了您，哎~慢走", GetPicUrl(flag)));
+                }
             }
             else
             {
-                AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
+                var data = LspCdCount(e.FromQQ);
+                if (data != null)
+                {
+                    var p = Math.Round(data.info.sp_cd_count / data.cd_count, 4, MidpointRounding.AwayFromZero);
+                    AppData.OpqApi.SendGroupMessage(e.FromGroup, $"这么快就冲完了？缓缓吧+\r\n+饥渴指数：【{p * 100}%】");
+                }
+                else
+                {
+                    AppData.OpqApi.SendGroupMessage(e.FromGroup, "这么快就冲完了？缓缓吧");
+                }
             }
         }
 
@@ -61,6 +81,27 @@ namespace WFBooooot.IOT.Event
         {
             var res = GHttpHelper.Http.Get<Lsp>($"https://api.lolicon.app/setu/?apikey=071046145f51a2a084d2c5&r18={(isR18 ? "1" : "0")}");
             return res.data.FirstOrDefault()?.url;
+        }
+
+        /// <summary>
+        /// lsp统计
+        /// </summary>
+        /// <param name="qq"></param>
+        private LspData LspCdCount(string qq)
+        {
+            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, cd = true}, RequestType.Json, "");
+            return res.code == 1 ? res.data : null;
+        }
+
+        /// <summary>
+        /// lsp普通统计
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <returns></returns>
+        private LspData LspCount(string qq)
+        {
+            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, cd = false}, RequestType.Json, "");
+            return res.code == 1 ? res.data : null;
         }
     }
 }
