@@ -50,8 +50,8 @@ namespace WFBooooot.IOT.Event
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_count / double.Parse(data.count), 4, MidpointRounding.AwayFromZero);
-                    msg += $"\r\n你的涩批指数：【{p * 100}%】";
+                    var p = Math.Round(data.info.sp_count / double.Parse(data.count) * 100, 4, MidpointRounding.AwayFromZero);
+                    msg += $"\r\n你的涩批指数：【{p}%】";
                     if (p > 0.95)
                     {
                         msg += "\r\n原来你就是传说的LSP！！";
@@ -66,8 +66,8 @@ namespace WFBooooot.IOT.Event
                 var msg = $"这么快就冲完了？缓缓吧";
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count), 4, MidpointRounding.AwayFromZero);
-                    msg += $"\r\n饥渴指数：【{p * 100}%】";
+                    var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 4, MidpointRounding.AwayFromZero);
+                    msg += $"\r\n饥渴指数：【{p}%】";
                     if (p > 0.8)
                     {
                         msg += "\r\n还真是一个快枪手呢~";
@@ -94,7 +94,7 @@ namespace WFBooooot.IOT.Event
         /// </summary>
         /// <param name="qq"></param>
         /// <param name="nickname"></param>
-        private LspData LspCdCount(string qq,string nickname)
+        private LspData LspCdCount(string qq, string nickname)
         {
             var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname, cd = true}, RequestType.Form, "");
             return res.code == 1 ? res.data : null;
@@ -106,9 +106,9 @@ namespace WFBooooot.IOT.Event
         /// <param name="qq"></param>
         /// <param name="nickname"></param>
         /// <returns></returns>
-        private LspData LspCount(string qq,string nickname)
+        private LspData LspCount(string qq, string nickname)
         {
-            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname, cd = false}, RequestType.Form, "");
+            var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname}, RequestType.Form, "");
             return res.code == 1 ? res.data : null;
         }
     }
