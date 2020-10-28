@@ -52,7 +52,7 @@ namespace WFBooooot.IOT.Event
                 {
                     var p = Math.Round(data.info.sp_count / double.Parse(data.count) * 100, 4, MidpointRounding.AwayFromZero);
                     msg += $"\r\n你的涩批指数：【{p}%】";
-                    if (p > 0.95)
+                    if (p > 7)
                     {
                         msg += "\r\n原来你就是传说的LSP！！";
                     }
@@ -68,7 +68,7 @@ namespace WFBooooot.IOT.Event
                 {
                     var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 4, MidpointRounding.AwayFromZero);
                     msg += $"\r\n饥渴指数：【{p}%】";
-                    if (p > 0.8)
+                    if (p > 40)
                     {
                         msg += "\r\n还真是一个快枪手呢~";
                     }
