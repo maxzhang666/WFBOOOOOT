@@ -41,7 +41,7 @@ namespace WFBooooot.IOT.Event
             }
 
             var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(1));
-            if (DateTime.Now - lastTime > TimeSpan.FromMinutes(1))
+            if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2))
             {
                 _cacheHelper.Set("lsp", DateTime.Now);
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
@@ -50,9 +50,9 @@ namespace WFBooooot.IOT.Event
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_count / double.Parse(data.count) * 100, 4, MidpointRounding.AwayFromZero);
+                    var p = Math.Round(data.info.sp_count / double.Parse(data.count) * 100, 2, MidpointRounding.AwayFromZero);
                     msg += $"\r\n你的涩批指数：【{p}%】";
-                    if (p > 7)
+                    if (p > 10)
                     {
                         msg += "\r\n原来你就是传说的LSP！！";
                     }
@@ -68,9 +68,9 @@ namespace WFBooooot.IOT.Event
                 {
                     var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 4, MidpointRounding.AwayFromZero);
                     msg += $"\r\n饥渴指数：【{p}%】";
-                    if (p > 40)
+                    if (p > 10)
                     {
-                        msg += "\r\n还真是一个快枪手呢~";
+                        msg += "\r\n莫非！！！你就是氏族最快的男人！！！！~";
                     }
                 }
 
