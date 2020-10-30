@@ -66,7 +66,7 @@ namespace WFBooooot.IOT.Event
                 var msg = $"这么快就冲完了？缓缓吧";
                 if (data != null)
                 {
-                    var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 4, MidpointRounding.AwayFromZero);
+                    var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 2, MidpointRounding.AwayFromZero);
                     msg += $"\r\n饥渴指数：【{p}%】";
                     if (p > 10)
                     {
