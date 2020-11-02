@@ -40,7 +40,7 @@ namespace WFBooooot.IOT.Event
                 return;
             }
 
-            var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(1));
+            var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(2));
             if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2))
             {
                 _cacheHelper.Set("lsp", DateTime.Now);
