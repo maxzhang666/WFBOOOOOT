@@ -143,6 +143,7 @@ namespace OPQ.SDK
                 _log.Info($"消息：类型[{groupMessage.CurrentPacket?.Data?.EventName.ToString()}],来源[{groupMessage.CurrentPacket?.Data?.EventMsg?.FromUin}]");
                 switch (groupMessage.CurrentPacket?.Data?.EventName)
                 {
+                    //进群事件
                     case CommonEventType.ON_EVENT_GROUP_JOIN:
                         var events = WandhiIocManager.ResolveAll<IGroupJoinEvent>();
                         var args = new GroupJoinEventArgs
@@ -163,8 +164,10 @@ namespace OPQ.SDK
                         }
 
                         break;
+                    //退群事件
                     case CommonEventType.ON_EVENT_GROUP_EXIT:
                         break;
+                    //踢人事件
                     case CommonEventType.ON_EVENT_GROUP_ADMINSYSNOTIFY:
                         break;
                 }
