@@ -14,10 +14,12 @@ namespace WFBooooot.IOT
     {
         private const string FileName = "app.config.json";
         private readonly string _filePath = $"{Directory.GetCurrentDirectory()}/{FileName}";
+
         /// <summary>
         /// 日志工具
         /// </summary>
         public readonly Log Log;
+
         public AppConfig AppConfig { private set; get; }
 
         public ConfigService(Log log)
@@ -56,7 +58,12 @@ namespace WFBooooot.IOT
                 appConfig = new AppConfig
                 {
                     DebugGroup = new List<string> {"951770042"},
-                    WarframeConfig = new WarframeConfig {ClientId = "7d5f1b7c821c46a49d820ee4ba24ed7b", ClientSecret = "09075310b225426f848a4bdd4adbef69"}
+                    WarframeConfig = new WarframeConfig
+                    {
+                        ClientId = "7d5f1b7c821c46a49d820ee4ba24ed7b",
+                        ClientSecret = "09075310b225426f848a4bdd4adbef69"
+                    },
+                    KeywordConfig = new KeywordConfig()
                 };
                 SaveConfig();
             }
@@ -67,7 +74,6 @@ namespace WFBooooot.IOT
             }
 
             Log.Info($"配置文件读取结束:{JsonConvert.SerializeObject(appConfig)}");
-
             return appConfig;
         }
 
