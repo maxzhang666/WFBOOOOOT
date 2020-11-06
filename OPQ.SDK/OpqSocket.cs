@@ -93,6 +93,9 @@ namespace OPQ.SDK
             EventOutGiving();
         }
 
+        /// <summary>
+        /// 事件分发
+        /// </summary>
         private void EventOutGiving()
         {
             #region 事件分发
