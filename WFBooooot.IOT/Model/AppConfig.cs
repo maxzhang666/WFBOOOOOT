@@ -43,11 +43,10 @@ namespace WFBooooot.IOT.Model
     /// </summary>
     public class KeywordConfig
     {
-
         /// <summary>
         /// 生效的群
         /// </summary>
-        public List<string> Groups { set; get; } = new List<string> {"340569308", "655341576", "722457505"};
+        public List<string> Groups { set; get; } = new List<string> {"340569308", "655341576", "722457505", "951770042"};
 
         /// <summary>
         /// 关键字词库

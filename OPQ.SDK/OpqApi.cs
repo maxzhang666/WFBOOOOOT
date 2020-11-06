@@ -106,6 +106,17 @@ namespace OPQ.SDK
         }
 
         /// <summary>
+        /// 发送群消息
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="msg"></param>
+        /// <param name="atUser"></param>
+        public void SendGroupMessage(long to, string msg, long atUser)
+        {
+            SendMessage(new GroupMessage(to, msg, atUser));
+        }
+
+        /// <summary>
         /// 消息处理
         /// </summary>
         private void MsgProcess()
