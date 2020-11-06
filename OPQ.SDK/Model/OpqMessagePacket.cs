@@ -1,6 +1,6 @@
 namespace OPQ.SDK.Model
 {
-    public class OpqMessagePacket
+    public class OpqMessagePacket<T> where T : class
     {
         /// <summary>
         /// 链接Id
@@ -10,6 +10,6 @@ namespace OPQ.SDK.Model
         /// <summary>
         /// 消息详情
         /// </summary>
-        public QMessage Data { get; set; }
+        public T Data { get; set; }
     }
 }

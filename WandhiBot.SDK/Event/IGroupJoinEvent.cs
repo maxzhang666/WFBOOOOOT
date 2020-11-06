@@ -6,14 +6,14 @@ using WandhiBot.SDK.Model;
 namespace WandhiBot.SDK.Event
 {
     /// <summary>
-    /// QQ群消息事件
+    /// QQ进群事件
     /// </summary>
     public interface IGroupJoinEvent
     {
         /// <summary>
-        /// QQ群消息事件
+        /// QQ进群事件
         /// </summary>
         /// <param name="e"></param>
-        void GroupMessage(GroupMessageEventArgs e);
+        void GroupJoin(GroupJoinEventArgs e);
     }
 }

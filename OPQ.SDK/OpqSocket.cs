@@ -101,7 +101,7 @@ namespace OPQ.SDK
 
             On(EventType.OnGroupMsgs, (message) =>
             {
-                var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
+                var groupMessage = JsonConvert.DeserializeObject<OpqMessage<QMessage>>(message.MessageText);
                 _log.Info($"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}--{groupMessage.CurrentPacket.Data.FromUserId}]:{groupMessage.CurrentPacket.Data.Content}");
 
                 //忽略自己的消息
@@ -135,7 +135,40 @@ namespace OPQ.SDK
 
             #endregion
 
-            #region 群加入事件
+            #region 通用事件
+
+            On(EventType.OnEvents, (message) =>
+            {
+                var groupMessage = JsonConvert.DeserializeObject<OpqMessage<CommonEventMessage>>(message.MessageText);
+                _log.Info($"消息：类型[{groupMessage.CurrentPacket?.Data?.EventName.ToString()}],来源[{groupMessage.CurrentPacket?.Data?.EventMsg?.FromUin}]");
+                switch (groupMessage.CurrentPacket?.Data?.EventName)
+                {
+                    case CommonEventType.ON_EVENT_GROUP_JOIN:
+                        var events = WandhiIocManager.ResolveAll<IGroupJoinEvent>();
+                        var args = new GroupJoinEventArgs
+                        {
+                            FromQQ = new QQ
+                            {
+                                Id = groupMessage.CurrentPacket.Data.EventData.UserID,
+                                NickName = groupMessage.CurrentPacket.Data.EventData.UserName
+                            },
+                            FromGroup = new Group
+                            {
+                                Id = groupMessage.CurrentPacket.Data.EventMsg.FromUin
+                            }
+                        };
+                        foreach (var item in events)
+                        {
+                            Task.Factory.StartNew((() => item.GroupJoin(args)));
+                        }
+
+                        break;
+                    case CommonEventType.ON_EVENT_GROUP_EXIT:
+                        break;
+                    case CommonEventType.ON_EVENT_GROUP_ADMINSYSNOTIFY:
+                        break;
+                }
+            });
 
             #endregion
 

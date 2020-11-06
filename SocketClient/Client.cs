@@ -35,8 +35,7 @@ namespace SocketClient
         /// <summary>
         /// RegistrationManager for dynamic events
         /// </summary>
-        protected RegistrationManager
-            registrationManager; // allow registration of dynamic events (event names) for client actions
+        protected RegistrationManager registrationManager; // allow registration of dynamic events (event names) for client actions
 
         /// <summary>
         /// By Default, use WebSocketVersion.Rfc6455
@@ -114,8 +113,7 @@ namespace SocketClient
         }
 
         // Constructors
-        public Client(string url)
-            : this(url, WebSocketVersion.Rfc6455)
+        public Client(string url) : this(url, WebSocketVersion.Rfc6455)
         {
         }
 
@@ -127,8 +125,7 @@ namespace SocketClient
 
             registrationManager = new RegistrationManager();
             _outboundQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
-            _dequeuOutBoundMsgTask =
-                Task.Factory.StartNew(() => dequeuOutboundMessages(), TaskCreationOptions.LongRunning);
+            _dequeuOutBoundMsgTask = Task.Factory.StartNew(() => dequeuOutboundMessages(), TaskCreationOptions.LongRunning);
         }
 
         /// <summary>
@@ -148,24 +145,18 @@ namespace SocketClient
                         //if (this.HandShake == null || string.IsNullOrWhiteSpace(this.HandShake.SID) || this.HandShake.HadError)
                         if (HandShake != null)
                         {
-                            LastErrorMessage =
-                                string.Format("Error initializing handshake with {0}", uri);
+                            LastErrorMessage = string.Format("Error initializing handshake with {0}", uri);
                             OnErrorEvent(this, new ErrorEventArgs(LastErrorMessage, new Exception()));
                         }
                         else
                         {
                             string wsScheme = (uri.Scheme == Uri.UriSchemeHttps ? "wss" : "ws");
 
-                            var url = string.Format("{0}://{1}:{2}/socket.io/{3}", wsScheme, uri.Host, uri.Port,
-                                uri.Query);
+                            var url = string.Format("{0}://{1}:{2}/socket.io/{3}", wsScheme, uri.Host, uri.Port, uri.Query);
 
-                            wsClient = new WebSocket(
-                                url,
-                                string.Empty,
-                                socketVersion);
+                            wsClient = new WebSocket(url, string.Empty, socketVersion);
 
-                            wsClient.EnableAutoSendPing =
-                                true; // #4 tkiley: Websocket4net client library initiates a websocket heartbeat, causes delivery problems
+                            wsClient.EnableAutoSendPing = true; // #4 tkiley: Websocket4net client library initiates a websocket heartbeat, causes delivery problems
                             wsClient.Opened += wsClient_OpenEvent;
 
                             wsClient.MessageReceived += wsClient_MessageReceived;
@@ -241,10 +232,7 @@ namespace SocketClient
             registrationManager.AddOnEvent(eventName, action);
         }
 
-        public virtual void On(
-            string eventName,
-            string endPoint,
-            Action<IMessage> action)
+        public virtual void On(string eventName, string endPoint, Action<IMessage> action)
         {
             registrationManager.AddOnEvent(eventName, endPoint, action);
         }
@@ -278,8 +266,7 @@ namespace SocketClient
                 case "error":
                 case "retry":
                 case "reconnect":
-                    throw new ArgumentOutOfRangeException(eventName,
-                        "Event name is reserved by socket.io, and cannot be used by clients or servers with this message type");
+                    throw new ArgumentOutOfRangeException(eventName, "Event name is reserved by socket.io, and cannot be used by clients or servers with this message type");
                 default:
                     if (!string.IsNullOrWhiteSpace(endPoint) && !endPoint.StartsWith("/"))
                         endPoint = "/" + endPoint;
@@ -406,8 +393,7 @@ namespace SocketClient
                     }
                     catch
                     {
-                        Trace.WriteLine(
-                            "exception raised trying to close websocket: can safely ignore, socket is being closed");
+                        Trace.WriteLine("exception raised trying to close websocket: can safely ignore, socket is being closed");
                     }
                 }
 
@@ -570,8 +556,7 @@ namespace SocketClient
                 catch (Exception ex)
                 {
                     // 
-                    Trace.WriteLine(string.Format("OnHeartBeatTimerCallback Error Event: {0}\r\n\t{1}", ex.Message,
-                        ex.InnerException));
+                    Trace.WriteLine(string.Format("OnHeartBeatTimerCallback Error Event: {0}\r\n\t{1}", ex.Message, ex.InnerException));
                 }
             }
         }
@@ -649,9 +634,7 @@ namespace SocketClient
                     client.Headers.Add("Connection", "Upgrade");
                     client.Headers.Add("Sec-Websocket-Version", "13");
                     client.Headers.Add("Sec-WebSocket-Key", "Lp2qSYxx3lHnGHdwFyHKQA==");
-                    value = client
-                        .DownloadString(
-                            url); // #5 tkiley: The uri.Query is available in socket.io's handshakeData object during authorization
+                    value = client.DownloadString(url); // #5 tkiley: The uri.Query is available in socket.io's handshakeData object during authorization
                     //value = client.ResponseHeaders.Get("Sec-WebSocket-Accept");                                // 13052140081337757257:15:25:websocket,htmlfile,xhr-polling,jsonp-polling
                     if (string.IsNullOrEmpty(value))
                         errorText = "Did not receive handshake string from server";
