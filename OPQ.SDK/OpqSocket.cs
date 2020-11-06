@@ -97,7 +97,7 @@ namespace OPQ.SDK
         {
             #region 事件分发
 
-            //endregion 群消息事件
+            #region 群消息事件
             On(EventType.OnGroupMsgs, (message) =>
             {
                 var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
@@ -132,6 +132,12 @@ namespace OPQ.SDK
                     }
                 }
             });
+            #endregion
+
+            #region 群加入事件
+
+
+            #endregion
 
             #endregion
         }

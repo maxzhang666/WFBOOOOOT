@@ -35,7 +35,7 @@ namespace WFBooooot.IOT.Model
         /// <summary>
         /// 关键字词库
         /// </summary>
-        public KeywordConfig KeywordConfig { set; get; }
+        public KeywordConfig KeywordConfig { set; get; } = new KeywordConfig();
     }
 
     /// <summary>

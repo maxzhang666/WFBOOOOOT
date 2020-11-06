@@ -40,9 +40,7 @@ namespace WFBooooot.IOT
 
         static void SocketInti()
         {
-            var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1
-                ? $"{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/"
-                : $"http://{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/";
+            var uri = _ConfigService.AppConfig.Host.IndexOf("http", StringComparison.Ordinal) > -1 ? $"{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/" : $"http://{_ConfigService.AppConfig.Host}:{_ConfigService.AppConfig.Port}/";
             //传入容器，自行管理对象
 
             _OpqSocket = new OpqSocket(_ConfigService.AppConfig.Host, _ConfigService.AppConfig.Port, _ConfigService.AppConfig.QQ, AppDomain.CurrentDomain.GetAssemblies(), _WandhiIocManager);
@@ -55,11 +53,9 @@ namespace WFBooooot.IOT
             _OpqSocket.Connect();
 
             //二维码检测事件
-            _OpqSocket.On(EventType.OnCheckLoginQrcode,
-                (fn) => { Console.WriteLine("OnCheckLoginQrcode\n" + ((JSONMessage) fn).MessageText); });
+            _OpqSocket.On(EventType.OnCheckLoginQrcode, (fn) => { Console.WriteLine("OnCheckLoginQrcode\n" + ((JSONMessage) fn).MessageText); });
             //收到好友消息的回调事件
-            _OpqSocket.On(EventType.OnFriendMsgs,
-                (fn) => { Console.WriteLine("OnFriendMsgs\n" + ((JSONMessage) fn).MessageText); });
+            _OpqSocket.On(EventType.OnFriendMsgs, (fn) => { Console.WriteLine("OnFriendMsgs\n" + ((JSONMessage) fn).MessageText); });
             //统一事件管理如好友进群事件 好友请求事件 退群等事件集合
             _OpqSocket.On(EventType.OnEvents, (fn) => { Console.WriteLine("OnEnevts\n" + ((JSONMessage) fn).MessageText); });
         }
