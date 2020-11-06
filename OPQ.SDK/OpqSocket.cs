@@ -98,11 +98,11 @@ namespace OPQ.SDK
             #region 事件分发
 
             #region 群消息事件
+
             On(EventType.OnGroupMsgs, (message) =>
             {
                 var groupMessage = JsonConvert.DeserializeObject<OpqMessage>(message.MessageText);
-                _log.Info(
-                    $"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}--{groupMessage.CurrentPacket.Data.FromUserId}]:{groupMessage.CurrentPacket.Data.Content}");
+                _log.Info($"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}--{groupMessage.CurrentPacket.Data.FromUserId}]:{groupMessage.CurrentPacket.Data.Content}");
 
                 //忽略自己的消息
                 if (groupMessage.CurrentPacket.Data.FromUserId != long.Parse(_qq))
@@ -132,10 +132,10 @@ namespace OPQ.SDK
                     }
                 }
             });
+
             #endregion
 
             #region 群加入事件
-
 
             #endregion
 
@@ -210,14 +210,21 @@ namespace OPQ.SDK
         {
             //注册群消息响应事件
             var groupEvents = new List<Type>();
+            var groupJoinEvents = new List<Type>();
             foreach (var assembly in assemblyAssemblies)
             {
                 groupEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupMessageEvent))));
+                groupJoinEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupJoinEvent))));
             }
 
             foreach (var item in groupEvents)
             {
                 WandhiIocManager.GetContainer().RegisterType(typeof(IGroupMessageEvent), item, item.Name);
+            }
+
+            foreach (var item in groupJoinEvents)
+            {
+                WandhiIocManager.GetContainer().RegisterType(typeof(IGroupJoinEvent), item, item.Name);
             }
 
 
@@ -232,16 +239,15 @@ namespace OPQ.SDK
             On(EventType.connect, (fn) =>
             {
                 Client.Emit("GetWebConn", _qq, null, (callback) =>
+                {
+                    if (!(callback is string jsonMsg) || jsonMsg.Contains("OK"))
                     {
-                        if (!(callback is string jsonMsg) || jsonMsg.Contains("OK"))
-                        {
-                            return;
-                        }
-
-                        Client.Close();
-                        Connect();
+                        return;
                     }
-                );
+
+                    Client.Close();
+                    Connect();
+                });
             });
         }
 
