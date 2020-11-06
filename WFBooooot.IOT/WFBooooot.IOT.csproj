@@ -11,6 +11,9 @@
     <Compile Remove="run.bat\**" />
     <EmbeddedResource Remove="run.bat\**" />
     <None Remove="run.bat\**" />
+    <None Update="run.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
