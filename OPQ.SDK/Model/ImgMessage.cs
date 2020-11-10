@@ -22,6 +22,11 @@ namespace OPQ.SDK.Model
         /// </summary>
         public string FileMd5 { get; set; } = "";
 
+        /// <summary>
+        /// 闪图
+        /// </summary>
+        public string FlashPic { set; get; }
+
         public ImgMessage(long to, string content, string picUrl, string picBase64Buf, string fileMd5) : base(to, content)
         {
             if (string.IsNullOrEmpty(picUrl))
@@ -34,6 +39,24 @@ namespace OPQ.SDK.Model
             }
 
             FileMd5 = fileMd5;
+
+            SendMsgType = MessageType.PicMsg;
+            Groupid = to;
+        }
+
+        public ImgMessage(long to, string content, string picUrl, bool flashPic, string picBase64Buf, string fileMd5) : base(to, content)
+        {
+            if (string.IsNullOrEmpty(picUrl))
+            {
+                PicBase64Buf = picBase64Buf;
+            }
+            else
+            {
+                PicUrl = picUrl;
+            }
+
+            FileMd5 = fileMd5;
+            FlashPic = flashPic.ToString().ToLower();
 
             SendMsgType = MessageType.PicMsg;
             Groupid = to;
