@@ -9,10 +9,13 @@ namespace WFBooooot.IOT.Event
     {
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            var msg = new DogService(e.FromGroup).GetMsg();
-            if (msg.IsNotEmpty())
+            if (e.Msg.Text.Contains("舔狗"))
             {
-                AppData.OpqApi.SendGroupMessage(e.FromGroup, msg);
+                var msg = new DogService(e.FromGroup).GetMsg();
+                if (msg.IsNotEmpty())
+                {
+                    AppData.OpqApi.SendGroupMessage(e.FromGroup, msg);
+                }
             }
         }
     }
