@@ -61,7 +61,7 @@ namespace WFBooooot.IOT.Event
                     }
                 }
 
-                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg,, flag));
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
             }
             else
             {
