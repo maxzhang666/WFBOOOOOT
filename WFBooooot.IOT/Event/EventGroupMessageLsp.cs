@@ -46,10 +46,8 @@ namespace WFBooooot.IOT.Event
                 _cacheHelper.Set("lsp", DateTime.Now);
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
-                var msg = "\r\n收好了您，哎~慢走";
                 var url = GetPicUrl(out var info, flag);
-                msg = msg + $"\r\nPid:{info.pid}";
-                msg = msg + $"\r\n画师:{info.author}";
+                var msg = $"\r\n收好了您，哎~慢走\r\nPid:{info.pid}\r\n画师:{info.author}";
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
