@@ -47,6 +47,9 @@ namespace WFBooooot.IOT.Event
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
                 var msg = "\r\n收好了您，哎~慢走";
+                var url = GetPicUrl(out var info, flag);
+                msg = msg + $"\r\nPid:{info.pid}";
+                msg = msg + $"\r\n画师:{info.author}";
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
@@ -58,7 +61,7 @@ namespace WFBooooot.IOT.Event
                     }
                 }
 
-                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, GetPicUrl(flag), flag));
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg,, flag));
             }
             else
             {
@@ -83,9 +86,10 @@ namespace WFBooooot.IOT.Event
         /// </summary>
         /// <param name="isR18">是否获取R18</param>
         /// <returns></returns>
-        private string GetPicUrl(bool isR18 = false)
+        private string GetPicUrl(out DataItem Info, bool isR18 = false)
         {
             var res = Http.Get<Lsp>($"https://api.lolicon.app/setu/?apikey=071046145f51a2a084d2c5&r18={(isR18 ? "1" : "0")}");
+            Info = res.data.FirstOrDefault();
             return res.data.FirstOrDefault()?.url;
         }
 
