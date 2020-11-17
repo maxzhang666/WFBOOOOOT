@@ -202,13 +202,11 @@ namespace TRKS.WF.QQBot
                     sb.AppendLine($"         [{inventory.item}] {inventory.ducats}金币 + {inventory.credits}现金");
                 }
 
-                //sb.Append($"结束时间:{trader.expiry}({time} 后)");
                 sb.Append($"结束时间: {time} 后");
             }
             else
             {
                 var time = (DateTime.Now - trader.activation).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
-                //sb.Append($"虚空商人将在{trader.activation}({time} 后)抵达{trader.location}");
                 sb.Append($"虚空商人将在 {time} 后 抵达{trader.location}");
             }
 
