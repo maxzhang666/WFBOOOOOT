@@ -78,20 +78,13 @@ namespace WFBooooot.IOT.Service.Warframe
 
         private static WFApi GetTranslateApi()
         {
-            var alerts = GHttpHelper.Http.Get<Alert[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Alert.json");
-            var dicts = GHttpHelper.Http.Get<Dict[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Dict.json");
-            var invasions = GHttpHelper.Http.Get<Invasion[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Invasion.json");
-            var sales = GHttpHelper.Http.Get<Sale[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Sale.json");
-            var riven = GHttpHelper.Http.Get<Riven[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Riven.json");
-            var relic = GHttpHelper.Http.Get<Relic[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Relic.json");
-            var modifier = GHttpHelper.Http.Get<Modifier[]>(
-                "https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Modifier.json");
+            var alerts = GHttpHelper.Http.Get<Alert[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Alert.json");
+            var dicts = GHttpHelper.Http.Get<Dict[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Dict.json");
+            var invasions = GHttpHelper.Http.Get<Invasion[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Invasion.json");
+            var sales = GHttpHelper.Http.Get<Sale[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Sale.json");
+            var riven = GHttpHelper.Http.Get<Riven[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Riven.json");
+            var relic = GHttpHelper.Http.Get<Relic[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Relic.json");
+            var modifier = GHttpHelper.Http.Get<Modifier[]>("https://cdn.jsdelivr.net/gh/Richasy/WFA_Lexicon/WF_Modifier.json");
             var translateApi = new WFApi
             {
                 Alert = alerts, Dict = dicts, Invasion = invasions, Relic = relic, Riven = riven, Sale = sales, Modifier = modifier
@@ -297,9 +290,14 @@ namespace WFBooooot.IOT.Service.Warframe
 
         public void TranslateWMOrder(WMInfo info, string searchword)
         {
-            foreach (var iteminset in info.include.item.items_in_set.Where(word => word.url_name == searchword))
+            var words = info.include.item.items_in_set.Where(word => word.url_name == searchword).ToList();
+            foreach (var item in words)
             {
-                iteminset.zh.item_name = searchwordTranslator["Item"].Translate(searchword);
+                if (item.zh==null)
+                {
+                    item.zh = new Zh();
+                }
+                item.zh.item_name = searchwordTranslator["Item"].Translate(searchword);
             }
 
             foreach (var order in info.payload.orders)

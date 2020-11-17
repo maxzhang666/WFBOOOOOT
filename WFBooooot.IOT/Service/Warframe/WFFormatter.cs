@@ -1,18 +1,18 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
- using Humanizer;
- using Humanizer.Localisation;
- using WFBooooot.IOT.Service.Warframe;
- using Event = WarframeAlertingPrime.SDK.Models.GameInfo.Event;
- using Fissure = WarframeAlertingPrime.SDK.Models.GameInfo.Fissure;
- using Sortie = WarframeAlertingPrime.SDK.Models.GameInfo.Sortie;
- using VoidTrader = WarframeAlertingPrime.SDK.Models.GameInfo.VoidTrader;
+using Humanizer;
+using Humanizer.Localisation;
+using WFBooooot.IOT.Service.Warframe;
+using Event = WarframeAlertingPrime.SDK.Models.GameInfo.Event;
+using Fissure = WarframeAlertingPrime.SDK.Models.GameInfo.Fissure;
+using Sortie = WarframeAlertingPrime.SDK.Models.GameInfo.Sortie;
+using VoidTrader = WarframeAlertingPrime.SDK.Models.GameInfo.VoidTrader;
 
- namespace TRKS.WF.QQBot
+namespace TRKS.WF.QQBot
 {
     public static class WFFormatter
     {
@@ -28,7 +28,6 @@ using System.Text;
                 sb.AppendLine($"- 剩余点数: {@event.health}");
                 sb.AppendLine($"- 结束时间: {time} 后");
                 sb.AppendLine();
-
             }
 
             return sb.ToString().Trim();
@@ -40,9 +39,7 @@ using System.Text;
             var reward = mission.Reward;
             var time = (alert.Expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
 
-            return $"[{mission.Node}] 等级{mission.MinEnemyLevel}~{mission.MaxEnemyLevel}:\r\n" +
-                   $"- 类型:     {mission.Type} - {mission.Faction}\r\n" +
-                   $"- 奖励:     {ToString(reward)}\r\n" +
+            return $"[{mission.Node}] 等级{mission.MinEnemyLevel}~{mission.MaxEnemyLevel}:\r\n" + $"- 类型:     {mission.Type} - {mission.Faction}\r\n" + $"- 奖励:     {ToString(reward)}\r\n" +
                    //$"-过期时间: {alert.Expiry}({time} 后)" +
                    $"- 过期时间: {time} 后";
         }
@@ -61,6 +58,7 @@ using System.Text;
 
             return sb.ToString().Trim();
         }
+
         public static string ToString(List<RivenInfo> infos)
         {
             var weapon = infos.First().item_Class;
@@ -89,6 +87,7 @@ using System.Text;
 
             return sb.ToString().Trim();
         }
+
         public static string ToString(List<Fissure> fissures)
         {
             var sb = new StringBuilder();
@@ -103,6 +102,7 @@ using System.Text;
 
             return sb.ToString().Trim();
         }
+
         public static string ToString(SyndicateMission mission)
         {
             var sb = new StringBuilder();
@@ -116,7 +116,7 @@ using System.Text;
                 sb.AppendLine("- 奖励:");
                 foreach (var reward in job.rewardPool)
                 {
-                    sb.Append($"[{reward}]");                   
+                    sb.Append($"[{reward}]");
                 }
 
                 sb.AppendLine();
@@ -125,6 +125,7 @@ using System.Text;
 
             return sb.ToString().Trim();
         }
+
         public static string ToString(WFInvasion inv)
         {
             var sb = new StringBuilder();
@@ -146,8 +147,7 @@ using System.Text;
 
         public static string ToString(CetusCycle cycle)
         {
-            var time = (cycle.Expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"),
-                TimeUnit.Hour, TimeUnit.Second, " ");
+            var time = (cycle.Expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Hour, TimeUnit.Second, " ");
             var status = cycle.IsDay ? "白天" : "夜晚";
             var nextTime = !cycle.IsDay ? "白天" : "夜晚";
 
@@ -161,8 +161,7 @@ using System.Text;
 
         public static string ToString(VallisCycle cycle)
         {
-            var time = (cycle.expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"),
-                TimeUnit.Hour, TimeUnit.Second, " ");
+            var time = (cycle.expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Hour, TimeUnit.Second, " ");
             var temp = cycle.isWarm ? "温暖" : "寒冷";
             var nextTemp = !cycle.isWarm ? "温暖" : "寒冷";
             var sb = new StringBuilder();
@@ -195,21 +194,20 @@ using System.Text;
             var sb = new StringBuilder();
             if (trader.active)
             {
-                var time = (DateTime.Now - trader.expiry).Humanize(int.MaxValue,
-                    CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
+                var time = (DateTime.Now - trader.expiry).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
                 sb.AppendLine($"虚空商人已抵达: {trader.location}");
                 sb.AppendLine($"携带商品:");
                 foreach (var inventory in trader.inventory)
                 {
                     sb.AppendLine($"         [{inventory.item}] {inventory.ducats}金币 + {inventory.credits}现金");
                 }
+
                 //sb.Append($"结束时间:{trader.expiry}({time} 后)");
                 sb.Append($"结束时间: {time} 后");
             }
             else
             {
-                var time = (DateTime.Now - trader.activation).Humanize(int.MaxValue,
-                    CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
+                var time = (DateTime.Now - trader.activation).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
                 //sb.Append($"虚空商人将在{trader.activation}({time} 后)抵达{trader.location}");
                 sb.Append($"虚空商人将在 {time} 后 抵达{trader.location}");
             }
@@ -221,35 +219,36 @@ using System.Text;
         {
             var sb = new StringBuilder();
             var itemItemsInSet = info.include.item.items_in_set;
-            var item = itemItemsInSet.Where(i => i.zh.item_name != i.en.item_name).ToList().Last();
+            var item = itemItemsInSet.Last(i => i.zh != null);
             sb.AppendLine($"下面是物品: {item.zh.item_name} 按价格从小到大的{info.payload.orders.Length}条信息");
             sb.AppendLine();
             foreach (var order in info.payload.orders)
             {
                 sb.AppendLine($"[{order.user.ingame_name}]   {order.user.status}");
                 sb.AppendLine($"{order.order_type}  {order.platinum} 白鸡");
-                sb.AppendLine(
-                    $"- 快捷回复: /w {order.user.ingame_name} Hi! I want to buy: {item.en.item_name} for {order.platinum} platinum. (warframe.market)");
+                sb.AppendLine($"- 快捷回复: /w {order.user.ingame_name} Hi! I want to buy: {item.en.item_name} for {order.platinum} platinum. (warframe.market)");
                 sb.AppendLine();
             }
+
             // 以后不好看了再说
             return sb.ToString().Trim();
         }
+
         public static string ToString(WMInfoEx info)
         {
             var sb = new StringBuilder();
             var item = info.info;
             sb.AppendLine($"下面是物品: {item.zhName} 按价格从小到大的{info.orders.Length}条信息");
             sb.AppendLine();
-            
+
             foreach (var order in info.orders)
             {
                 sb.AppendLine($"[{order.userName}]   {order.status}");
                 sb.AppendLine($"{order.order_Type}  {order.platinum} 白鸡");
-                sb.AppendLine(
-                    $"- 快捷回复: /w {order.userName} Hi! I want to buy: {item.enName} for {order.platinum} platinum. (warframe.market)");
+                sb.AppendLine($"- 快捷回复: /w {order.userName} Hi! I want to buy: {item.enName} for {order.platinum} platinum. (warframe.market)");
                 sb.AppendLine();
             }
+
             // 这已经很难看了好吧
             return sb.ToString().Trim();
         }
@@ -285,6 +284,7 @@ using System.Text;
 
             return string.Join(" + ", rewards);
         }
+
         public static string ToString(Reward reward)
         {
             var rewards = new List<string>();
