@@ -35,6 +35,10 @@ namespace OPQ.SDK.Enum
         /// <summary>
         /// 群禁言
         /// </summary>
-        ON_EVENT_GROUP_SHUT
+        ON_EVENT_GROUP_SHUT,
+        /// <summary>
+        /// 网络变化
+        /// </summary>
+        ON_EVENT_QQ_NETWORK_CHANGE
     }
 }
