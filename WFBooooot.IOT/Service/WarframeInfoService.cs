@@ -179,7 +179,7 @@ namespace WFBooooot.IOT.Service
                 }
             }
 
-            var msg = "";
+            var msg = string.Empty;
             if (false)
             {
                 var infoEx = GetWMINfoEx(searchword);
