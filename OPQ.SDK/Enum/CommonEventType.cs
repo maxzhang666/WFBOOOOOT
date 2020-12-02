@@ -39,6 +39,10 @@ namespace OPQ.SDK.Enum
         /// <summary>
         /// 网络变化
         /// </summary>
-        ON_EVENT_QQ_NETWORK_CHANGE
+        ON_EVENT_QQ_NETWORK_CHANGE,
+        /// <summary>
+        /// 好友添加
+        /// </summary>
+        ON_EVENT_FRIEND_ADD_STATUS
     }
 }
