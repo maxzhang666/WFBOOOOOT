@@ -47,7 +47,7 @@ namespace WFBooooot.IOT.Event
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
                 var url = GetPicUrl(out var info, flag);
-                var msg = $"\r\n[ATUSER({e.FromQQ})]收好了您，哎~慢走\r\nPid:{info.pid}\r\n画师:{info.author}";
+                var msg = $"\r\n收好了您，哎~慢走\r\nPid:{info.pid}\r\n画师:{info.author}";
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
@@ -64,7 +64,7 @@ namespace WFBooooot.IOT.Event
             else
             {
                 var data = LspCdCount(e.FromQQ, e.FromQQ.NickName);
-                var msg = $"[ATUSER({e.FromQQ})]\r\n这么快就冲完了？缓缓吧";
+                var msg = $"这么快就冲完了？缓缓吧";
                 if (data != null)
                 {
                     var p = Math.Round(data.info.sp_cd_count / double.Parse(data.cd_count) * 100, 2, MidpointRounding.AwayFromZero);

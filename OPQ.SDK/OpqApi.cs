@@ -123,7 +123,8 @@ namespace OPQ.SDK
         {
             if (_sendActions.TryDequeue(out var msg))
             {
-                Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, JsonConvert.SerializeObject(msg, _jsonFormat))));
+                var json = JsonConvert.SerializeObject(msg, _jsonFormat);
+                Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, json)));
             }
         }
 
