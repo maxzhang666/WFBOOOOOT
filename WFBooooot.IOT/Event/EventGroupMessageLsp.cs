@@ -59,6 +59,7 @@ namespace WFBooooot.IOT.Event
                     }
                 }
 
+                msg += $"[ATUSER({e.FromQQ})]";
                 AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
             }
             else
@@ -75,7 +76,8 @@ namespace WFBooooot.IOT.Event
                     }
                 }
 
-                AppData.OpqApi.SendGroupMessage(e.FromGroup, msg);
+                msg += $"[ATUSER({e.FromQQ})]";
+                AppData.OpqApi.SendGroupMessage(e.FromGroup, msg, e.FromQQ);
             }
         }
 

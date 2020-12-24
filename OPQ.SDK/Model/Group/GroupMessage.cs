@@ -12,7 +12,7 @@ namespace OPQ.SDK.Model.Group
 
         public GroupMessage(long to, string content, long atUser) : base(to, content)
         {
-            this.AtUser = atUser;
+            AtUser = atUser;
             SendToType = SendToType.Group;
         }
 
