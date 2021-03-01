@@ -39,6 +39,9 @@ namespace WFBooooot.IOT.Event
             {
                 return;
             }
+            
+            
+            AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup,$"[ATUSER({e.FromQQ})] 有内鬼，终止交易！"));
 
             var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(2));
             if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2))
