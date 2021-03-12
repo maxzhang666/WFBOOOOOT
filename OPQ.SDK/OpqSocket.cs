@@ -126,7 +126,8 @@ namespace OPQ.SDK
                         Msg = new QQMessage
                         {
                             Text = groupMessage.CurrentPacket.Data.Content,
-                            MsgId = groupMessage.CurrentPacket.Data.MsgSeq
+                            MsgSeq = groupMessage.CurrentPacket.Data.MsgSeq,
+                            MsgRandom = groupMessage.CurrentPacket.Data.MsgRandom
                         }
                     };
                     foreach (var item in events)

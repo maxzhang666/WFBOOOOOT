@@ -10,7 +10,11 @@ namespace WandhiBot.SDK.Model
         /// <summary>
         /// 消息id
         /// </summary>
-        public long MsgId { set; get; }
+        public long MsgSeq { set; get; }
+        /// <summary>
+        /// 消息随机值
+        /// </summary>
+        public long MsgRandom { get; set; }
         
 
         /// <summary>
