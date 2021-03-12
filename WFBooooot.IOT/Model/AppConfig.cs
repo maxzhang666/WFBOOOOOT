@@ -28,6 +28,11 @@ namespace WFBooooot.IOT.Model
         public List<string> DebugGroup { get; set; }
 
         /// <summary>
+        /// redis配置
+        /// </summary>
+        public RedisConfig RedisConfig { set; get; }
+
+        /// <summary>
         /// Api配置
         /// </summary>
         public WarframeConfig WarframeConfig { get; set; }

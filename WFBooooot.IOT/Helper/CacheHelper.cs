@@ -2,13 +2,14 @@ using System;
 using IocManager;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using WFBooooot.IOT.Helper.Interface;
 
 namespace WFBooooot.IOT.Helper
 {
     /// <summary>
     /// 内存缓存
     /// </summary>
-    public class CacheHelper : IIocSingletonService
+    public class CacheHelper : ICacheService
     {
         /// <summary>
         /// 锁
