@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Threading.Tasks;
 using IocManager;
 using Newtonsoft.Json;
@@ -97,7 +98,13 @@ namespace WFBooooot.IOT
 
         static void ExcetionLog(object source, FirstChanceExceptionEventArgs args)
         {
-            _Log.Error($"发生错误：[{args.Exception.Message}]\r\n来源：\r\n{args.Exception.Source}\r\n路径:{args.Exception.StackTrace}");
+            var sb = new StringBuilder($"发生错误：[{args.Exception.Message}]\r\n来源：\r\n{args.Exception.Source}\r\n路径:{args.Exception.StackTrace}");
+            if (args.Exception.InnerException != null)
+            {
+                sb.AppendLine($"内部错误：[{args.Exception.InnerException.Message}]\r\n来源：\r\n{args.Exception.InnerException.Source}\r\n路径:{args.Exception.InnerException.StackTrace}");
+            }
+
+            _Log.Error(sb.ToString());
         }
     }
 }
