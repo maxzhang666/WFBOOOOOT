@@ -105,7 +105,7 @@ namespace OPQ.SDK
             On(EventType.OnGroupMsgs, (message) =>
             {
                 var groupMessage = JsonConvert.DeserializeObject<OpqMessage<QMessage>>(message.MessageText);
-                _log.Info($"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}--{groupMessage.CurrentPacket.Data.FromUserId}]:{groupMessage.CurrentPacket.Data.Content}");
+                _log.Info($"消息：类型[群],来源[{groupMessage.CurrentPacket.Data.FromGroupId}],用户[{groupMessage.CurrentPacket.Data.FromNickName}-{groupMessage.CurrentPacket.Data.FromUserId}],[{groupMessage.CurrentPacket.Data.MsgSeq}-{groupMessage.CurrentPacket.Data.MsgRandom}]:{groupMessage.CurrentPacket.Data.Content}");
 
                 //忽略自己的消息
                 if (groupMessage.CurrentPacket.Data.FromUserId != long.Parse(_qq))
