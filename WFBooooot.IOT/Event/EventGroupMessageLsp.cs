@@ -6,6 +6,7 @@ using OPQ.SDK.Model.Group;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
 using WFBooooot.IOT.Helper;
+using WFBooooot.IOT.Helper.Interface;
 using WFBooooot.IOT.Model.Lsp;
 
 namespace WFBooooot.IOT.Event
@@ -15,9 +16,9 @@ namespace WFBooooot.IOT.Event
     /// </summary>
     public class EventGroupMessageLsp : IGroupMessageEvent
     {
-        private CacheHelper _cacheHelper;
+        private ICacheService _cacheHelper;
 
-        public EventGroupMessageLsp(CacheHelper cacheHelper)
+        public EventGroupMessageLsp(ICacheService cacheHelper)
         {
             _cacheHelper = cacheHelper;
         }

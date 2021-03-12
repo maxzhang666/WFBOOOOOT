@@ -40,7 +40,7 @@ namespace WFBooooot.IOT.Model
         /// <summary>
         /// 关键字词库
         /// </summary>
-        public KeywordConfig KeywordConfig { set; get; } = new KeywordConfig();
+        public KeywordConfig KeywordConfig { set; get; }
     }
 
     /// <summary>
@@ -51,34 +51,13 @@ namespace WFBooooot.IOT.Model
         /// <summary>
         /// 生效的群
         /// </summary>
-        public List<string> Groups { set; get; } = new List<string> {"340569308", "655341576", "722457505", "951770042"};
+        public List<string> Groups { set; get; }
 
         /// <summary>
         /// 关键字词库
         /// 键名-关键字
         /// 键值-回复消息
         /// </summary>
-        public Dictionary<string, string> KeyWords { set; get; } = new Dictionary<string, string>
-        {
-            {
-                "百度", @"百度网盘VIP账号，2天只需1.5元(共享账号概率限速，介意勿扰)
-迅雷Vip 每天只需1.5元，1周只需4元
-另新增各种其他业务
-详情点击：http://t.cn/AiOEzcrZ"
-            },
-            {
-                "迅雷", @"百度网盘VIP账号，2天只需1.5元(共享账号概率限速，介意勿扰)
-迅雷Vip 每天只需1.5元，1周只需4元
-另新增各种其他业务
-详情点击：http://t.cn/AiOEzcrZ"
-            },
-            {
-                "翻墙", @"禁止讨论任何形式的翻Q软件
-
-违者直接飞机票
-
-PS：私聊不管"
-            }
-        };
+        public Dictionary<string, string> KeyWords { set; get; }
     }
 }

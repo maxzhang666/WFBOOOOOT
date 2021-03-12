@@ -9,7 +9,7 @@ namespace WFBooooot.IOT.Helper
     /// <summary>
     /// 内存缓存
     /// </summary>
-    public class CacheHelper : ICacheService
+    public class MemoryCacheHelper : ICacheService,IIocSingletonService
     {
         /// <summary>
         /// 锁
@@ -19,7 +19,7 @@ namespace WFBooooot.IOT.Helper
         private MemoryCache _memoryCache;
         private Log _log;
 
-        public CacheHelper(Log log)
+        public MemoryCacheHelper(Log log)
         {
             _log = log;
             this._memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

@@ -5,11 +5,11 @@ using WFBooooot.IOT.Helper.Interface;
 
 namespace WFBooooot.IOT.Helper
 {
-    public class RedisHelper : ICacheService
+    public class RedisCacheHelper : ICacheService
     {
         private static CSRedisClient _Client;
 
-        public RedisHelper()
+        public RedisCacheHelper()
         {
             if (_Client == null)
             {
@@ -55,7 +55,7 @@ namespace WFBooooot.IOT.Helper
         }
 
         /// <summary>
-        /// 默认30分钟
+        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -63,12 +63,25 @@ namespace WFBooooot.IOT.Helper
         /// <typeparam name="T"></typeparam>
         public void Set<T>(string key, T value, TimeSpan? time)
         {
-            _Client.Set(key, value, time ?? TimeSpan.FromMinutes(30));
+            if (time.HasValue)
+            {
+                _Client.Set(key, value, time.Value);
+            }
+            else
+            {
+                _Client.Set(key, value);
+            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         public void Set<T>(string key, T value)
         {
-            Set(key, value, null);
+            _Client.Set(key, value);
         }
     }
 }

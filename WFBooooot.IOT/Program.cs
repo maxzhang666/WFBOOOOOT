@@ -15,6 +15,7 @@ using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
 using WandhiBot.SDK.Model;
 using WFBooooot.IOT.Helper;
+using WFBooooot.IOT.Helper.Interface;
 using WFBooooot.IOT.Model;
 
 namespace WFBooooot.IOT
@@ -89,6 +90,16 @@ namespace WFBooooot.IOT
             _ConfigService = _WandhiIocManager.Resolve<ConfigService>();
             _SocketHelper = _WandhiIocManager.Resolve<SocketHelper>();
             _Log = _WandhiIocManager.Resolve<Log>();
+
+            //初始化缓存类
+            if (_ConfigService.AppConfig.RedisConfig?.Open != null && _ConfigService.AppConfig.RedisConfig.Open.Value)
+            {
+                _WandhiIocManager.GetContainer().RegisterSingleton<ICacheService, RedisCacheHelper>();
+            }
+            else
+            {
+                _WandhiIocManager.GetContainer().RegisterSingleton<ICacheService, MemoryCacheHelper>();
+            }
         }
 
         static void ExcetionHandle()
