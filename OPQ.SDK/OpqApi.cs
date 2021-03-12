@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using OPQ.SDK.Enum;
 using OPQ.SDK.Model;
 using OPQ.SDK.Model.Group;
+using WandhiBot.SDK.Model;
 using WandhiHelper.Extension;
 
 namespace OPQ.SDK
@@ -44,6 +45,8 @@ namespace OPQ.SDK
         /// 通用消息发送
         /// </summary>
         private string SendMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=SendMsg&timeout={TimeOut}";
+
+        private string RevokeMsgMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=RevokeMsg&timeout={TimeOut}";
 
         #endregion
 
@@ -126,6 +129,39 @@ namespace OPQ.SDK
                 var json = JsonConvert.SerializeObject(msg, _jsonFormat);
                 Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, json)));
             }
+        }
+
+        #endregion
+
+        #region 撤回消息
+
+        /// <summary>
+        /// 撤回群消息
+        /// </summary>
+        /// <param name="fromGroup"></param>
+        /// <param name="msgSeq"></param>
+        /// <param name="msgRandom"></param>
+        public void RevokeMessage(long fromGroup, long msgSeq, long msgRandom)
+        {
+            Task.Run(() =>
+            {
+                GHttpHelper.Http.PostJson(RevokeMsgMsg, JsonConvert.SerializeObject(new
+                {
+                    GroupID = fromGroup,
+                    MsgSeq = msgSeq,
+                    MsgRandom = msgRandom
+                }, _jsonFormat));
+            });
+        }
+
+        /// <summary>
+        /// 撤回群消息
+        /// </summary>
+        /// <param name="fromGroup"></param>
+        /// <param name="msg"></param>
+        public void RevokeMessage(long fromGroup, QQMessage msg)
+        {
+            RevokeMessage(fromGroup, msg.MsgSeq, msg.MsgRandom);
         }
 
         #endregion
