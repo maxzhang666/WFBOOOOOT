@@ -17,18 +17,18 @@ namespace WFBooooot.IOT
     {
         private const string FileName = "app.config.json";
         private readonly string _filePath = $"{Directory.GetCurrentDirectory()}/{FileName}";
-        private FileSystemWatcher _watcher = new FileSystemWatcher(Directory.GetCurrentDirectory(), FileName);
+        private readonly FileSystemWatcher _watcher = new FileSystemWatcher(Directory.GetCurrentDirectory(), FileName);
 
         /// <summary>
         /// 日志工具
         /// </summary>
-        public readonly Log Log;
+        private readonly Log _log;
 
         public AppConfig AppConfig { private set; get; }
 
         public ConfigService(Log log)
         {
-            Log = log;
+            _log = log;
             AppConfig = InitConfig();
             WatchFileChange();
         }
@@ -43,7 +43,7 @@ namespace WFBooooot.IOT
             _watcher.Changed += (sender, e) =>
             {
                 _watcher.EnableRaisingEvents = false;
-                Log.Debug("配置文件变化，重新加载");
+                _log.Debug("配置文件变化，重新加载");
                 AppConfig = InitConfig();
                 _watcher.EnableRaisingEvents = true;
             };
@@ -63,19 +63,17 @@ namespace WFBooooot.IOT
             else
             {
                 var json = File.ReadAllText(_filePath);
-                AppConfig = (json.IsNotEmpty() && json != "null") ? JsonConvert.DeserializeObject<AppConfig>(json) : InitDefaultConfig();
+                AppConfig = JsonConvert.DeserializeObject<AppConfig>(json);
+                InitDefaultConfig();
             }
-
-            Log.Info($"配置文件读取结束:{JsonConvert.SerializeObject(AppConfig)}");
             return AppConfig;
         }
 
         /// <summary>
         /// 保存配置信息
         /// </summary>
-        public void SaveConfig()
+        private void SaveConfig()
         {
-            Log.Info("保存配置信息");
             File.WriteAllText(_filePath, JsonConvert.SerializeObject(AppConfig, Formatting.Indented));
         }
 

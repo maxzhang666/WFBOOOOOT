@@ -11,7 +11,8 @@ namespace WFBooooot.IOT.Event
         {
             if (e.FromQQ == "373884384" && e.Msg.Text.Contains("撤回我"))
             {
-                AppData.OpqApi.RevokeMessage(e.FromGroup, e.Msg);
+                AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，5秒后撤回你");
+                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(5)));
             }
         }
     }

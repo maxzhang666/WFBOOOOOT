@@ -16,19 +16,24 @@ namespace OPQ.SDK
     public class OpqApi
     {
         private string Root { set; get; }
-        private long CurrentQQ { set; get; }
-        private string Version;
-        private int TimeOut;
+        private long CurrentQq { set; get; }
+        private string _version;
+        private int _timeOut;
 
         /// <summary>
         /// 每秒执行一次，处理发送事件
         /// </summary>
-        private Timer _timer = new Timer(TimeSpan.FromMilliseconds(1).TotalMilliseconds);
+        private readonly Timer _timer = new Timer(TimeSpan.FromMilliseconds(1).TotalMilliseconds);
 
         /// <summary>
         /// 待发送消息队列
         /// </summary>
-        private ConcurrentQueue<Message> _sendActions = new ConcurrentQueue<Message>();
+        private readonly ConcurrentQueue<Message> _sendActions = new ConcurrentQueue<Message>();
+
+        /// <summary>
+        /// 定时事件
+        /// </summary>
+        private readonly ConcurrentQueue<ILazyEvent> _commonQueue = new ConcurrentQueue<ILazyEvent>();
 
         #region 配置信息
 
@@ -44,10 +49,10 @@ namespace OPQ.SDK
         /// <summary>
         /// 通用消息发送
         /// </summary>
-        private string SendMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=SendMsg&timeout={TimeOut}";
+        private string SendMsg => $"{Root}/{_version}/LuaApiCaller?qq={CurrentQq}&funcname=SendMsg&timeout={_timeOut}";
 
         //${host}/v1/LuaApiCaller?qq=${CurrentQQ}&funcname=RevokeMsg&timeout=10
-        private string RevokeMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=RevokeMsg&timeout={TimeOut}";
+        private string RevokeMsg => $"{Root}/{_version}/LuaApiCaller?qq={CurrentQq}&funcname=RevokeMsg&timeout={_timeOut}";
 
         #endregion
 
@@ -70,12 +75,13 @@ namespace OPQ.SDK
         public OpqApi(string root, long currentQQ, string version = "v1", int timeout = 10)
         {
             Root = root;
-            CurrentQQ = currentQQ;
-            Version = version;
-            TimeOut = timeout;
+            CurrentQq = currentQQ;
+            _version = version;
+            _timeOut = timeout;
 
 
             _timer.Elapsed += (s, e) => MsgProcess();
+            _timer.Elapsed += (s, e) => EventProcess();
             _timer.Start();
         }
 
@@ -125,11 +131,13 @@ namespace OPQ.SDK
         /// </summary>
         private void MsgProcess()
         {
-            if (_sendActions.TryDequeue(out var msg))
+            if (!_sendActions.TryDequeue(out var msg))
             {
-                var json = JsonConvert.SerializeObject(msg, _jsonFormat);
-                Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, json)));
+                return;
             }
+
+            var json = JsonConvert.SerializeObject(msg, _jsonFormat);
+            Task.Run((() => GHttpHelper.Http.PostJson(SendMsg, json)));
         }
 
         #endregion
@@ -163,6 +171,38 @@ namespace OPQ.SDK
         public void RevokeMessage(long fromGroup, QQMessage msg)
         {
             RevokeMessage(fromGroup, msg.MsgSeq, msg.MsgRandom);
+        }
+
+        #endregion
+
+        #region 延时事件
+
+        public void LazyEvent(ILazyEvent lazyEvent)
+        {
+            _commonQueue.Enqueue(lazyEvent);
+        }
+
+        private void EventProcess()
+        {
+            if (_commonQueue.IsEmpty)
+            {
+                return;
+            }
+
+            if (_commonQueue.TryDequeue(out var item))
+            {
+                Task.Run(() =>
+                {
+                    if (item.CanDo())
+                    {
+                        item.Do();
+                    }
+                    else
+                    {
+                        _commonQueue.Enqueue(item);
+                    }
+                });
+            }
         }
 
         #endregion
