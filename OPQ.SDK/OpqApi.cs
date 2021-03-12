@@ -46,7 +46,8 @@ namespace OPQ.SDK
         /// </summary>
         private string SendMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=SendMsg&timeout={TimeOut}";
 
-        private string RevokeMsgMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=RevokeMsg&timeout={TimeOut}";
+        //${host}/v1/LuaApiCaller?qq=${CurrentQQ}&funcname=RevokeMsg&timeout=10
+        private string RevokeMsg => $"{Root}/{Version}/LuaApiCaller?qq={CurrentQQ}&funcname=RevokeMsg&timeout={TimeOut}";
 
         #endregion
 
@@ -145,12 +146,12 @@ namespace OPQ.SDK
         {
             Task.Run(() =>
             {
-                GHttpHelper.Http.PostJson(RevokeMsgMsg, JsonConvert.SerializeObject(new
+                GHttpHelper.Http.PostJson(RevokeMsg, JsonConvert.SerializeObject(new
                 {
                     GroupID = fromGroup,
                     MsgSeq = msgSeq,
                     MsgRandom = msgRandom
-                }, _jsonFormat));
+                }));
             });
         }
 
