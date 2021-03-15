@@ -42,17 +42,16 @@ namespace WFBooooot.IOT.Event
             }
 
 
-            AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, $"[ATUSER({e.FromQQ})] 有内鬼，终止交易！"));
-            return;
-
             var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(2));
             if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2))
             {
                 _cacheHelper.Set("lsp", DateTime.Now);
+                // AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, $"[ATUSER({e.FromQQ})] 有内鬼，终止交易！"));
+                // return;
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
                 var flag = e.FromQQ == 373884384 && (key.Contains("18") || key.Contains("牛批"));
                 var url = GetPicUrl(out var info, flag);
-                var msg = $"\r\n收好了您，哎~慢走\r\nPid:{info.pid}\r\n画师:{info.author}";
+                var msg = $"\r\n收好了您，哎~慢走(手机查看)\r\nPid:{info.pid}\r\n画师:{info.author}";
                 var data = LspCount(e.FromQQ, e.FromQQ.NickName);
                 if (data != null)
                 {
@@ -65,7 +64,7 @@ namespace WFBooooot.IOT.Event
                 }
 
                 msg += $"[ATUSER({e.FromQQ})]";
-                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, true));
             }
             else
             {

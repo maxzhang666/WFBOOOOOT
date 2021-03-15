@@ -13,7 +13,7 @@ namespace WFBooooot.IOT.Helper
         {
             if (_Client == null)
             {
-                _Client = new CSRedisClient($"{AppData.AppConfig.RedisConfig.Host}:{AppData.AppConfig.RedisConfig.Prot}{(AppData.AppConfig.RedisConfig.Password.IsNotEmpty() ? ($",password={AppData.AppConfig.RedisConfig.Password}") : "")}");
+                _Client = new CSRedisClient($"{AppData.AppConfig.RedisConfig.Host}:{AppData.AppConfig.RedisConfig.Prot}{(AppData.AppConfig.RedisConfig.Password.IsNotEmpty() ? ($",password={AppData.AppConfig.RedisConfig.Password}") : "")},testcluster=false");
             }
         }
 

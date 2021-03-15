@@ -17,8 +17,8 @@ namespace OPQ.SDK
     {
         private string Root { set; get; }
         private long CurrentQq { set; get; }
-        private string _version;
-        private int _timeOut;
+        private readonly string _version;
+        private readonly int _timeOut;
 
         /// <summary>
         /// 每秒执行一次，处理发送事件
@@ -37,7 +37,7 @@ namespace OPQ.SDK
 
         #region 配置信息
 
-        private JsonSerializerSettings _jsonFormat = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _jsonFormat = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
