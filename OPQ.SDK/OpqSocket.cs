@@ -104,8 +104,29 @@ namespace OPQ.SDK
 
             On(EventType.OnFriendMsgs, (message =>
             {
-                // var _message = JsonConvert.DeserializeObject<OpqMessage<QMessage>>(message.MessageText);
-                _log.Info($"消息:类型[好友],原始数据：{message.MessageText}");
+                var friendMessage = JsonConvert.DeserializeObject<OpqMessage<QFrMessage>>(message.MessageText);
+                _log.Info($"消息:类型[好友],来源[{friendMessage.CurrentPacket.Data.FromUin}]:{friendMessage.CurrentPacket.Data.Content}");
+
+                if (friendMessage.CurrentPacket.Data.FromUin != long.Parse(_qq))
+                {
+                    var events = WandhiIocManager.ResolveAll<IFriendMessageEvent>();
+                    var friendArgs = new FriendMessageEventArgs
+                    {
+                        FromQQ = new QQ
+                        {
+                            Id = friendMessage.CurrentPacket.Data.FromUin,
+                        },
+                        Msg = new QQMessage
+                        {
+                            Text = friendMessage.CurrentPacket.Data.Content,
+                            MsgSeq = friendMessage.CurrentPacket.Data.MsgSeq
+                        }
+                    };
+                    foreach (var item in events)
+                    {
+                        Task.Factory.StartNew((() => { item.FriendMessage(friendArgs); }));
+                    }
+                }
             }));
 
             #endregion
