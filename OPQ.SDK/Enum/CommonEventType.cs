@@ -44,6 +44,11 @@ namespace OPQ.SDK.Enum
         /// 好友添加
         /// </summary>
         ON_EVENT_FRIEND_ADD_STATUS,
-        ON_EVENT_GROUP_SYSTEMNOTIFY
+        ON_EVENT_GROUP_SYSTEMNOTIFY,
+        /// <summary>
+        /// 推送好友添加
+        /// </summary>
+        ON_EVENT_NOTIFY_PUSHADDFRD,
+        ON_EVENT_FRIEND_ADDED
     }
 }
