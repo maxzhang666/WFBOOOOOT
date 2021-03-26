@@ -1,5 +1,7 @@
+using System;
 using OPQ.SDK;
 using OPQ.SDK.Model.Friend;
+using WandhiBot.SDK.Enum;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
 
