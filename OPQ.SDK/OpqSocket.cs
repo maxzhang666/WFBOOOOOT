@@ -102,6 +102,23 @@ namespace OPQ.SDK
 
             #region 好友消息事件
 
+            #region 好友图文消息
+
+            // {
+            //     "Content": "\n图文消息体",
+            //     "FriendPic": [
+            //     {
+            //         "FileMd5": "O7PuDpFkqO/qyr0F3dyWMw==",
+            //         "FileSize": 910,
+            //         "Path": "/373884384-133401397-3BB3EE0E9164A8EFEACABD05DDDC9633",
+            //         "Url": "http://c2cpicdw.qpic.cn/offpic_new/1213068777/373884384-133401397-3BB3EE0E9164A8EFEACABD05DDDC9633/0"
+            //     }
+            //     ],
+            //     "Tips": "[好友图片]"
+            // }
+
+            #endregion
+
             On(EventType.OnFriendMsgs, (message =>
             {
                 var friendMessage = JsonConvert.DeserializeObject<OpqMessage<QFrMessage>>(message.MessageText);
@@ -132,6 +149,24 @@ namespace OPQ.SDK
             #endregion
 
             #region 群消息事件
+
+            #region 群图文消息
+
+            // {
+            //     "GroupPic": [
+            //     {
+            //         "FileId": 2699016130,
+            //         "FileMd5": "ItL+TjdsH+VSIVa9DS9Jtw==",
+            //         "FileSize": 1276,
+            //         "ForwordBuf": "EiQyMkQyRkU0RTM3NkMxRkU1NTIyMTU2QkQwRDJGNDlCNy5qcGcyVhU2IDg2ZUExQmEwZGZiN2MyM2FmYTg4MzggICAgICA1MENBdm5NSE1Nd3M3U0Y3QjIyMkQyRkU0RTM3NkMxRkU1NTIyMTU2QkQwRDJGNDlCNy5qcGdBOMLv/oYKQLiQ6tcDSFBQQloQQ0F2bk1ITU13czdTRjdCMmABahAi0v5ON2wf5VIhVr0NL0m3clwvZ2NoYXRwaWNfbmV3LzI1NDc1NTAwODMvMjAzMjE0MjExNC0yNjk5MDE2MTMwLTIyRDJGRTRFMzc2QzFGRTU1MjIxNTZCRDBEMkY0OUI3LzE5OD90ZXJtPTI1NYIBWi9nY2hhdHBpY19uZXcvMjU0NzU1MDA4My8yMDMyMTQyMTE0LTI2OTkwMTYxMzAtMjJEMkZFNEUzNzZDMUZFNTUyMjE1NkJEMEQyRjQ5QjcvMD90ZXJtPTI1NaAB6AewAUS4AVjAAWfIAfwJ0AEA2AFE4AFY6AEA8AEA+gFcL2djaGF0cGljX25ldy8yNTQ3NTUwMDgzLzIwMzIxNDIxMTQtMjY5OTAxNjEzMC0yMkQyRkU0RTM3NkMxRkU1NTIyMTU2QkQwRDJGNDlCNy80MDA/dGVybT0yNTWAAkSIAliSAhoIARAAMgBKDlvliqjnlLvooajmg4VdUAB4Bg==",
+            //         "ForwordField": 8,
+            //         "Url": "http://gchat.qpic.cn/gchatpic_new/2547550083/89142114-2534335053-22D2FE4E376C1FE5522156BD0D2F49B7/0?vuin=1213068777\u0026term=255\u0026pictype=0"
+            //     }
+            //     ],
+            //     "Tips": "[群图片]"
+            // }
+
+            #endregion
 
             On(EventType.OnGroupMsgs, (message) =>
             {

@@ -1,5 +1,10 @@
+using WandhiBot.SDK.Enum;
+
 namespace WandhiBot.SDK.Model
 {
+    /// <summary>
+    /// 通用消息
+    /// </summary>
     public class QQMessage
     {
         /// <summary>
@@ -11,11 +16,17 @@ namespace WandhiBot.SDK.Model
         /// 消息id
         /// </summary>
         public long MsgSeq { set; get; }
+
         /// <summary>
         /// 消息随机值
         /// </summary>
         public long MsgRandom { get; set; }
-        
+
+        /// <summary>
+        /// 消息类型
+        /// </summary>
+        public MessageType MessageType { set; get; }
+
 
         /// <summary>
         /// 重写默认ToString
