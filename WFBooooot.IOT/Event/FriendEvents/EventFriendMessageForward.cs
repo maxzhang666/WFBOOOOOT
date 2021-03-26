@@ -15,7 +15,7 @@ namespace WFBooooot.IOT.Event.FriendEvents
         /// <param name="e"></param>
         public void FriendMessage(FriendMessageEventArgs e)
         {
-            AppData.OpqApi.SendMessage(new FriendMessage(373884384, e.Msg));
+            AppData.OpqApi.SendMessage(new FriendMessage(373884384, $"[{e.FromQQ}]:{e.Msg}"));
         }
     }
 }
