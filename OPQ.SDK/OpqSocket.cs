@@ -280,19 +280,29 @@ namespace OPQ.SDK
         private OpqSocket RegisterEvent(Assembly[] assemblyAssemblies)
         {
             //注册群消息响应事件
+            var friendEvents = new List<Type>();
             var groupEvents = new List<Type>();
             var groupJoinEvents = new List<Type>();
             foreach (var assembly in assemblyAssemblies)
             {
                 groupEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupMessageEvent))));
+                friendEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IFriendMessageEvent))));
                 groupJoinEvents.AddRange(assembly.GetTypes().Where(e => e.GetInterfaces().Contains(typeof(IGroupJoinEvent))));
             }
 
+            //好友消息
+            foreach (var item in friendEvents)
+            {
+                WandhiIocManager.GetContainer().RegisterType(typeof(IFriendMessageEvent), item, item.Name);
+            }
+
+            // 群消息
             foreach (var item in groupEvents)
             {
                 WandhiIocManager.GetContainer().RegisterType(typeof(IGroupMessageEvent), item, item.Name);
             }
 
+            //群加入
             foreach (var item in groupJoinEvents)
             {
                 WandhiIocManager.GetContainer().RegisterType(typeof(IGroupJoinEvent), item, item.Name);
