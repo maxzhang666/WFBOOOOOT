@@ -43,7 +43,7 @@ namespace WFBooooot.IOT.Event
 
 
             var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(2));
-            if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2))
+            if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2) || e.FromQQ == 373884384)
             {
                 _cacheHelper.Set("lsp", DateTime.Now);
                 // AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, $"[ATUSER({e.FromQQ})] 有内鬼，终止交易！"));
@@ -64,7 +64,7 @@ namespace WFBooooot.IOT.Event
                 }
 
                 msg += $"[ATUSER({e.FromQQ})]";
-                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, true));
+                AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
             }
             else
             {
