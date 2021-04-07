@@ -1,4 +1,5 @@
 using Castle.Core.Internal;
+using WandhiBot.SDK.Model;
 
 namespace WFBooooot.IOT.Extension
 {
@@ -12,6 +13,16 @@ namespace WFBooooot.IOT.Extension
         public static bool IsNotEmpty(this string str)
         {
             return !str.IsNullOrEmpty();
+        }
+
+        /// <summary>
+        /// 生成艾特用户的红字符
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <returns></returns>
+        public static string AtUser(QQ qq)
+        {
+            return $"[ATUSER({qq})]";
         }
     }
 }

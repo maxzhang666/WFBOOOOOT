@@ -1,11 +1,12 @@
 using System;
 using CSRedis;
+using IocManager;
 using WFBooooot.IOT.Extension;
 using WFBooooot.IOT.Helper.Interface;
 
 namespace WFBooooot.IOT.Helper
 {
-    public class RedisCacheHelper : ICacheService
+    public class RedisCacheHelper : ICacheService, IIocSingletonService
     {
         private static CSRedisClient _Client;
 

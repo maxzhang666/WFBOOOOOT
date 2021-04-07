@@ -8,6 +8,7 @@ using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Humanizer;
 using Humanizer.Localisation;
 using TRKS.WF.QQBot;
+using WandhiBot.SDK.Model;
 using WarframeAlertingPrime.SDK.Models.User;
 using WFBooooot.IOT.Service.Warframe;
 using WFBooooot.IOT.Service.Warframe.NightWave;
@@ -17,6 +18,11 @@ namespace WFBooooot.IOT.Extension
 {
     public static class DataExtension
     {
+        public static string AtUser(this QQ qq)
+        {
+            return StringExtension.AtUser(qq);
+        }
+
         /// <summary>
         /// 虚空商人格式化
         /// </summary>
@@ -57,10 +63,7 @@ namespace WFBooooot.IOT.Extension
             var reward = mission.Reward;
             var time = (wfAlert.Expiry - DateTime.Now).Humanize(int.MaxValue, CultureInfo.GetCultureInfo("zh-CN"), TimeUnit.Day, TimeUnit.Second, " ");
 
-            return $"[{mission.Node}] 等级{mission.MinEnemyLevel}~{mission.MaxEnemyLevel}:\r\n" 
-                   + $"- 类型:     {mission.Type} - {mission.Faction}\r\n" 
-                   + $"- 奖励:     {reward.Format()}\r\n" 
-                   + $"- 过期时间: {time} 后";
+            return $"[{mission.Node}] 等级{mission.MinEnemyLevel}~{mission.MaxEnemyLevel}:\r\n" + $"- 类型:     {mission.Type} - {mission.Faction}\r\n" + $"- 奖励:     {reward.Format()}\r\n" + $"- 过期时间: {time} 后";
         }
 
         /// <summary>
