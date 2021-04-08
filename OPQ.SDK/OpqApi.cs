@@ -53,6 +53,7 @@ namespace OPQ.SDK
 
         //${host}/v1/LuaApiCaller?qq=${CurrentQQ}&funcname=RevokeMsg&timeout=10
         private string RevokeMsg => $"{Root}/{_version}/LuaApiCaller?qq={CurrentQq}&funcname=RevokeMsg&timeout={_timeOut}";
+        private string GroupMgr => $"{Root}/{_version}/LuaApiCaller?qq={CurrentQq}&funcname=GroupMgr&timeout={_timeOut}";
 
         #endregion
 
@@ -203,6 +204,31 @@ namespace OPQ.SDK
                     }
                 });
             }
+        }
+
+        #endregion
+
+        #region 群功能
+
+        /// <summary>
+        /// 群功能
+        /// </summary>
+        /// <param name="fromGroup"></param>
+        /// <param name="qq"></param>
+        /// <param name="msg"></param>
+        /// <param name="actionType"></param>
+        public void GroupEvent(long fromGroup, long qq, string msg, GroupEvent actionType)
+        {
+            Task.Run((() =>
+            {
+                GHttpHelper.Http.PostJson(GroupMgr, JsonConvert.SerializeObject(new
+                {
+                    ActionType = actionType,
+                    GroupId = fromGroup,
+                    ActionUserID = qq,
+                    Content = msg
+                }));
+            }));
         }
 
         #endregion
