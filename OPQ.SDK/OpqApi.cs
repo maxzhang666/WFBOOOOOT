@@ -224,7 +224,7 @@ namespace OPQ.SDK
                 GHttpHelper.Http.PostJson(GroupMgr, JsonConvert.SerializeObject(new
                 {
                     ActionType = actionType,
-                    GroupId = fromGroup,
+                    GroupID = fromGroup,
                     ActionUserID = qq,
                     Content = msg
                 }));

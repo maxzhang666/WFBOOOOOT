@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.1.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="CSRedisCore" Version="3.6.6" />
     <PackageReference Include="Fastenshtein" Version="1.0.0.5" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />

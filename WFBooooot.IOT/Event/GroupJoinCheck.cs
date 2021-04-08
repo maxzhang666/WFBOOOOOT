@@ -23,7 +23,7 @@ namespace WFBooooot.IOT.Event
 
         public void GroupJoin(GroupJoinEventArgs e)
         {
-            if (e.FromGroup == 937826612)
+            if (e.FromGroup == 937826612 || e.FromGroup == 951770042)
             {
                 var sb = new StringBuilder("【新人进群验证】");
                 sb.AppendLine("请回答下列验证问题的答案，在验证完成之前您将无法正常发送消息！");
@@ -81,7 +81,7 @@ namespace WFBooooot.IOT.Event
         public void Do()
         {
             var black = _cacheService.Get<string>(key) ?? "";
-            if (black.IsNotEmpty() && start.Add(interval) > DateTime.Now)
+            if (black.IsNotEmpty() && start.Add(interval) < DateTime.Now)
             {
                 AppData.OpqApi.GroupEvent(fromGroup, qq, "", GroupEvent.移出群聊);
                 _cacheService.Remove(key);
@@ -93,7 +93,7 @@ namespace WFBooooot.IOT.Event
             var black = _cacheService.Get<string>(key) ?? "";
             if (black.IsNotEmpty())
             {
-                return start.Add(interval) > DateTime.Now;
+                return start.Add(interval) < DateTime.Now;
             }
 
             return true;
