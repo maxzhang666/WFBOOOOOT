@@ -29,6 +29,7 @@ namespace WFBooooot.IOT.Event
                 sb.AppendLine("请回答下列验证问题的答案，在验证完成之前您将无法正常发送消息！");
                 sb.AppendLine(CommonHelper.CheckCode(out var res));
                 sb.Append("注：若您没能在180秒内通过该验证，您将被踢出群！！！");
+                sb.Append(e.FromQQ.AtUser());
 
                 _cacheService.Set($"join-check-{e.FromGroup}-{e.FromQQ}", res, TimeSpan.MaxValue);
                 AppData.OpqApi.LazyEvent(new GroupJoinCheckKick(e.FromGroup, e.FromQQ, TimeSpan.FromMinutes(3)));
