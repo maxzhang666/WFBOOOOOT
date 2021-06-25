@@ -11,7 +11,7 @@ namespace WFBooooot.IOT.Event
     {
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            if (e.FromGroup==937826612)
+            if (e.FromGroup==937826612||e.FromGroup==1019480370)
             {
                 var reg = new Regex(@"https:\/\/m\.tb\.cn\/[a-zA-Z.0-9?=&]*",RegexOptions.IgnoreCase);
                 if (reg.IsMatch(e.Msg))
