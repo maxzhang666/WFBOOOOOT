@@ -18,25 +18,35 @@ namespace WFBooooot.IOT.Helper
             }
         }
 
+        private static CSRedisClient GetClient()
+        {
+            if (_Client == null)
+            {
+                _Client = new CSRedisClient($"{AppData.AppConfig.RedisConfig.Host}:{AppData.AppConfig.RedisConfig.Prot}{(AppData.AppConfig.RedisConfig.Password.IsNotEmpty() ? ($",password={AppData.AppConfig.RedisConfig.Password}") : "")},testcluster=false");
+            }
+
+            return _Client;
+        }
+
         public void Clear()
         {
         }
 
         public T Get<T>(string key)
         {
-            return _Client.Get<T>(key);
+            return GetClient().Get<T>(key);
         }
 
         public bool TryGet<T>(string key, out T value)
         {
-            value = _Client.Get<T>(key);
+            value = GetClient().Get<T>(key);
 
             return value != null;
         }
 
         public void Remove(string key)
         {
-            _Client.Del(key);
+            GetClient().Del(key);
         }
 
         public T Get<T>(string key, Func<T> factory)
@@ -66,11 +76,11 @@ namespace WFBooooot.IOT.Helper
         {
             if (time.HasValue)
             {
-                _Client.Set(key, value, time.Value);
+                GetClient().Set(key, value, time.Value);
             }
             else
             {
-                _Client.Set(key, value);
+                GetClient().Set(key, value);
             }
         }
 
@@ -82,7 +92,7 @@ namespace WFBooooot.IOT.Helper
         /// <typeparam name="T"></typeparam>
         public void Set<T>(string key, T value)
         {
-            _Client.Set(key, value);
+            GetClient().Set(key, value);
         }
     }
 }
