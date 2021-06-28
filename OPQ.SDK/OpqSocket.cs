@@ -198,7 +198,10 @@ namespace OPQ.SDK
                     };
                     foreach (var item in events)
                     {
-                        Task.Factory.StartNew((() => { item.GroupMessage(groupArgs); }));
+                        Task.Run(() =>
+                        {
+                            item.GroupMessage(groupArgs);
+                        });
                     }
                 }
             });
