@@ -35,7 +35,7 @@ namespace WFBooooot.IOT.Event
                 var msgNo = match?.Groups[1].Value;
                 if (!string.IsNullOrEmpty(msgNo))
                 {
-                    AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
+                    _cacheHelper.Set(msgNo, e, TimeSpan.FromMinutes(5));
                 }
             }
             else if (e.Msg.Text.Contains(@"/撤回"))
@@ -57,7 +57,7 @@ namespace WFBooooot.IOT.Event
             var msg = "";
             if (e.FromQQ == 373884384 || e.FromQQ == 1257262199)
             {
-                var reg = new Regex(@"/撤回 ([0-9]*)/i");
+                var reg = new Regex(@"撤回 ([0-9]*)");
                 if (!reg.IsMatch(e.Msg.Text))
                 {
                     return;
@@ -65,12 +65,12 @@ namespace WFBooooot.IOT.Event
 
                 var match = reg.Match(e.Msg.Text);
                 var msgNo = match?.Groups[1].Value;
-                var qqMessage = _cacheHelper.Get<QQMessage>(msgNo);
+                var qqMessage = _cacheHelper.Get<GroupMessageEventArgs>(msgNo);
 
                 if (qqMessage != null)
                 {
-                    AppData.OpqApi.RevokeMessage(e.FromGroup, qqMessage);
-                    msg = "好耶！撤回成功！！\r\n这小大家都没的冲了~";
+                    AppData.OpqApi.RevokeMessage(qqMessage.FromGroup, qqMessage.Msg);
+                    msg = "好耶！撤回成功！！\r\n这次大家都没的冲了~";
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace WFBooooot.IOT.Event
             var lastTime = _cacheHelper.Get("lsp", DateTime.Now - TimeSpan.FromMinutes(2));
             if (DateTime.Now - lastTime > TimeSpan.FromMinutes(2) || e.FromQQ == 373884384)
             {
-                _cacheHelper.Set("lsp", DateTime.Now);
+                _cacheHelper.Set("lsp", DateTime.Now, TimeSpan.FromMinutes(5));
                 // AppData.OpqApi.SendMessage(new GroupMessage(e.FromGroup, $"[ATUSER({e.FromQQ})] 有内鬼，终止交易！"));
                 // return;
                 AppData.OpqApi.SendGroupMessage(e.FromGroup, "好嘞，马上就给你");
