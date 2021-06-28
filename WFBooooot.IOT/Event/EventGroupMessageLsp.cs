@@ -1,10 +1,13 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using GHttpHelper;
+using OPQ.SDK;
 using OPQ.SDK.Model.Group;
 using WandhiBot.SDK.Event;
 using WandhiBot.SDK.EventArgs;
+using WandhiBot.SDK.Model;
 using WFBooooot.IOT.Helper;
 using WFBooooot.IOT.Helper.Interface;
 using WFBooooot.IOT.Model.Lsp;
@@ -24,6 +27,65 @@ namespace WFBooooot.IOT.Event
         }
 
         public void GroupMessage(GroupMessageEventArgs e)
+        {
+            var reg = new Regex(@"消息编号:\[([0-9]*)\]");
+            if (reg.IsMatch(e.Msg.Text))
+            {
+                var match = reg.Match(e.Msg.Text);
+                var msgNo = match?.Value;
+                if (!string.IsNullOrEmpty(msgNo))
+                {
+                    _cacheHelper.Set(msgNo, e.Msg);
+                }
+            }
+            else if (e.Msg.Text.Contains(@"/撤回"))
+            {
+                _RevokeLsp(e);
+            }
+            else
+            {
+                _GroupMessage(e);
+            }
+        }
+
+        private void _RevokeLsp(GroupMessageEventArgs e)
+        {
+            var msg = "";
+            if (e.FromQQ == 373884384 || e.FromQQ == 1257262199)
+            {
+                var reg = new Regex(@"/撤回 ([0-9]*)/i");
+                if (!reg.IsMatch(e.Msg.Text))
+                {
+                    return;
+                }
+
+                var match = reg.Match(e.Msg.Text);
+                var msgNo = match?.Value;
+                var qqMessage = _cacheHelper.Get<QQMessage>(msgNo);
+
+                if (qqMessage != null)
+                {
+                    AppData.OpqApi.RevokeMessage(e.FromGroup, qqMessage);
+                    msg = "好耶！撤回成功！！\r\n这小大家都没的冲了~";
+                }
+                else
+                {
+                    msg = "啊哦,没找到这条信息耶~";
+                }
+            }
+            else
+            {
+                msg = "小伙子你木得权限啊,冲冲冲！！";
+            }
+
+            AppData.OpqApi.SendGroupMessage(e.FromGroup, msg);
+        }
+
+        /// <summary>
+        /// 涩图流程
+        /// </summary>
+        /// <param name="e"></param>
+        private void _GroupMessage(GroupMessageEventArgs e)
         {
             if (!AppData.AppConfig.DebugGroup.Contains(e.FromGroup))
             {
@@ -62,6 +124,8 @@ namespace WFBooooot.IOT.Event
                         msg += "\r\n原来你就是传说的LSP！！";
                     }
                 }
+
+                msg += $"\r\n消息编号:[{GetTimeStamp()}]";
 
                 msg += $"[ATUSER({e.FromQQ})]";
                 AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
@@ -118,6 +182,16 @@ namespace WFBooooot.IOT.Event
         {
             var res = Http.Post<LspAnalyze>("https://api.wandhi.com/api/tools/lsp", new {qq = qq, nickname}, RequestType.Form, "");
             return res.code == 1 ? res.data : null;
+        }
+
+        /// <summary>
+        /// 获取时间戳
+        /// </summary>
+        /// <returns></returns>
+        public string GetTimeStamp()
+        {
+            var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
     }
 }
