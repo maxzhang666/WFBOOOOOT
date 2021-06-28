@@ -28,23 +28,23 @@ namespace WFBooooot.IOT.Event
 
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            // var reg = new Regex(@"消息编号:\[([0-9]*)\]");
-            // if (reg.IsMatch(e.Msg.Text))
-            // {
-            //     var match = reg.Match(e.Msg.Text);
-            //     var msgNo = match?.Groups[1].Value;
-            //     if (!string.IsNullOrEmpty(msgNo))
-            //     {
-            //         AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
-            //     }
-            // }
-            // else if (e.Msg.Text.Contains(@"/撤回"))
-            // {
-            //     _RevokeLsp(e);
-            // }
-            if (e.Msg.Text.Contains("你的涩批指数"))
+            var reg = new Regex(@"消息编号:\[([0-9]*)\]");
+            if (reg.IsMatch(e.Msg.Text))
             {
-                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
+                var match = reg.Match(e.Msg.Text);
+                var msgNo = match?.Groups[1].Value;
+                if (!string.IsNullOrEmpty(msgNo))
+                {
+                    AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
+                }
+            }
+            else if (e.Msg.Text.Contains(@"/撤回"))
+            {
+                _RevokeLsp(e);
+            }
+            else if (e.Msg.Text.Contains("你的涩批指数"))
+            {
+                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(60)));
             }
             else
             {
@@ -130,6 +130,7 @@ namespace WFBooooot.IOT.Event
                 }
 
                 msg += $"\r\n冲冲冲!一会就没了";
+                msg += $"\r\n消息编号:[{GetTimeStamp()}]";
 
                 msg += $"[ATUSER({e.FromQQ})]";
                 AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
