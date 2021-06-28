@@ -28,19 +28,23 @@ namespace WFBooooot.IOT.Event
 
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            var reg = new Regex(@"消息编号:\[([0-9]*)\]");
-            if (reg.IsMatch(e.Msg.Text))
+            // var reg = new Regex(@"消息编号:\[([0-9]*)\]");
+            // if (reg.IsMatch(e.Msg.Text))
+            // {
+            //     var match = reg.Match(e.Msg.Text);
+            //     var msgNo = match?.Groups[1].Value;
+            //     if (!string.IsNullOrEmpty(msgNo))
+            //     {
+            //         AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
+            //     }
+            // }
+            // else if (e.Msg.Text.Contains(@"/撤回"))
+            // {
+            //     _RevokeLsp(e);
+            // }
+            if (e.Msg.Text.Contains("你的涩批指数"))
             {
-                var match = reg.Match(e.Msg.Text);
-                var msgNo = match?.Value;
-                if (!string.IsNullOrEmpty(msgNo))
-                {
-                    _cacheHelper.Set(msgNo, e.Msg);
-                }
-            }
-            else if (e.Msg.Text.Contains(@"/撤回"))
-            {
-                _RevokeLsp(e);
+                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(90)));
             }
             else
             {
@@ -60,7 +64,7 @@ namespace WFBooooot.IOT.Event
                 }
 
                 var match = reg.Match(e.Msg.Text);
-                var msgNo = match?.Value;
+                var msgNo = match?.Groups[1].Value;
                 var qqMessage = _cacheHelper.Get<QQMessage>(msgNo);
 
                 if (qqMessage != null)
@@ -125,7 +129,7 @@ namespace WFBooooot.IOT.Event
                     }
                 }
 
-                msg += $"\r\n消息编号:[{GetTimeStamp()}]";
+                msg += $"\r\n冲冲冲!一会就没了";
 
                 msg += $"[ATUSER({e.FromQQ})]";
                 AppData.OpqApi.SendMessage(new GroupImgMessage(e.FromGroup, msg, url, flag));
