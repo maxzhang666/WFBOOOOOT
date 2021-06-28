@@ -42,7 +42,7 @@ namespace WFBooooot.IOT.Event
             {
                 _RevokeLsp(e);
             }
-            else if (e.Msg.Text.Contains("你的涩批指数"))
+            else if (e.Msg.Text.Contains("涩批指数"))
             {
                 AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(60)));
             }
