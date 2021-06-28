@@ -33,22 +33,24 @@ namespace WFBooooot.IOT.Event
             {
                 var match = reg.Match(e.Msg.Text);
                 var msgNo = match?.Groups[1].Value;
-                if (!string.IsNullOrEmpty(msgNo))
-                {
+                // if (!string.IsNullOrEmpty(msgNo))
+                // {
                     _cacheHelper.Set(msgNo, e, TimeSpan.FromMinutes(5));
-                }
+                // }
             }
             else if (e.Msg.Text.Contains(@"/撤回"))
             {
                 _RevokeLsp(e);
             }
-            else if (e.Msg.Text.Contains("涩批指数"))
-            {
-                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(60)));
-            }
+
             else
             {
                 _GroupMessage(e);
+            }
+
+            if (e.Msg.Text.Contains("涩批指数"))
+            {
+                AppData.OpqApi.LazyEvent(new EventLazyRevoke(e.FromGroup, e.Msg, DateTime.Now.AddSeconds(60)));
             }
         }
 
