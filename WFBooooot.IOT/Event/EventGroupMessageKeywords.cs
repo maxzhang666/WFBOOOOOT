@@ -12,7 +12,7 @@ namespace WFBooooot.IOT.Event
     {
         public void GroupMessage(GroupMessageEventArgs e)
         {
-            if (AppData.AppConfig.KeywordConfig.Groups.Contains(e.FromGroup))
+            if (AppData.AppConfig.KeywordConfig.Groups.Contains(e.FromGroup) && e.FromQQ != AppData.OpqApi.CurrentQq)
             {
                 var msg = "";
                 foreach (var key in AppData.AppConfig.KeywordConfig.KeyWords.Keys)

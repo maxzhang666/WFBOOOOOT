@@ -16,7 +16,7 @@ namespace OPQ.SDK
     public class OpqApi
     {
         private string Root { set; get; }
-        private long CurrentQq { set; get; }
+        public long CurrentQq { set; get; }
         private readonly string _version;
         private readonly int _timeOut;
 
